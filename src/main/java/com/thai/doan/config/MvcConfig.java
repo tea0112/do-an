@@ -11,11 +11,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("index");
+//        registry.addViewController("/login").setViewName("login");
+//        registry.addViewController("/register").setViewName("register");
+//        registry.addViewController("/admin").setViewName("admin");
+        registry.addViewController("/button").setViewName("admin/buttons");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
+
 }

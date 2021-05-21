@@ -1,14 +1,22 @@
 package com.thai.doan.dao.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,7 +26,9 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
+    @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9\\.]+$")
+    @Size(min = 1, max = 50)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -27,6 +37,6 @@ public class User implements Serializable {
     @Column(name = "is_admin", nullable = false)
     private Boolean admin;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Student> students;
+    @OneToOne(mappedBy = "user")
+    private Student student;
 }

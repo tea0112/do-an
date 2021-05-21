@@ -1,12 +1,13 @@
 CREATE TABLE students
 (
-    id            INT         NOT NULL AUTO_INCREMENT,
-    last_name     VARCHAR(50) NOT NULL,
-    first_name    VARCHAR(50) NOT NULL,
-    birth         DATETIME    NOT NULL,
-    place         VARCHAR(100),
-    retraining_id INT         NOT NULL,
-    user_id       INT         NOT NULL,
+    id            INT      NOT NULL AUTO_INCREMENT,
+    last_name     NVARCHAR(50) NOT NULL,
+    first_name    NVARCHAR(50) NOT NULL,
+    birth         DATETIME NOT NULL,
+    place         NVARCHAR(100),
+    phone_number  NVARCHAR(20) NOT NULL,
+    retraining_id INT      NOT NULL,
+    user_id       INT      NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -19,10 +20,10 @@ CREATE TABLE student_schedule_relation
 
 CREATE TABLE users
 (
-    id       INT     NOT NULL AUTO_INCREMENT,
-    email    VARCHAR(50) NOT NULL,
-    password VARCHAR(500) NOT NULL,
-    is_admin BIT     NOT NULL,
+    id       INT NOT NULL AUTO_INCREMENT,
+    email    NVARCHAR(50) NOT NULL UNIQUE,
+    password NVARCHAR(500) NOT NULL,
+    is_admin BIT NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -39,7 +40,7 @@ CREATE TABLE retrainings
 CREATE TABLE schedules
 (
     id          INT  NOT NULL AUTO_INCREMENT,
-    name        VARCHAR(100),
+    name        NVARCHAR(100),
     start_day   DATE NOT NULL,
     end_date    DATE NOT NULL,
     semester_id INT  NOT NULL,
@@ -48,13 +49,13 @@ CREATE TABLE schedules
 
 CREATE TABLE subjects
 (
-    id            INT     NOT NULL AUTO_INCREMENT,
-    name          VARCHAR(100) NOT NULL,
+    id            INT NOT NULL AUTO_INCREMENT,
+    name          NVARCHAR(100) NOT NULL,
     grade         FLOAT,
-    schedule_id   INT     NOT NULL,
-    retraining_id INT     NOT NULL,
-    fee_id        INT     NOT NULL,
-    semester_id   INT     NOT NULL,
+    schedule_id   INT NOT NULL,
+    retraining_id INT NOT NULL,
+    fee_id        INT NOT NULL,
+    semester_id   INT NOT NULL,
     PRIMARY KEY (id)
 );
 
