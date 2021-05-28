@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Pannel</title>
+    <title>Sinh Viên</title>
 
     <!-- Custom fonts for this template-->
     <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -28,7 +28,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <div th:replace="~{admin/fragments/side-bar :: sidebar}"></div>
+        <div th:replace="~{fragments/side-bar :: sidebar}"></div>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -38,7 +38,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <div th:replace="~{/admin/fragments/navbar :: navbar}"></div>
+                <div th:replace="~{fragments/navbar :: navbar}"></div>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -75,7 +75,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div th:replace="~{/admin/fragments/logout-modal :: logout}"></div>
+    <div th:replace="~{fragments/logout-modal :: logout}"></div>
 
     <!-- Bootstrap core JavaScript-->
     <script th:src="@{/static/admin/vendor/jquery/jquery.min.js}"></script>

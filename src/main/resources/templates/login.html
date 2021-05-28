@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:form="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-  <div th:replace="fragments/guest-header :: header"></div>
+  <script th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+  <link rel="stylesheet" th:href="@{/static/css/bootstrap/bootstrap.min.css}" />
+  <script th:src="@{/static/js/bootstrap/bootstrap.min.js}"></script>
   <link rel="stylesheet" th:href="@{/static/css/login.css}">
 </head>
 <body>

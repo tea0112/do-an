@@ -32,9 +32,6 @@ public class Fee implements Serializable {
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "fee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Subject> subjects;
-
-    @OneToMany(mappedBy = "fee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Retraining> retrainings;
 
     @OneToMany(mappedBy = "fee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

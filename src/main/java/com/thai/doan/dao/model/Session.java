@@ -26,4 +26,8 @@ public class Session implements Serializable {
 
     @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Student> students;
+
+    @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Semester> semesters;
+
 }

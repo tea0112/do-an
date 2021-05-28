@@ -34,7 +34,4 @@ public class Retraining implements Serializable {
 
     @OneToMany(mappedBy = "retraining", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Student> students;
-
-    @OneToMany(mappedBy = "retraining", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Subject> subjects;
 }

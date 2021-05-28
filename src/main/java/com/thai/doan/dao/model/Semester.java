@@ -25,8 +25,8 @@ public class Semester implements Serializable {
     @Column(name = "start_day", nullable = false)
     private LocalDate startDay;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "end_day", nullable = false)
+    private LocalDate endDay;
 
     @ManyToOne
     @JoinColumn(name = "fee_id")
@@ -34,4 +34,8 @@ public class Semester implements Serializable {
 
     @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
+
+    @ManyToOne
+    @JoinColumn(name = "session_id")
+    private Session session;
 }

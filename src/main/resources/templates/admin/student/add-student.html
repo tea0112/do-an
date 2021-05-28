@@ -90,14 +90,14 @@
           </div>
           <div class="form-group">
             <label for="sessionInput">Niên Khoá</label>
-            <div th:if="${sessionNames != null}">
+            <div th:if="${sessionNames != null and sessionNames.size() &gt; 0}">
               <select class="form-control" th:field="*{sessionName}" id="sessionInput">
                 <th:block th:each="sessionName : ${sessionNames}">
                   <option th:text="${sessionName.name}" th:value="${sessionName.name}"></option>
                 </th:block>
               </select>
             </div>
-            <div style ="color: red;" th:if="${sessionNames == null}">
+            <div style ="color: red;" th:if="${sessionNames == null or sessionNames.size == 0}">
               Không thể tạo sinh viên mới vì thiếu "niên khoá" trong cơ sở dữ liệu
             </div>
             <p style ="color: red;" th:if="${#fields.hasErrors('sessionName')}" th:errors="*{sessionName}"></p>

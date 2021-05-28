@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "subjects")
-public class Subject implements Serializable {
+@Table(name = "lecturer")
+public class Lecturer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,9 +21,6 @@ public class Subject implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "grade")
-    private Float grade;
-
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
 }
