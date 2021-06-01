@@ -1,5 +1,7 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,10 +30,12 @@ public class Semester implements Serializable {
     @Column(name = "end_day", nullable = false)
     private LocalDate endDay;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "fee_id")
     private Fee fee;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
 

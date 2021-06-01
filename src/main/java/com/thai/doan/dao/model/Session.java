@@ -1,5 +1,6 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,10 +25,15 @@ public class Session implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9]+$")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Student> students;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Semester> semesters;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Classes> classes;
 }

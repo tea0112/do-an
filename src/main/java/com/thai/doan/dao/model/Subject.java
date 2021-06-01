@@ -1,5 +1,6 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,9 +22,15 @@ public class Subject implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "grade")
-    private Float grade;
+    @Column(name = "subject_type", nullable = false)
+    private int subjectType;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
+
+    public enum SUBJECT_TYPE {
+        THEORY,
+        PRACTICE
+    }
 }

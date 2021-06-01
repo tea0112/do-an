@@ -9,8 +9,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "classes")
-public class Classes implements Serializable {
+@Table(name = "department")
+public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,14 +22,7 @@ public class Classes implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "class_type", nullable = false)
-    private Integer classType;
-
     @JsonIgnore
-    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Schedule> schedules;
-
-    @ManyToOne
-    @JoinColumn(name = "session_id")
-    private Session session;
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Lecturer> lecturers;
 }

@@ -1,5 +1,14 @@
 package com.thai.doan.service;
 
+import com.thai.doan.dao.model.Schedule;
+import com.thai.doan.dto.request.NewScheduleRequest;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+
 public interface ScheduleService {
-    void getSchedule();
+    List<Schedule> getSchedule(int subjectType);
+
+    ModelAndView createNewSchedule(NewScheduleRequest newSchlReq, BindingResult result);
 }

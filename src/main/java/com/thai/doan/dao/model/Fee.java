@@ -1,5 +1,6 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Fee implements Serializable {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "fee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Retraining> retrainings;
 

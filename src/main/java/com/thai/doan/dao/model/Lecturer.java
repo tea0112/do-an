@@ -1,5 +1,6 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,11 @@ public class Lecturer implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }
