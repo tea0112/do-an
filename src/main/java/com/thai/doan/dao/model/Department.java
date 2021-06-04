@@ -25,4 +25,13 @@ public class Department implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Lecturer> lecturers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Subject> subjects;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Classes> classes;
+
 }

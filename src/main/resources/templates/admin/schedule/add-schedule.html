@@ -3,22 +3,22 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Admin Pannel</title>
+  <title>Admin Pannel</title>
 
-    <!-- Custom fonts for this template-->
-    <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
-    <link
-      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-      rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
 
 </head>
 
@@ -27,97 +27,141 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
-    <div th:replace="~{admin/fragments/side-bar :: sidebar}"></div>
-    <!-- End of Sidebar -->
+  <!-- Sidebar -->
+  <div th:replace="~{admin/fragments/side-bar :: sidebar}"></div>
+  <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Main Content -->
-        <div id="content">
+    <!-- Main Content -->
+    <div id="content">
 
-            <!-- Topbar -->
-            <div th:replace="~{/admin/fragments/navbar :: navbar}"></div>
-            <!-- End of Topbar -->
+      <!-- Topbar -->
+      <div th:replace="~{/admin/fragments/navbar :: navbar}"></div>
+      <!-- End of Topbar -->
 
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-                <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Thêm Sinh Viên</h1>
-                <!-- Form Thêm-->
-                <form name="addStudent" th:action="@{/admin/add-student}" th:object="${newSchedule}" method="post">
-                    <div class="form-group">
-                        <label for="emailInput">Địa chỉ Email</label>
-                        <input type="email" th:field="*{email}" class="form-control" id="emailInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="passwordInput">Mật Khẩu</label>
-                        <input type="password" th:field="*{password}" class="form-control" id="passwordInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="repasswordInput">Nhập Lại Mật Khẩu</label>
-                        <input type="password" th:field="*{repassword}" class="form-control" id="repasswordInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('repassword')}" th:errors="*{repassword}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="firstNameInput">Họ</label>
-                        <input type="text" th:field="*{firstName}" class="form-control" id="firstNameInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastNameInput">Tên</label>
-                        <input type="text" th:field="*{lastName}" class="form-control" id="lastNameInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="birthInput">Ngày Sinh</label>
-                        <input class="form-control" th:field="*{birth}" type="date" value="2011-08-19" id="birthInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="placeInput">Thường Trú</label>
-                        <input type="text" th:field="*{place}" class="form-control" id="placeInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('place')}" th:errors="*{place}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumberInput">Số Điện Thoại</label>
-                        <input type="text" th:field="*{phoneNumber}" class="form-control" id="phoneNumberInput">
-                        <p style ="color: red;" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="sessionInput">Niên Khoá</label>
-                        <div th:if="${sessionNames != null and sessionNames.size() &gt; 0}">
-                            <select class="form-control" th:field="*{sessionName}" id="sessionInput">
-                                <th:block th:each="sessionName : ${sessionNames}">
-                                    <option th:text="${sessionName.name}" th:value="${sessionName.name}"></option>
-                                </th:block>
-                            </select>
-                        </div>
-                        <div style ="color: red;" th:if="${sessionNames == null or sessionNames.size == 0}">
-                            Không thể tạo sinh viên mới vì thiếu "niên khoá" trong cơ sở dữ liệu
-                        </div>
-                        <p style ="color: red;" th:if="${#fields.hasErrors('sessionName')}" th:errors="*{sessionName}"></p>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Thêm</button>
-                </form>
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Thêm Thời Khoá Biểu</h1>
+        <!-- Form Thêm-->
+        <form name="addStudent" th:action="@{/admin/add-student}" th:object="${newSchedule}" method="post">
+          <div class="form-group">
+            <label for="departmentInput">Khoa</label>
+            <div th:if="${allDepartment != null and allDepartment.size() &gt; 0}">
+              <select class="form-control" th:field="*{department}" id="departmentInput" onchange="changeDpm()">
+                <th:block th:each="dpmt : ${allDepartment}">
+                  <option th:text="${dpmt.name}" th:value="${dpmt.name}"></option>
+                </th:block>
+              </select>
             </div>
-            <!-- /.container-fluid -->
-
-        </div>
-        <!-- End of Main Content -->
+            <div style="color: red;" th:if="${allDepartment == null or allDepartment.size == 0}">
+              Không thể tạo sinh viên mới vì thiếu "niên khoá" trong cơ sở dữ liệu
+            </div>
+            <!--            <p style="color: red;" th:if="${#fields.hasErrors('sessionName')}" th:errors="*{sessionName}"></p>-->
+          </div>
+          <div class="form-group">
+            <label for="subjectTypeInput">Kiểu Môn</label>
+            <select class="form-control" th:field="*{subjectType}" id="subjectTypeInput"
+                    onchange="handleSubjectTypeChange()">
+              <option th:value="0">Lý Thuyết</option>
+              <option th:value="1">Thực Hành</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="subjectInput">Tên Môn</label>
+            <select class="form-control" th:field="*{subject}" id="subjectInput">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lecturerInput">Giảng Viên</label>
+            <div>
+              <select class="form-control" th:field="*{lecturer}" id="lecturerInput">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sessionInput">Khoá</label>
+            <select class="form-control" th:field="*{session}" id="sessionInput" onchange="handleSessionChange()">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="classInput">Lớp</label>
+            <select class="form-control" th:field="*{className}" id="classInput" onchange="handleClassChange()">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="semesterInput">Học Kỳ</label>
+            <select class="form-control" th:field="*{className}" id="semesterInput">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="startPeriodInput">Tiết Bắt Đầu</label>
+            <select class="form-control" th:field="*{startPeriod}" id="startPeriodInput">
+              <option th:value="1">1</option>
+              <option th:value="2">2</option>
+              <option th:value="3">3</option>
+              <option th:value="4">4</option>
+              <option th:value="5">5</option>
+              <option th:value="6">6</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="endPeriodInput">Tiết Kết Thúc</label>
+            <select class="form-control" th:field="*{endPeriod}" id="endPeriodInput">
+              <option th:value="1">1</option>
+              <option th:value="2">2</option>
+              <option th:value="3">3</option>
+              <option th:value="4">4</option>
+              <option th:value="5">5</option>
+              <option th:value="6">6</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="weekDayInput">Thứ</label>
+            <select class="form-control form-control-sm" th:field="*{week}" id="weekDayInput">
+              <option th:value="2">2</option>
+              <option th:value="3">3</option>
+              <option th:value="4">4</option>
+              <option th:value="5">5</option>
+              <option th:value="6">6</option>
+              <option th:value="7">7</option>
+              <option th:value="8">8</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="startDayInput">Ngày Bắt Đầu</label>
+            <input class="form-control" th:field="*{startDay}" type="date" value="2011-08-19" id="startDayInput">
+          </div>
+          <div class="form-group">
+            <label for="endDayInput">Ngày Kết Thúc</label>
+            <input class="form-control" th:field="*{endDay}" type="date" value="2011-08-19" id="endDayInput">
+          </div>
+          <div class="form-group">
+            <label for="periodType">Buổi</label>
+            <select class="form-control form-control-sm" th:field="*{periodType}" id="periodType">
+              <option th:value="0">Sáng</option>
+              <option th:value="1">Chiều</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+      </div>
+      <!-- /.container-fluid -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+  </div>
+  <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
+  <i class="fas fa-angle-up"></i>
 </a>
 
 <!-- Logout Modal-->
@@ -132,6 +176,9 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/static/admin/js/sb-admin-2.min.js}"></script>
+
+<script th:src="@{/static/admin/js/schedule-add.js}"></script>
+
 </body>
 
 </html>

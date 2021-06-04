@@ -46,7 +46,6 @@ public class Schedule implements Serializable {
     @OneToMany(mappedBy = "scheduleId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StudentScheduleRelation> studentScheduleRelations;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "semester_id")
     private Semester semester;

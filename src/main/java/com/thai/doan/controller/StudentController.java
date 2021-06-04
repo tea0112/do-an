@@ -22,7 +22,7 @@ public class StudentController {
     @GetMapping("/admin/add-student")
     public ModelAndView addSinhVien() {
         ModelAndView mvc = new ModelAndView("admin/student/add-student");
-        mvc.addObject("sessionNames", sessionSv.getAllSessionName());
+        mvc.addObject("sessionNames", sessionSv.getAllSession());
         mvc.addObject("newStudentRequest", new NewStudentRequest());
         return mvc;
     }
@@ -32,7 +32,7 @@ public class StudentController {
     public ModelAndView addNewStudent(@Valid NewStudentRequest stdReq, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView mvc = new ModelAndView("admin/student/add-student", result.getModel());
-            mvc.addObject("sessionNames", sessionSv.getAllSessionName());
+            mvc.addObject("sessionNames", sessionSv.getAllSession());
             mvc.addObject("newStudentRequest", new NewStudentRequest());
             return mvc;
         }

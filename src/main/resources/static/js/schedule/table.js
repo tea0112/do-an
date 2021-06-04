@@ -7,7 +7,7 @@ const theoryData = fetch('/thoi-khoa-bieu/ly-thuyet/theory-schedule')
                     response.status);
                 return;
             }
-            response.json().then(function (tableData) {
+        response.json().then(function (tableData) {
                 const morningData = tableData.filter(schedule => schedule.periodType === 0);
                 const morningTable = new Tabulator("#morning-table", {
                     data: morningData,           //load row data from array

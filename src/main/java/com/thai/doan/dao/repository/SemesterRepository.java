@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SemesterRepository extends JpaRepository<Semester, Integer>, JpaSpecificationExecutor<Semester> {
@@ -22,4 +23,6 @@ public interface SemesterRepository extends JpaRepository<Semester, Integer>, Jp
     int getNewestTermOfSession(Session session);
 
     Optional<Semester> findBySessionAndTermNumber(Session session, int newestTermNumber);
+
+    List<Semester> findBySession(Session session);
 }

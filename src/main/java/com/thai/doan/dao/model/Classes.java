@@ -32,4 +32,9 @@ public class Classes implements Serializable {
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
 }

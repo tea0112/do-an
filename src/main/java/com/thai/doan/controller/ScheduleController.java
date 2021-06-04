@@ -4,25 +4,29 @@ import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.NewStudentRequest;
+import com.thai.doan.service.DepartmentService;
+import com.thai.doan.service.LecturerService;
 import com.thai.doan.service.ScheduleService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Controller
+@RestController
 @Data
 public class ScheduleController {
     private final ScheduleService scheduleSv;
+    private final DepartmentService departmentSv;
+    private final LecturerService lecturerSv;
 
     // View
 
@@ -44,10 +48,12 @@ public class ScheduleController {
         return mav;
     }
 
+    // admin view
     @GetMapping("/admin/thoi-khoa-bieu/them")
     public ModelAndView getAdminAddSchedule() {
         ModelAndView mav = new ModelAndView("admin/schedule/add-schedule");
         mav.addObject("newSchedule", new NewScheduleRequest());
+        mav.addObject("allDepartment", departmentSv.getAllDepartments());
         return mav;
     }
 

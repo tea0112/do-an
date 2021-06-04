@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SessionService {
     String createSession(String name, BindingResult result);
-    List<Session> getAllSessionName();
+    List<Session> getAllSession();
 }

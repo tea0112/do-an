@@ -1,5 +1,9 @@
 package com.thai.doan.service;
 
-public interface SemesterService {
+import com.thai.doan.dao.model.Semester;
 
+import java.util.List;
+
+public interface SemesterService {
+    List<Semester> getWithSession(int sessionId);
 }

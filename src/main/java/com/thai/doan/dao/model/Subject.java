@@ -29,6 +29,10 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
     public enum SUBJECT_TYPE {
         THEORY,
         PRACTICE

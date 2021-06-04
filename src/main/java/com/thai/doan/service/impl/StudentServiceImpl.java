@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
             hasInvalidField = true;
         }
         if (hasInvalidField) {
-            addStudent.addObject("sessionNames", sessionSv.getAllSessionName());
+            addStudent.addObject("sessionNames", sessionSv.getAllSession());
             return addStudent;
         }
         Student student = Student.builder()
@@ -68,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             studentRepo.save(student);
         } catch (DataIntegrityViolationException e) {
-            addStudent.addObject("sessionNames", sessionSv.getAllSessionName());
+            addStudent.addObject("sessionNames", sessionSv.getAllSession());
             result.rejectValue("email", "email", "Email đã tồn tại");
             return addStudent;
         }
