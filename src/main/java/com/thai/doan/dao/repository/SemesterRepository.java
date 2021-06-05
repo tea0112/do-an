@@ -24,5 +24,7 @@ public interface SemesterRepository extends JpaRepository<Semester, Integer>, Jp
 
     Optional<Semester> findBySessionAndTermNumber(Session session, int newestTermNumber);
 
+    Optional<Semester> findById(int id);
+
     List<Semester> findBySession(Session session);
 }

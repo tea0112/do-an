@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer>, JpaSpecificationExecutor<Subject> {
-    Optional<Subject> findBySubjectTypeAndName(int subjectType, String name);
+    Optional<Subject> findByIdAndSubjectType(int id, int subjectType);
 
     List<Subject> findBySubjectTypeAndDepartment(int subjectType, Department department);
 }

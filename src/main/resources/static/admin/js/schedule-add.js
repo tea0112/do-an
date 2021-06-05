@@ -5,6 +5,14 @@ const subjectTypeInput = document.getElementById("subjectTypeInput");
 const sessionInput = document.getElementById("sessionInput");
 const classInput = document.getElementById("classInput");
 const semesterInput = document.getElementById("semesterInput");
+const saveAlert = document.getElementById("alert");
+
+if (saveAlert) {
+  if (saveAlert.className === "error")
+    alert("Không thể thêm thời khoá biểu");
+  else
+    alert("Thêm thành công thời khoá biểu")
+}
 
 commonGetFetchOpt("/admin/session", sessionInput, bindWithIdAndName)
   .then(() => commonGetFetchOpt(

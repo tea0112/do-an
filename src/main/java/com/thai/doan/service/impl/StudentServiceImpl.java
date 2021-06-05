@@ -48,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
         }
         if (hasInvalidField) {
             addStudent.addObject("sessionNames", sessionSv.getAllSession());
+            addStudent.addObject("message", "error");
             return addStudent;
         }
         Student student = Student.builder()
@@ -72,6 +73,8 @@ public class StudentServiceImpl implements StudentService {
             result.rejectValue("email", "email", "Email đã tồn tại");
             return addStudent;
         }
-        return new ModelAndView("redirect:/admin/add-student");
+        ModelAndView redirect = new ModelAndView("redirect:/admin/add-student");
+        redirect.addObject("message", "success");
+        return redirect;
     }
 }

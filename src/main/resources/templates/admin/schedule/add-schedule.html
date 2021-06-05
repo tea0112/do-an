@@ -24,6 +24,8 @@
 
 <body id="page-top">
 
+<div id="alert" th:if="${message}" th:class="${message}"></div>
+
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -46,7 +48,7 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Thêm Thời Khoá Biểu</h1>
         <!-- Form Thêm-->
-        <form name="addStudent" th:action="@{/admin/add-student}" th:object="${newSchedule}" method="post">
+        <form name="addStudent" th:action="@{/admin/thoi-khoa-bieu/them}" th:object="${newScheduleRequest}" method="post">
           <div class="form-group">
             <label for="departmentInput">Khoa</label>
             <div th:if="${allDepartment != null and allDepartment.size() &gt; 0}">
@@ -57,7 +59,7 @@
               </select>
             </div>
             <div style="color: red;" th:if="${allDepartment == null or allDepartment.size == 0}">
-              Không thể tạo sinh viên mới vì thiếu "niên khoá" trong cơ sở dữ liệu
+              Không thể tạo sinh viên mới vì thiếu Khoa trong cơ sở dữ liệu
             </div>
             <!--            <p style="color: red;" th:if="${#fields.hasErrors('sessionName')}" th:errors="*{sessionName}"></p>-->
           </div>
@@ -68,11 +70,13 @@
               <option th:value="0">Lý Thuyết</option>
               <option th:value="1">Thực Hành</option>
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('subjectType')}" th:errors="*{subjectType}"></p>
           </div>
           <div class="form-group">
             <label for="subjectInput">Tên Môn</label>
             <select class="form-control" th:field="*{subject}" id="subjectInput">
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></p>
           </div>
           <div class="form-group">
             <label for="lecturerInput">Giảng Viên</label>
@@ -80,21 +84,25 @@
               <select class="form-control" th:field="*{lecturer}" id="lecturerInput">
               </select>
             </div>
+            <p style ="color: red;" th:if="${#fields.hasErrors('lecturer')}" th:errors="*{lecturer}"></p>
           </div>
           <div class="form-group">
             <label for="sessionInput">Khoá</label>
             <select class="form-control" th:field="*{session}" id="sessionInput" onchange="handleSessionChange()">
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('session')}" th:errors="*{session}"></p>
           </div>
           <div class="form-group">
             <label for="classInput">Lớp</label>
-            <select class="form-control" th:field="*{className}" id="classInput" onchange="handleClassChange()">
+            <select class="form-control" th:field="*{classId}" id="classInput" onchange="handleClassChange()">
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('classId')}" th:errors="*{classId}"></p>
           </div>
           <div class="form-group">
             <label for="semesterInput">Học Kỳ</label>
-            <select class="form-control" th:field="*{className}" id="semesterInput">
+            <select class="form-control" th:field="*{semester}" id="semesterInput">
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('semester')}" th:errors="*{semester}"></p>
           </div>
           <div class="form-group">
             <label for="startPeriodInput">Tiết Bắt Đầu</label>
@@ -106,6 +114,7 @@
               <option th:value="5">5</option>
               <option th:value="6">6</option>
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('startPeriod')}" th:errors="*{startPeriod}"></p>
           </div>
           <div class="form-group">
             <label for="endPeriodInput">Tiết Kết Thúc</label>
@@ -117,6 +126,7 @@
               <option th:value="5">5</option>
               <option th:value="6">6</option>
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('endPeriod')}" th:errors="*{endPeriod}"></p>
           </div>
           <div class="form-group">
             <label for="weekDayInput">Thứ</label>
@@ -129,14 +139,17 @@
               <option th:value="7">7</option>
               <option th:value="8">8</option>
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('week')}" th:errors="*{week}"></p>
           </div>
           <div class="form-group">
             <label for="startDayInput">Ngày Bắt Đầu</label>
             <input class="form-control" th:field="*{startDay}" type="date" value="2011-08-19" id="startDayInput">
+            <p style ="color: red;" th:if="${#fields.hasErrors('startDay')}" th:errors="*{startDay}"></p>
           </div>
           <div class="form-group">
             <label for="endDayInput">Ngày Kết Thúc</label>
             <input class="form-control" th:field="*{endDay}" type="date" value="2011-08-19" id="endDayInput">
+            <p style ="color: red;" th:if="${#fields.hasErrors('endDay')}" th:errors="*{endDay}"></p>
           </div>
           <div class="form-group">
             <label for="periodType">Buổi</label>
@@ -144,6 +157,7 @@
               <option th:value="0">Sáng</option>
               <option th:value="1">Chiều</option>
             </select>
+            <p style ="color: red;" th:if="${#fields.hasErrors('periodType')}" th:errors="*{periodType}"></p>
           </div>
           <button type="submit" class="btn btn-primary">Thêm</button>
         </form>

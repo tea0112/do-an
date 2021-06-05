@@ -5,6 +5,7 @@ import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.ScheduleService;
+import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -42,16 +43,40 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ModelAndView createNewSchedule(NewScheduleRequest newSchlReq, BindingResult result) {
-        Optional<Subject> subject = subjectRepo.findBySubjectTypeAndName(
-            newSchlReq.getSubjectType(), newSchlReq.getSubject());
+        ModelAndView addSchedule = new ModelAndView("admin/schedule/add-schedule");
+        boolean hasInvalidField = false;
         Optional<Department> department = departmentRepo.findByName(newSchlReq.getDepartment());
-        Optional<Lecturer> lecturer = lecturerRepo.findByNameAndDepartment(
-            newSchlReq.getLecturer(), department.get());
-        Optional<Session> session = sessionRepo.findByName(newSchlReq.getSession());
-        int newestTerm = semesterRepo.getNewestTermOfSession(session.get());
-        Optional<Classes> studentsClass = classesRepo.findBySession(session.get());
-        Optional<Semester> semester = semesterRepo.findBySessionAndTermNumber(session.get(), newestTerm);
-
+        Optional<Subject> subject = subjectRepo.findById(newSchlReq.getSubject());
+        Optional<Lecturer> lecturer = lecturerRepo.findByIdAndDepartment(newSchlReq.getLecturer(), department.get());
+        Optional<Classes> studentsClass = classesRepo.findById(newSchlReq.getClassId());
+        Optional<Semester> semester = semesterRepo.findById(newSchlReq.getSemester());
+        if (!department.isPresent()) {
+            result.rejectValue("department", "department", "Khoa không tồn tại");
+            hasInvalidField = true;
+        } else if (!subject.isPresent()) {
+            result.rejectValue("subject", "subject", "Môn không tồn tại");
+            hasInvalidField = true;
+        } else if (!lecturer.isPresent()) {
+            result.rejectValue("lecturer", "lecturer", "Giảng Viên không tồn tại");
+            hasInvalidField = true;
+        } else if (!studentsClass.isPresent()) {
+            result.rejectValue("classId", "classId", "Lớp không tồn tại");
+            hasInvalidField = true;
+        } else if (!semester.isPresent()) {
+            result.rejectValue("semester", "semester", "Khoá không tồn tại");
+            hasInvalidField = true;
+        } else if (newSchlReq.getStartDay() == null) {
+            result.rejectValue("startDay", "startDay", "Ngày bắt đầu không được trống");
+            hasInvalidField = true;
+        } else if (newSchlReq.getEndDay() == null) {
+            result.rejectValue("endDay", "endDay", "Ngày kết thúc không được trống");
+            hasInvalidField = true;
+        }
+        if (hasInvalidField) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
         Schedule schedule = Schedule.builder()
             .startPeriod(newSchlReq.getStartPeriod())
             .endPeriod(newSchlReq.getEndPeriod())
@@ -64,7 +89,15 @@ public class ScheduleServiceImpl implements ScheduleService {
             .subject(subject.get())
             .classes(studentsClass.get())
             .build();
-        scheduleRepo.save(schedule);
-        return null;
+        try {
+            scheduleRepo.save(schedule);
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+        addSchedule.addObject("message", "success");
+        addSchedule.addObject("allDepartment", departmentRepo.findAll());
+        return addSchedule;
     }
 }

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -52,18 +54,21 @@ public class ScheduleController {
     @GetMapping("/admin/thoi-khoa-bieu/them")
     public ModelAndView getAdminAddSchedule() {
         ModelAndView mav = new ModelAndView("admin/schedule/add-schedule");
-        mav.addObject("newSchedule", new NewScheduleRequest());
+        mav.addObject("newScheduleRequest", new NewScheduleRequest());
         mav.addObject("allDepartment", departmentSv.getAllDepartments());
         return mav;
     }
 
     // curd
     @PostMapping("/admin/thoi-khoa-bieu/them")
-    public ModelAndView createNewSchedule(NewScheduleRequest newSchlReq, BindingResult result) {
+    public ModelAndView createNewSchedule(
+        @Valid NewScheduleRequest newSchlReq, BindingResult result) {
         if (result.hasErrors()) {
-            ModelAndView mvc = new ModelAndView("admin/schedule/add-schedule", result.getModel());
-            mvc.addObject("newStudentRequest", new NewStudentRequest());
-            return mvc;
+            ModelAndView mav = new ModelAndView("admin/schedule/add-schedule", result.getModel());
+            mav.addObject("allDepartment", departmentSv.getAllDepartments());
+            mav.addObject("newScheduleRequest", new NewScheduleRequest());
+            mav.addObject("message", "error");
+            return mav;
         }
         return scheduleSv.createNewSchedule(newSchlReq, result);
     }

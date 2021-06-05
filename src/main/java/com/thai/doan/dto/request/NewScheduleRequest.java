@@ -1,6 +1,7 @@
 package com.thai.doan.dto.request;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -14,20 +15,23 @@ public class NewScheduleRequest {
     @Max(1)
     private int subjectType;
 
-    @NotBlank
-    private String subject;
+    @Min(0)
+    private int subject;
 
     @NotBlank
     private String department;
 
-    @NotBlank
-    private String lecturer;
+    @Min(0)
+    private int lecturer;
 
-    @NotBlank
-    private String session;
+    @Min(0)
+    private int session;
 
-    @NotBlank
-    private String className;
+    @Min(0)
+    private int classId;
+
+    @Min(0)
+    private int semester;
 
     @Min(1)
     private int startPeriod;
@@ -36,12 +40,15 @@ public class NewScheduleRequest {
     private int endPeriod;
 
     @Min(2)
+    @Max(8)
     private int week;
 
-    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Không được trống")
     private LocalDate startDay;
 
-    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Không được trống")
     private LocalDate endDay;
 
     @Min(0)
