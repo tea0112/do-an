@@ -20,4 +20,9 @@ public class ClassController {
         @RequestParam(name = "department") String departmentName, @RequestParam(name = "session") int sessionId) {
         return classSv.getWithDepartmentAndSession(departmentName, sessionId);
     }
+
+    @GetMapping("/api/classes")
+    public List<Classes> getWithSessionIdAndDepartmentId(@RequestParam int session, @RequestParam int department) {
+        return classSv.getWithSessionIdAndDepartmentId(session, department);
+    }
 }

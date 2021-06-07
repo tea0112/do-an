@@ -1,6 +1,8 @@
 package com.thai.doan.dao.repository;
 
+import com.thai.doan.dao.model.Classes;
 import com.thai.doan.dao.model.Schedule;
+import com.thai.doan.dao.model.Semester;
 import com.thai.doan.dao.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -31,4 +33,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
             ")"
     )
     List<Schedule> getCurrentSchedules(Student currentStudent, int classType, int subjectType);
+
+    @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
+    List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class SemesterController {
     private final SemesterService semesterSv;
 
-    @GetMapping("/admin/semesters")
+    @GetMapping("/api/semesters")
     public List<Semester> getWithSession(@RequestParam int sessionId) {
         return semesterSv.getWithSession(sessionId);
     }

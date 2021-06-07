@@ -100,4 +100,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         addSchedule.addObject("allDepartment", departmentRepo.findAll());
         return addSchedule;
     }
+
+    @Override
+    public List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId) {
+        return scheduleRepo.getWithClassIdAndSemesterId(classId, semesterId);
+    }
 }

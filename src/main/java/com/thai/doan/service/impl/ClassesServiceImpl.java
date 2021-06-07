@@ -27,4 +27,9 @@ public class ClassesServiceImpl implements ClassesService {
         List<Classes> clazz = classesRepo.findBySessionAndDepartment(session.get(), department.get());
         return clazz;
     }
+
+    @Override
+    public List<Classes> getWithSessionIdAndDepartmentId(int sessionId, int departmentId) {
+        return classesRepo.findBySessionIdAndDepartmentId(sessionId, departmentId);
+    }
 }

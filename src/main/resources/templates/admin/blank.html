@@ -19,7 +19,18 @@
 
     <!-- Custom styles for this template-->
     <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
-
+    <!---react-->
+    <script src="/static/js/reactjs/polyfill.js"></script>
+    <script
+      crossorigin
+      src="/static/js/reactjs/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="/static/js/reactjs/react-dom.development.js"
+    ></script>
+    <script src="/static/js/reactjs/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -45,8 +56,9 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-
+                    <div id="app"></div>
+                    <script type="text/babel" src="">
+                    </script>
                 </div>
                 <!-- /.container-fluid -->
 

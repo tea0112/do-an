@@ -10,13 +10,10 @@ import com.thai.doan.service.ScheduleService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -59,6 +56,12 @@ public class ScheduleController {
         return mav;
     }
 
+    @GetMapping("/admin/thoi-khoa-bieu/sua")
+    public ModelAndView getAdminEditSchedule() {
+        ModelAndView mav = new ModelAndView("admin/schedule/edit-schedule");
+        return mav;
+    }
+
     // curd
     @PostMapping("/admin/thoi-khoa-bieu/them")
     public ModelAndView createNewSchedule(
@@ -85,4 +88,8 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleSv.getSchedule(Subject.SUBJECT_TYPE.PRACTICE.ordinal()), HttpStatus.OK);
     }
 
+    @GetMapping("/api/schedules")
+    public List<Schedule> getWithClassIdAndSemesterId(@RequestParam int classId, @RequestParam int semesterId) {
+        return scheduleSv.getWithClassIdAndSemesterId(classId, semesterId);
+    };
 }

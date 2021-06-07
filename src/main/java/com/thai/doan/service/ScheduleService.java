@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ScheduleService {
     List<Schedule> getSchedule(int subjectType);
-
     ModelAndView createNewSchedule(NewScheduleRequest newSchlReq, BindingResult result);
+    List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
 }

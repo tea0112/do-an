@@ -18,7 +18,7 @@ commonGetFetchOpt("/admin/session", sessionInput, bindWithIdAndName)
   .then(() => commonGetFetchOpt(
     "/admin/classes?department=" + departmentInput.value + "&session=" + sessionInput.value,
     classInput, bindWithIdAndName))
-  .then(() => commonGetFetchOpt("/admin/semesters?sessionId=" + sessionInput.value,
+  .then(() => commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value,
     semesterInput, bindWithId))
 commonGetFetchOpt("/admin/lecturers?department=" + departmentInput.value, lecturerInput, bindWithIdAndName);
 commonGetFetchOpt("/admin/subject?subjectType=" + subjectTypeInput.value + "&department=" + departmentInput.value,
@@ -42,11 +42,11 @@ function handleSessionChange() {
   commonGetFetchOpt(
     "/admin/classes?department=" + departmentInput.value + "&session=" + sessionInput.value,
     classInput, bindWithIdAndName);
-  commonGetFetchOpt("/admin/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
+  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
 }
 
 function handleClassChange() {
-  commonGetFetchOpt("/admin/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
+  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
 }
 
 // Common
