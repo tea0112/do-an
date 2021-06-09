@@ -31,7 +31,6 @@ public class Semester implements Serializable {
     @Column(name = "end_day", nullable = false)
     private LocalDate endDay;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "fee_id")
     private Fee fee;

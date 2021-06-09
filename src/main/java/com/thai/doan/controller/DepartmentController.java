@@ -13,8 +13,10 @@ import java.util.List;
 public class DepartmentController {
     private final DepartmentService departmentService;
 
+    // RESTFul api
     @GetMapping("/api/departments")
     public List<Department> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
+
 }

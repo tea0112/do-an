@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, JpaSpecificationExecutor<Schedule> {
     @Query(
@@ -36,4 +37,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
 
     @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
+    Optional<Schedule> findById(int id);
 }

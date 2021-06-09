@@ -35,4 +35,21 @@ public class SubjectServiceImpl implements SubjectService {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Môn Không Tồn Tại");
         }
     }
+
+    @Override
+    public List<Subject> getBySubjectTypeAndDepartment(int subjectType, int departmentId) {
+        Optional<Department> department = departmentRepo.findById(departmentId);
+        if (!department.isPresent())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        switch (subjectType) {
+            case 0:
+                return subjectRepo.findBySubjectTypeAndDepartment(
+                    Subject.SUBJECT_TYPE.THEORY.ordinal(), department.get());
+            case 1:
+                return subjectRepo.findBySubjectTypeAndDepartment(
+                    Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
+            default:
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
 }

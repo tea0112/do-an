@@ -21,7 +21,7 @@ function App() {
       })
   }, []);
   React.useEffect(() => {
-    while(scheduleTableRef.current.firstElementChild) {
+    while (scheduleTableRef.current.firstElementChild) {
       scheduleTableRef.current.removeChild(scheduleTableRef.current.firstChild)
     }
     if (schedules && schedules.length !== 0) {
@@ -96,7 +96,7 @@ function App() {
   })
   // utils
   const getTabulator = () => new Tabulator("#schedule-table", {
-    // height: 205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+    // height: 205
     data: schedules, //assign data to table
     layout: "fitColumns", //fit columns to width of table (optional)
     columns: [ //Define Table Columns
@@ -108,8 +108,9 @@ function App() {
       {title: "Tiết Kết Thúc", field: "endPeriod"},
       {title: "Buổi", field: "periodType"},
     ],
-    rowClick: function (e, row) { //trigger an alert message when the row is clicked
-      alert("Row " + row.getData().id + " Clicked!!!!");
+    rowClick: function (e, row) {
+      // alert("Row " + row.getData().id + " Clicked!!!!");
+      window.location.href = "/admin/thoi-khoa-bieu/sua?scheduleId=" + row.getData().id
     },
   });
   return (
@@ -140,10 +141,10 @@ function App() {
             {semesters && semesterOption(semesters)}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">Tìm</button>
+        <button type="submit" className="btn btn-primary"
+                disabled={!classes || !semesters}>Tìm
+        </button>
       </form>
-      <br/>
-      <br/>
       <br/>
       <div id="schedule-table" ref={scheduleTableRef}/>
     </div>

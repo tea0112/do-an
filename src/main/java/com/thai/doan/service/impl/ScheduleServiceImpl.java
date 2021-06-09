@@ -3,15 +3,19 @@ package com.thai.doan.service.impl;
 import com.thai.doan.dao.model.*;
 import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewScheduleRequest;
+import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.ScheduleService;
 import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,5 +108,54 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId) {
         return scheduleRepo.getWithClassIdAndSemesterId(classId, semesterId);
+    }
+
+    @Override
+    public void updateSchedule(ScheduleUpdatingRequest scheduleUpdatingReq, String id) {
+        try {
+            Optional<Schedule> scheduleOpl = scheduleRepo.findById(Integer.parseInt(id));
+            if (!scheduleOpl.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            Semester semester = semesterRepo.findById(scheduleUpdatingReq.getSemester()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Lecturer lecturer = lecturerRepo.findById(scheduleUpdatingReq.getLecturer()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Subject subject = subjectRepo.findById(scheduleUpdatingReq.getSubject()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Classes clazz = classesRepo.findById(scheduleUpdatingReq.getClasses()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Schedule schedule = scheduleOpl.get();
+            schedule.setStartDay(scheduleUpdatingReq.getStartDay());
+            schedule.setEndDay(scheduleUpdatingReq.getEndDay());
+            schedule.setWeekDay(scheduleUpdatingReq.getWeekDay());
+            schedule.setPeriodType(scheduleUpdatingReq.getPeriodType());
+            schedule.setStartPeriod(scheduleUpdatingReq.getStartPeriod());
+            schedule.setEndPeriod(scheduleUpdatingReq.getEndPeriod());
+            schedule.setSemester(semester);
+            schedule.setLecturer(lecturer);
+            schedule.setSubject(subject);
+            schedule.setClasses(clazz);
+            scheduleRepo.save(schedule);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public Schedule getOneSchedule(String id) {
+        try {
+            Optional<Schedule> schedule = scheduleRepo.findById(Integer.parseInt(id));
+            if (!schedule.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            return schedule.get();
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 }

@@ -19,7 +19,7 @@ commonGetFetchOpt("/admin/session", sessionInput, bindWithIdAndName)
     "/admin/classes?department=" + departmentInput.value + "&session=" + sessionInput.value,
     classInput, bindWithIdAndName))
   .then(() => commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value,
-    semesterInput, bindWithId))
+    semesterInput, bindWithTermNumber))
 commonGetFetchOpt("/admin/lecturers?department=" + departmentInput.value, lecturerInput, bindWithIdAndName);
 commonGetFetchOpt("/admin/subject?subjectType=" + subjectTypeInput.value + "&department=" + departmentInput.value,
   subjectInput, bindWithIdAndName);
@@ -42,11 +42,11 @@ function handleSessionChange() {
   commonGetFetchOpt(
     "/admin/classes?department=" + departmentInput.value + "&session=" + sessionInput.value,
     classInput, bindWithIdAndName);
-  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
+  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithTermNumber)
 }
 
 function handleClassChange() {
-  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithId)
+  commonGetFetchOpt("/api/semesters?sessionId=" + sessionInput.value, semesterInput, bindWithTermNumber)
 }
 
 // Common
@@ -87,4 +87,11 @@ function bindWithId(response = {}) {
     response.parentSlt.appendChild(childSlt);
   })
 }
-
+function bindWithTermNumber(response = {}) {
+  response.data.forEach(function (value) {
+    const childSlt = document.createElement('option');
+    childSlt.value = value.id;
+    childSlt.innerHTML = value.termNumber;
+    response.parentSlt.appendChild(childSlt);
+  })
+}

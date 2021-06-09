@@ -2,6 +2,7 @@ package com.thai.doan.dao.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,6 +48,7 @@ public class Schedule implements Serializable {
     @Column(name = "end_period", nullable = false)
     private Integer endPeriod;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "scheduleId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StudentScheduleRelation> studentScheduleRelations;
 

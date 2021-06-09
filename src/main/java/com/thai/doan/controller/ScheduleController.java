@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.NewStudentRequest;
+import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.service.DepartmentService;
 import com.thai.doan.service.LecturerService;
 import com.thai.doan.service.ScheduleService;
@@ -58,8 +59,12 @@ public class ScheduleController {
 
     @GetMapping("/admin/thoi-khoa-bieu/sua")
     public ModelAndView getAdminEditSchedule() {
-        ModelAndView mav = new ModelAndView("admin/schedule/edit-schedule");
-        return mav;
+        return new ModelAndView("admin/schedule/edit-schedule");
+    }
+
+    @RequestMapping(value = "/admin/thoi-khoa-bieu/sua", method = RequestMethod.GET, params = "scheduleId")
+    public ModelAndView getAdminIdEditSchedule(@RequestParam("scheduleId") int scheduleId) {
+        return new ModelAndView("admin/schedule/id-edit-schedule");
     }
 
     // curd
@@ -92,4 +97,16 @@ public class ScheduleController {
     public List<Schedule> getWithClassIdAndSemesterId(@RequestParam int classId, @RequestParam int semesterId) {
         return scheduleSv.getWithClassIdAndSemesterId(classId, semesterId);
     };
+
+    @GetMapping("/api/admin/schedules/{id}")
+    public ResponseEntity<?> getSchedule(@PathVariable String id) {
+        return new ResponseEntity<>(scheduleSv.getOneSchedule(id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/api/admin/schedules/{id}")
+    public ResponseEntity<?> updateSchedule(@RequestBody @Valid ScheduleUpdatingRequest scheduleUpdatingReq,
+                                            @PathVariable String id) {
+        scheduleSv.updateSchedule(scheduleUpdatingReq, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
