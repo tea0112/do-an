@@ -40,7 +40,7 @@ public class StudentController {
 
     @RequestMapping(value = "/admin/sinh-vien/sua", params = "studentId", method = RequestMethod.GET)
     public ModelAndView editStudentWithId(@RequestParam int studentId) {
-        return new ModelAndView("admin/student/edit-student");
+        return new ModelAndView("admin/student/edit-id-student.html");
     }
 
     //curd
@@ -61,8 +61,13 @@ public class StudentController {
         return studentClassRelationSv.getWithClassId(classId);
     }
 
+    @GetMapping("/api/admin/students/{id}")
+    public Student getWithId(@PathVariable String id) {
+        return studentService.getWithId(id);
+    }
+
     @PatchMapping("/api/sinh-vien/sua")
-    public ResponseEntity<?> updateWithId(@RequestBody StudentUpdatingRequest studentUpdatingReq,
+    public ResponseEntity<?> updateWithId(@Valid @RequestBody StudentUpdatingRequest studentUpdatingReq,
                                           @RequestParam String studentId) {
         studentService.updateWithId(studentUpdatingReq, studentId);
         return new ResponseEntity<>(HttpStatus.OK);

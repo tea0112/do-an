@@ -97,4 +97,15 @@ public class StudentServiceImpl implements StudentService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public Student getWithId(String studentId) {
+        try {
+            return studentRepo.findById(Integer.parseInt(studentId)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

@@ -19,7 +19,10 @@
 
   <!-- Custom styles for this template-->
   <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
-
+  <script th:src="@{/static/admin/vendor/jquery/jquery.min.js}"></script>
+  <link href="/static/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+  <script src="/static/js/axios.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -43,25 +46,54 @@
 
       <!-- Begin Page Content -->
       <div class="container-fluid">
-
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-
+        <h1 class="h3 mb-4 text-gray-800">Thời Khoá Biểu Thực Hành</h1>
+        <h2 th:text="${currentTime}"></h2>
+        <div id="theory-table">
+        </div>
+        <script type="text/javascript">
+          axios.get('/thoi-khoa-bieu/thuc-hanh/practice-schedule')
+            .then((data) => {
+              const theoryScheduleData = data.map(e => {
+                if (e.periodType === 0) {
+                  e.periodType = "Sáng"
+                }
+                if (e.periodType === 1) {
+                  e.periodType = "Chiều"
+                }
+                if (e.periodType === 2) {
+                  e.periodType = "Tối"
+                }
+                return e
+              })
+              //create Tabulator on DOM element with id "example-table"
+              const table = new Tabulator("#theory-table", {
+                data: theoryScheduleData,
+                layout: "fitColumns",
+                initialSort: [
+                  {column: "startPeriod", dir:"asc"},
+                ],
+                columns: [
+                  {title: "Môn", field: "subject.name"},
+                  {title: "Giảng Viên", field: "lecturer.name"},
+                  {title: "Thứ", field: "weekDay", width: 60},
+                  {title: "Buổi", field: "periodType", width: 80},
+                  {title: "Tiết Bắt Đầu", field: "startPeriod"},
+                  {title: "Tiết Kết Thúc", field: "endPeriod"},
+                  {title: "Ngày Bắt Đầu", field: "startDay"},
+                  {title: "Ngày Kết Thúc", field: "endDay"},
+                ],
+                rowClick: function (e, row) { //trigger an alert message when the row is clicked
+                  alert("Row " + row.getData().id + " Clicked!!!!");
+                },
+              });
+            })
+        </script>
       </div>
       <!-- /.container-fluid -->
 
     </div>
     <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <!--                <div class="container my-auto">-->
-      <!--                    <div class="copyright text-center my-auto">-->
-      <!--                        <span>Copyright &copy; HACTECH Website 2021</span>-->
-      <!--                    </div>-->
-      <!--                </div>-->
-    </footer>
-    <!-- End of Footer -->
 
   </div>
   <!-- End of Content Wrapper -->
@@ -78,7 +110,6 @@
 <div th:replace="~{fragments/logout-modal :: logout}"></div>
 
 <!-- Bootstrap core JavaScript-->
-<script th:src="@{/static/admin/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/static/admin/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 <!-- Core plugin JavaScript-->
