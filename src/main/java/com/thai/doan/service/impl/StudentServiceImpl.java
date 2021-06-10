@@ -7,14 +7,17 @@ import com.thai.doan.dao.repository.SessionRepository;
 import com.thai.doan.dao.repository.StudentRepository;
 import com.thai.doan.dao.repository.UserRepository;
 import com.thai.doan.dto.request.NewStudentRequest;
+import com.thai.doan.dto.request.StudentUpdatingRequest;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentService;
 import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -76,5 +79,22 @@ public class StudentServiceImpl implements StudentService {
         ModelAndView redirect = new ModelAndView("redirect:/admin/add-student");
         redirect.addObject("message", "success");
         return redirect;
+    }
+
+    @Override
+    public void updateWithId(StudentUpdatingRequest studentUpdatingReq, String id) {
+        try {
+            Student student = studentRepo.findById(Integer.parseInt(id)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            student.setLastName(studentUpdatingReq.getLastName());
+            student.setFirstName(studentUpdatingReq.getFirstName());
+            student.setBirth(studentUpdatingReq.getBirth());
+            student.setPlace(studentUpdatingReq.getPlace());
+            student.setPhoneNumber(studentUpdatingReq.getPhoneNumber());
+            studentRepo.save(student);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
     }
 }

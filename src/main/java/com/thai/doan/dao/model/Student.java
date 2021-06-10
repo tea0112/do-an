@@ -1,5 +1,7 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,7 @@ public class Student implements Serializable {
     @NotNull
     private String firstName;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
 
@@ -51,6 +54,7 @@ public class Student implements Serializable {
     @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StudentScheduleRelation> studentScheduleRelations;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @NotNull

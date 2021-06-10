@@ -1,5 +1,6 @@
 package com.thai.doan.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +38,7 @@ public class User implements Serializable {
     @Column(name = "is_admin", nullable = false)
     private Boolean admin;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Student student;
 }
