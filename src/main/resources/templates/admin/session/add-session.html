@@ -46,7 +46,7 @@
 
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Thêm Niên Khoá</h1>
-        <form name="addStudent" th:action="@{/admin/session}" method="post" th:object="${sessionCreation}">
+        <form name="addStudent" th:action="@{/admin/nien-khoa/them}" method="post" th:object="${sessionCreation}">
           <div class="form-group">
             <label for="sessionNameInput">Tên Niên Khoá</label>
             <p style ="color: red;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
@@ -80,7 +80,7 @@
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
-
+<div id="message" th:if="${message}" th:text="${message}"></div>
 <!-- Logout Modal-->
 <div th:replace="~{/admin/fragments/logout-modal :: logout}"></div>
 
@@ -93,6 +93,33 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/static/admin/js/sb-admin-2.min.js}"></script>
+<script>
+  // const getParamValue = (name) => {
+  //   const urlString = window.location.href
+  //   const url = new URL(urlString)
+  //   const value = url.searchParams.get(name)
+  //   if (value) {
+  //     return value
+  //   }
+  //   return null
+  // }
+  // if (getParamValue("message") === "success") {
+  //   alert("Thêm niên khoá thành công ✔")
+  // }
+  // if (getParamValue("message") === "error") {
+  //   alert("Thêm niên khoá thất bại ❌")
+  // }
+  //show result
+  const message = document.getElementById('message')
+  if (message) {
+    if (message.textContent === 'success') {
+      alert('Thêm niên khoá thành công')
+    }
+    if (message.textContent === 'error') {
+      alert('Thêm niên khoá thất bại')
+    }
+  }
+</script>
 </body>
 
 </html>

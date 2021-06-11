@@ -21,19 +21,23 @@ import java.util.List;
 public class SessionController {
     private final SessionService sessionSv;
     //view
-    @GetMapping("/admin/session-add")
+    @GetMapping("/admin/nien-khoa/them")
     public ModelAndView addSession() {
         ModelAndView mv = new ModelAndView("admin/session/add-session");
         mv.addObject("sessionCreation", new SessionCreation());
+        mv.addObject("message", "");
         return mv;
     }
 
     //curd
-    @PostMapping("/admin/session")
-    public String createSession(@Valid SessionCreation sessionCreation,
+    @PostMapping("/admin/nien-khoa/them")
+    public ModelAndView createSession(@Valid SessionCreation sessionCreation,
                                 BindingResult result) {
         if (result.hasErrors()) {
-            return "admin/session/add-session";
+            ModelAndView mv = new ModelAndView("admin/session/add-session", result.getModel());
+            mv.addObject("sessionCreation", new SessionCreation());
+            mv.addObject("message", "error");
+            return mv;
         }
         return sessionSv.createSession(sessionCreation.getName(), result);
     }

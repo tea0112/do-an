@@ -11,10 +11,9 @@ import java.time.LocalDate;
 
 @Data
 public class NewStudentRequest {
-    @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9\\.]+$", message = "Email chỉ chứa chữ và số")
     @Size(min = 1, max = 100, message = "Tối đa 100 ký tự")
     @NotBlank(message = "Không được để trống")
-    private String email;
+    private String username;
 
     @Size(min = 8, max = 20, message = "Từ 8 đến 20 ký tự")
     @NotBlank(message = "Không được để trống")

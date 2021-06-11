@@ -27,10 +27,9 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9\\.]+$")
-    @Size(min = 1, max = 50)
-    private String email;
+    @Column(name = "username", nullable = false, unique = true)
+    @Size(min = 1, max = 500)
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;

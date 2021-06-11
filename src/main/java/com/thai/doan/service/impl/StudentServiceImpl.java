@@ -8,12 +8,14 @@ import com.thai.doan.dao.repository.StudentRepository;
 import com.thai.doan.dao.repository.UserRepository;
 import com.thai.doan.dto.request.NewStudentRequest;
 import com.thai.doan.dto.request.StudentUpdatingRequest;
+import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentService;
 import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -64,7 +66,7 @@ public class StudentServiceImpl implements StudentService {
             .build();
         User user = User.builder()
             .admin(false)
-            .email(stdReq.getEmail())
+            .username(stdReq.getUsername())
             .password(pwdEcd.encode(stdReq.getPassword()))
             .student(student)
             .build();
@@ -73,10 +75,10 @@ public class StudentServiceImpl implements StudentService {
             studentRepo.save(student);
         } catch (DataIntegrityViolationException e) {
             addStudent.addObject("sessionNames", sessionSv.getAllSession());
-            result.rejectValue("email", "email", "Email đã tồn tại");
+            result.rejectValue("username", "username", "username đã tồn tại");
             return addStudent;
         }
-        ModelAndView redirect = new ModelAndView("redirect:/admin/add-student");
+        ModelAndView redirect = new ModelAndView("redirect:/admin/sinh-vien/them");
         redirect.addObject("message", "success");
         return redirect;
     }
@@ -107,5 +109,13 @@ public class StudentServiceImpl implements StudentService {
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
+    }
+
+    @Override
+    public Student getAuthenticated() {
+        CustomUserDetails customUserDetails =
+            (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = customUserDetails.getUser();
+        return currentUser.getStudent();
     }
 }

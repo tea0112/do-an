@@ -45,12 +45,14 @@ public class Student implements Serializable {
     private String place;
 
     @Column(name = "phone_number")
+    @Pattern(regexp = "((09|03|07|08|05)+([0-9]{8})\\b)", message = "lỗi định dạng số điện thoại")
     private String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "retraining_id")
     private Retraining retraining;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StudentScheduleRelation> studentScheduleRelations;
 

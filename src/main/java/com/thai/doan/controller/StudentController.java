@@ -44,7 +44,7 @@ public class StudentController {
     }
 
     //curd
-    @PostMapping("/admin/add-student")
+    @PostMapping("/admin/sinh-vien/sua")
     public ModelAndView addNewStudent(@Valid NewStudentRequest stdReq, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView mvc = new ModelAndView("admin/student/add-student", result.getModel());
@@ -71,5 +71,10 @@ public class StudentController {
                                           @RequestParam String studentId) {
         studentService.updateWithId(studentUpdatingReq, studentId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/api/students/current")
+    public Student getCurrent() {
+        return studentService.getAuthenticated();
     }
 }

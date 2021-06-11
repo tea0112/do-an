@@ -25,10 +25,10 @@ public class DoAnApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         String adminAccount = "adminhactech2021@gmail.com";
         String password = "1";
-        User user = userRepository.findByEmail(adminAccount).orElseGet(() -> {
+        User user = userRepository.findByUsername(adminAccount).orElseGet(() -> {
             User newAdmin = new User();
             newAdmin.setAdmin(true);
-            newAdmin.setEmail(adminAccount);
+            newAdmin.setUsername(adminAccount);
             newAdmin.setPassword(passwordEncoder.encode(password));
             return newAdmin;
         });

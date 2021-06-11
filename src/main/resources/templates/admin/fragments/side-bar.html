@@ -20,7 +20,7 @@
     <li class="nav-item active">
       <a class="nav-link" th:href="@{/}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>Bảng Điều Khiển</span></a>
     </li>
 
     <!-- Divider -->
@@ -42,9 +42,28 @@
       <div class="collapse custom-show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Tuỳ Chọn:</h6>
-          <a class="collapse-item" href="/admin/sinh-vien/them-sinh-vien">Thêm Sinh Viên</a>
+          <a class="collapse-item" href="/admin/sinh-vien/them">Thêm Sinh Viên</a>
           <a class="collapse-item" href="/admin/sinh-vien/sua">Sửa Sinh Viên</a>
           <a class="collapse-item" href="/admin/sinh-vien/xoa">Xoá Sinh Viên</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="nav-item custom-nav-item">
+      <a class="nav-link collapsed custom-nav-link" href="#" data-toggle="collapse"
+         data-target="#collapseTwo"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-users"></i>
+        <span>Lớp</span>
+      </a>
+      <div class="collapse custom-show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Tuỳ Chọn:</h6>
+          <a class="collapse-item" href="/admin/sinh-vien/them">Thêm Sinh Viên Vào Lớp</a>
+          <a class="collapse-item" href="/admin/sinh-vien/them">Xoá Sinh Viên Khỏi Lớp</a>
+          <a class="collapse-item" href="/admin/sinh-vien/sua">Thêm Lớp</a>
+          <a class="collapse-item" href="/admin/sinh-vien/sua">Sửa Lớp</a>
+          <a class="collapse-item" href="/admin/sinh-vien/xoa">Xoá Lớp</a>
         </div>
       </div>
     </li>
@@ -60,7 +79,7 @@
            data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Chức Năng:</h6>
-          <a class="collapse-item" href="/admin/session-add">Thêm Niên Khoá</a>
+          <a class="collapse-item" href="/admin/nien-khoa/them">Thêm Niên Khoá</a>
           <a class="collapse-item" href="/admin/session-delete">Xoá Niên Khoá</a>
           <a class="collapse-item" href="/admin/session-update">Sửa Niên Khoá</a>
         </div>
