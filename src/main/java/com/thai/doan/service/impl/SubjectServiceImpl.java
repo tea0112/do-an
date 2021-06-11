@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Department;
 import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dao.repository.DepartmentRepository;
 import com.thai.doan.dao.repository.SubjectRepository;
+import com.thai.doan.dto.request.SubjectAddingRequest;
 import com.thai.doan.service.SubjectService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,24 @@ public class SubjectServiceImpl implements SubjectService {
                     Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
             default:
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @Override
+    public void addOne(SubjectAddingRequest subjectAddingRequest) {
+        try {
+            Department department = departmentRepo.findById(Integer.parseInt(subjectAddingRequest.getDepartmentId()))
+                .orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+                );
+            Subject subject = Subject.builder()
+                .name(subjectAddingRequest.getName())
+                .subjectType(subjectAddingRequest.getSubjectType())
+                .department(department)
+                .build();
+            subjectRepo.save(subject);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
 }

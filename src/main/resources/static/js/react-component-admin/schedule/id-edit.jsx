@@ -269,9 +269,11 @@ function App() {
     })
       .then(() => {
         alert('Cập Nhật Thành Công')
+        location.reload()
       })
       .catch(err => {
         alert('Cập Nhật Thất Bại ' + err)
+        location.reload()
       })
   }
   // utils

@@ -1,6 +1,7 @@
 package com.thai.doan.dao.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
+@Builder
 @Entity
 @Table(name = "subjects")
 public class Subject implements Serializable {
