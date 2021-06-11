@@ -2,15 +2,16 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Session;
 import com.thai.doan.dto.model.SessionCreation;
+import com.thai.doan.dto.request.SessionUpdatingRequest;
 import com.thai.doan.service.SessionService;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -24,6 +25,14 @@ public class SessionController {
     @GetMapping("/admin/nien-khoa/them")
     public ModelAndView addSession() {
         ModelAndView mv = new ModelAndView("admin/session/add-session");
+        mv.addObject("sessionCreation", new SessionCreation());
+        mv.addObject("message", "");
+        return mv;
+    }
+
+    @GetMapping("/admin/nien-khoa/sua")
+    public ModelAndView editSession() {
+        ModelAndView mv = new ModelAndView("admin/session/edit-session");
         mv.addObject("sessionCreation", new SessionCreation());
         mv.addObject("message", "");
         return mv;
@@ -45,5 +54,17 @@ public class SessionController {
     @GetMapping("/admin/session")
     public List<Session> getAllSession() {
         return sessionSv.getAllSession();
+    }
+
+    @GetMapping("/admin/sessions")
+    public List<Session> getAllSessions() {
+        return sessionSv.getAllSession();
+    }
+
+    @PatchMapping("/admin/sessions/{id}")
+    public ResponseEntity<?> updateWithId(@PathVariable String id,
+    @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
+        sessionSv.updateWithId(id, sessionUpdatingReq);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

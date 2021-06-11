@@ -3,11 +3,14 @@ package com.thai.doan.service.impl;
 import com.thai.doan.dao.model.Session;
 import com.thai.doan.dao.repository.SessionRepository;
 import com.thai.doan.dto.model.SessionCreation;
+import com.thai.doan.dto.request.SessionUpdatingRequest;
 import com.thai.doan.service.SessionService;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -39,5 +42,18 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<Session> getAllSession() {
         return sessionRepo.findAll();
+    }
+
+    @Override
+    public void updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq) {
+        try {
+            Session session = sessionRepo.findById(Integer.parseInt(id)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            session.setName(sessionUpdatingReq.getName());
+            sessionRepo.save(session);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 }
