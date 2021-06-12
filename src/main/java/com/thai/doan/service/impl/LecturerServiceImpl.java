@@ -45,7 +45,7 @@ public class LecturerServiceImpl implements LecturerService {
                 .department(department)
                 .build();
             lecturerRepo.save(lecturer);
-        } catch (ResponseStatusException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }

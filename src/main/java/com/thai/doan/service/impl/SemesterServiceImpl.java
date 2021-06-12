@@ -46,7 +46,7 @@ public class SemesterServiceImpl implements SemesterService {
                 .fee(fee)
                 .build();
             semesterRepo.save(semester);
-        } catch (ResponseStatusException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }

@@ -40,4 +40,42 @@ public class StudentClassRelationServiceImpl implements StudentClassRelationServ
             .collect(Collectors.toList());
 
     }
+
+    @Override
+    public void addStudentToClass(int studentId, int classId) {
+        try {
+            Classes clazz = classesRepo.findById(classId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Student student = studentRepo.findById(studentId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            StudentClassRelation studentClassRlt = StudentClassRelation.builder()
+                .studentId(student)
+                .classId(clazz)
+                .build();
+            studentClassRelationRepo.save(studentClassRlt);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public void removeStudentFromClass(int studentId, int classId) {
+        try {
+            Classes clazz = classesRepo.findById(classId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Student student = studentRepo.findById(studentId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            StudentClassRelation studentClassRlt = StudentClassRelation.builder()
+                .studentId(student)
+                .classId(clazz)
+                .build();
+            studentClassRelationRepo.delete(studentClassRlt);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

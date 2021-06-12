@@ -106,7 +106,7 @@ public class StudentServiceImpl implements StudentService {
             return studentRepo.findById(Integer.parseInt(studentId)).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-        } catch (ResponseStatusException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }

@@ -1,12 +1,18 @@
 package com.thai.doan.dao.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @IdClass(StudentClassRelationFK.class)
 @Table(name = "student_class_relation")
 public class StudentClassRelation implements Serializable {

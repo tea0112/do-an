@@ -52,8 +52,8 @@ public class SessionServiceImpl implements SessionService {
             );
             session.setName(sessionUpdatingReq.getName());
             sessionRepo.save(session);
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
 }

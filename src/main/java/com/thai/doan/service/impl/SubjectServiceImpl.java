@@ -67,7 +67,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .department(department)
                 .build();
             subjectRepo.save(subject);
-        } catch (ResponseStatusException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
