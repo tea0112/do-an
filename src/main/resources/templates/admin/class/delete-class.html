@@ -1,10 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Sửa Lớp</title>
+
+  <!-- Custom fonts for this template-->
+  <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
+  <script th:src="@{/static/admin/vendor/jquery/jquery.min.js}"></script>
+  <!---react-->
+  <script src="/static/js/reactjs/polyfill.js"></script>
+  <script
+    crossorigin
+    src="/static/js/reactjs/react.development.js"
+  ></script>
+  <script
+    crossorigin
+    src="/static/js/reactjs/react-dom.development.js"
+  ></script>
+  <script src="/static/js/reactjs/babel.min.js"></script>
+  <script src="/static/js/axios.min.js"></script>
+  <link href="/static/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <div th:replace="~{admin/fragments/side-bar :: sidebar}"></div>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+      <!-- Topbar -->
+      <div th:replace="~{/admin/fragments/navbar :: navbar}"></div>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <h1></h1>
+        <!-- Page Heading -->
+        <div id="app"></div>
+        <script type="text/babel">
+          function App() {
+            //state
+            const [sessions, setSessions] = React.useState(null)
+            const [departments, setDepartments] = React.useState(null)
+            const [classes, setClasses] = React.useState(null)
+            const [clazz, setClazz] = React.useState(null)
+            const [tabulator, setTabulator] = React.useState(null)
+            //ref
+            const sessionInputRef = React.useRef()
+            const departmentInputRef = React.useRef()
+            const classInputRef = React.useRef()
+            const scheduleTableRef = React.useRef()
+            const classNameChangeInputRef = React.useRef();
+            const classTypeChangeInputRef = React.useRef();
+            const sessionChangeInputRef = React.useRef();
+            const departmentChangeInputRef = React.useRef();
+            React.useEffect(() => {
+              Promise.all([getSessionPromise(), getDepartmentPromise()])
+                .then(([sessionArr, departmentArr]) => {
+                  setSessions(sessionArr)
+                  setDepartments(departmentArr)
+                })
+            }, []);
+            React.useEffect(() => {
+              if (classes) {
+                while (scheduleTableRef.current.firstElementChild) {
+                  scheduleTableRef.current.removeChild(scheduleTableRef.current.firstChild)
+                }
+                setTabulator(getTabulator())
+              }
+            }, [classes]);
+            const getSessionPromise = () => axios.get('/admin/session')
+            const getDepartmentPromise = () => axios.get('/api/departments')
+            const getClasses = (sessionId, departmentId) => {
+              return axios.get(`/api/classes?session=${sessionId}&department=${departmentId}`)
+            }
+            // onChange
+            const onClickTabulatorChange = () => {
+
+            }
+            // onSubmit
+            const onFind = (e) => {
+              e.preventDefault()
+              setClazz(null)
+              getClasses(sessionInputRef.current.value, departmentInputRef.current.value)
+                .then((classes) => {
+                  setClasses(classes.map(e => {
+                    if (e.classType === 0) {
+                      e.classType = 'đại cương'
+                    } else {
+                      e.classType = 'chuyên ngành'
+                    }
+                    return e
+                  }))
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+              if (scheduleTableRef.current.hasAttribute("class")) {
+                scheduleTableRef.current.removeAttribute("class")
+              }
+            }
+            const onDelete = (e) => {
+              e.preventDefault()
+              axios.delete(`/api/admin/classes/${clazz.id}`)
+                .then(() => {
+                  alert('Xoá Thành Công')
+                  location.reload()
+                })
+                .catch(err => {
+                  alert('Xoá Thất Bại ' + err)
+                  location.reload()
+                })
+            }
+            // component
+            const sessionOption = (sessionData) => {
+              return sessionData.map((session) => <option key={session.id} value={session.id}>{session.name}</option>)
+            }
+            const departmentOption = (departmentData) => departmentData.map((department) => {
+              return (
+                <option key={department.id} value={department.id}>{department.name}</option>
+              )
+            })
+            const changeField = (clazz) => {
+              const getValueClassType = (type) => {
+                if (type === 'đại cương') {
+                  return 0
+                } else {
+                  return 1
+                }
+              }
+              return (
+                <div>
+                  <hr/>
+                  <form onSubmit={onDelete}>
+                    <div className="form-group">
+                      <label htmlFor="classNameChangeInput">Tên Lớp</label>
+                      <input type="text" id="classNameChangeInput" key={clazz.id} ref={classNameChangeInputRef}
+                             defaultValue={clazz.name}
+                             className="form-control"/>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="subjectTypeChangeInput">Kiểu Lớp</label>
+                      <select className="form-control" key={clazz.id}
+                              defaultValue={clazz.classType && getValueClassType(clazz.classType)}
+                              ref={classTypeChangeInputRef}
+                              id="subjectTypeInput">
+                        <option value="0">đại cương</option>
+                        <option value="1">chuyên ngành</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Khoá</label>
+                      <select className="form-control" id="sessionChangeInput" key={clazz.id}
+                              defaultValue={clazz.session.id}
+                              ref={sessionChangeInputRef}>
+                        {sessions && sessionOption(sessions)}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Khoa</label>
+                      <select className="form-control" id="departmentChangeInput" key={clazz.id}
+                              defaultValue={clazz.department.id}
+                              ref={departmentChangeInputRef}>
+                        {departments && departmentOption(departments)}
+                      </select>
+                    </div>
+                    <button type="submit" className="btn btn-primary">Xoá</button>
+                  </form>
+                </div>
+              )
+            }
+            // utils
+            const getTabulator = () => new Tabulator("#schedule-table", {
+              data: classes,
+              layout: "fitColumns",
+              columns: [
+                {title: "Tên Lớp", field: "name"},
+                {title: "Kiểu Lớp", field: "classType"},
+                {title: "Thuộc Khoa", field: "department.name"},
+                {title: "Khoá", field: "session.name"},
+              ],
+              rowClick: function (e, row) {
+                classes.forEach(e => {
+                  if (e.id === row.getData().id) {
+                    setClazz(e)
+                  }
+                })
+              },
+            });
+            return (
+              <div>
+                <h1 className="h3 mb-4 text-gray-800">Xoá Lớp</h1>
+                <form onSubmit={onFind}>
+                  <div className="form-group">
+                    <label>Khoá</label>
+                    <select className="form-control" id="sessionInput" ref={sessionInputRef}>
+                      {sessions && sessionOption(sessions)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Thuộc Khoa</label>
+                    <select className="form-control" id="departmentInput"
+                            ref={departmentInputRef}>
+                      {departments && departmentOption(departments)}
+                    </select>
+                  </div>
+                  <button type="submit" className="btn btn-primary">Tìm</button>
+                </form>
+                <br/>
+                <div id="schedule-table" ref={scheduleTableRef}/>
+                {clazz && changeField(clazz)}
+              </div>
+            )
+          }
+
+          ReactDOM.render(React.createElement(App), document.getElementById('app'))
+        </script>
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="~{/admin/fragments/logout-modal :: logout}"></div>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/static/admin/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/static/admin/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/static/admin/js/sb-admin-2.min.js}"></script>
 </body>
+
 </html>

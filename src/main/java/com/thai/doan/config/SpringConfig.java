@@ -11,7 +11,17 @@ public class SpringConfig {
     @Bean
     public StrictHttpFirewall httpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowedHttpMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "get", "post", "patch", "put"));
+        firewall.setAllowedHttpMethods(Arrays.asList(
+            "GET",
+            "POST",
+            "PATCH",
+            "PUT",
+            "DELETE",
+            "delete",
+            "get",
+            "post",
+            "patch",
+            "put"));
         return firewall;
     }
 }
