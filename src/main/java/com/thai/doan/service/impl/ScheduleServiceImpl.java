@@ -107,7 +107,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId) {
-        return scheduleRepo.getWithClassIdAndSemesterId(classId, semesterId);
+        Classes clazz = classesRepo.findById(classId).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        Semester semester = semesterRepo.findById(semesterId).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        return scheduleRepo.findByClassesAndSemester(clazz, semester);
     }
 
     @Override

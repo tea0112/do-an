@@ -28,6 +28,16 @@ function App() {
       setTabulator(getTabulator())
     }
   }, [schedules]);
+  React.useEffect(() => {
+    if (departments) {
+      getClasses()
+    }
+  }, [departments]);
+  React.useEffect(() => {
+    if (classes) {
+      getSemester()
+    }
+  }, [classes]);
   const getSessionPromise = () => axios.get('/admin/session')
   const getDepartmentPromise = () => axios.get('/api/departments')
   const getSemester = () => {
@@ -44,25 +54,21 @@ function App() {
       .then((schedules) => setSchedules(schedules))
   }
   const handleSessionChange = (e) => {
-    setClasses(null)
-    setSemesters(null)
-  }
-  const handleDepartmentChange = (e) => {
-    setClasses(null)
-    setSemesters(null)
-  }
-  const handleClassChange = () => {
-
-  }
-  //click
-  const handleClassClick = () => {
     getClasses()
-  }
-  const handleSemesterClick = () => {
     getSemester()
   }
+  const handleDepartmentChange = (e) => {
+    getClasses()
+  }
+  const handleClassChange = () => {
+    getSemester()
+  }
+  const handleSemesterChange = () => {
+  }
+  //click
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(schedules)
     getSchedule()
     if (scheduleTableRef.current.hasAttribute("class")) {
       scheduleTableRef.current.removeAttribute("class")
@@ -96,10 +102,9 @@ function App() {
   })
   // utils
   const getTabulator = () => new Tabulator("#schedule-table", {
-    // height: 205
-    data: schedules, //assign data to table
-    layout: "fitColumns", //fit columns to width of table (optional)
-    columns: [ //Define Table Columns
+    data: schedules,
+    layout: "fitColumns",
+    columns: [
       {title: "Môn", field: "subject.name"},
       {title: "Loại", field: "subject.subjectType"},
       {title: "Giảng Viên", field: "lecturer.name"},
@@ -109,7 +114,6 @@ function App() {
       {title: "Buổi", field: "periodType"},
     ],
     rowClick: function (e, row) {
-      // alert("Row " + row.getData().id + " Clicked!!!!");
       window.location.href = "/admin/thoi-khoa-bieu/sua?scheduleId=" + row.getData().id
     },
   });
@@ -130,14 +134,13 @@ function App() {
         </div>
         <div className="form-group">
           <label>Lớp</label>
-          <select className="form-control" id="classInput" ref={classInputRef} onChange={handleClassChange}
-                  onClick={handleClassClick}>
+          <select className="form-control" id="classInput" ref={classInputRef} onChange={handleClassChange}>
             {classes && classOption(classes)}
           </select>
         </div>
         <div className="form-group">
           <label>Học Kỳ</label>
-          <select className="form-control" id="semesterInput" ref={semesterInputRef} onClick={handleSemesterClick}>
+          <select className="form-control" id="semesterInput" ref={semesterInputRef} onChange={handleSemesterChange}>
             {semesters && semesterOption(semesters)}
           </select>
         </div>

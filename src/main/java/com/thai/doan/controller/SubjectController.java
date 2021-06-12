@@ -37,7 +37,7 @@ public class SubjectController {
         return subjectSv.getBySubjectTypeAndDepartment(subjectType, departmentId);
     }
 
-    @PostMapping("/admin/subject/add")
+    @PostMapping("/admin/subjects")
     public ResponseEntity<?> add(@RequestBody @Valid SubjectAddingRequest subjectAddingReq) {
         subjectSv.addOne(subjectAddingReq);
         return new ResponseEntity<>(HttpStatus.OK);

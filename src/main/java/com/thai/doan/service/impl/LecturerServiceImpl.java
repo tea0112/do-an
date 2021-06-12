@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Department;
 import com.thai.doan.dao.model.Lecturer;
 import com.thai.doan.dao.repository.DepartmentRepository;
 import com.thai.doan.dao.repository.LecturerRepository;
+import com.thai.doan.dto.request.LecturerAddingRequest;
 import com.thai.doan.service.LecturerService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,20 @@ public class LecturerServiceImpl implements LecturerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         return lecturerRepo.findAllByDepartment(department.get());
+    }
+
+    @Override
+    public void add(LecturerAddingRequest lecturerAddingReq) {
+        try {
+            Department department = departmentRepo.findById(Integer.parseInt(lecturerAddingReq.getDepartmentId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            Lecturer lecturer = Lecturer.builder()
+                .name(lecturerAddingReq.getName())
+                .department(department)
+                .build();
+            lecturerRepo.save(lecturer);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
     }
 }

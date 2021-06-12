@@ -1,9 +1,11 @@
 package com.thai.doan.service;
 
 import com.thai.doan.dao.model.Semester;
+import com.thai.doan.dto.request.SemesterAddingRequest;
 
 import java.util.List;
 
 public interface SemesterService {
     List<Semester> getWithSession(int sessionId);
+    void add(SemesterAddingRequest semesterAddingReq);
 }

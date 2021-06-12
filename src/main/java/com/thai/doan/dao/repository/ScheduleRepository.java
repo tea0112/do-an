@@ -37,5 +37,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
 
     @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
+    List<Schedule> findByClassesAndSemester(Classes clazz, Semester semester);
     Optional<Schedule> findById(int id);
 }

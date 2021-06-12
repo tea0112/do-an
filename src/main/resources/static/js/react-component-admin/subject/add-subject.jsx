@@ -29,7 +29,7 @@ function App() {
     e.preventDefault()
     axios({
       method: 'POST',
-      url: `/admin/subject/add`,
+      url: `/admin/subjects`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -81,7 +81,7 @@ function App() {
             <option value="1">Thực Hành</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">Sửa</button>
+        <button type="submit" className="btn btn-primary">Thêm</button>
       </form>
     </div>
   )
