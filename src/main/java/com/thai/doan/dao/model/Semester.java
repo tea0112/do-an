@@ -1,6 +1,7 @@
 package com.thai.doan.dao.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -32,9 +33,11 @@ public class Semester implements Serializable {
     private Integer termNumber;
 
     @Column(name = "start_day", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDay;
 
     @Column(name = "end_day", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDay;
 
     @ManyToOne

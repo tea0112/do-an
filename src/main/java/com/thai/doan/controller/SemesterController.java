@@ -3,6 +3,7 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Semester;
 import com.thai.doan.dto.request.SemesterAddingRequest;
+import com.thai.doan.dto.request.SemesterUpdatingRequest;
 import com.thai.doan.service.SemesterService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,13 @@ public class SemesterController {
 
     //view
     @GetMapping("/admin/hoc-ky/them")
-    public ModelAndView getAdd() {
+    public ModelAndView getAddPage() {
         return new ModelAndView("admin/semester/add-semester");
+    }
+
+    @GetMapping("/admin/hoc-ky/sua")
+    public ModelAndView getEditPage() {
+        return new ModelAndView("admin/semester/edit-semester");
     }
 
     // restful api
@@ -35,4 +41,12 @@ public class SemesterController {
         semesterSv.add(semesterAddingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/api/admin/semesters/{id}")
+    public ResponseEntity<?> update(@Valid @RequestBody SemesterUpdatingRequest semesterUpdatingReq,
+                                    @PathVariable Integer id) {
+        semesterSv.updateWithId(semesterUpdatingReq, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

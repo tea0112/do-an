@@ -59,7 +59,7 @@
 
       <!-- Begin Page Content -->
       <div class="container-fluid">
-        <h1></h1>
+        <h1 className="h3 mb-4 text-gray-800"></h1>
         <!-- Page Heading -->
         <div id="app"></div>
         <script type="text/babel">
@@ -176,7 +176,7 @@
             })
             return (
               <div>
-                <h1>Sửa Giảng Viên</h1>
+                <h1 className="h3 mb-4 text-gray-800">Sửa Giảng Viên</h1>
                 <form>
                   <div className="form-group">
                     <label htmlFor="departmentInput">Khoa</label>
@@ -197,8 +197,11 @@
                 </form>
                 <hr/>
                 <div>
-                  <h3>Thay Đổi Cho: {lecturer && ' Id: ' + lecturer.id + ' - Tên: ' +
-                    lecturer.name + ' - Khoa: ' + lecturer.department.name}</h3>
+                  <h3 className="h3 mb-4 text-gray-800">
+                    Thay Đổi Cho:
+                    <br/>
+                    &emsp;{lecturer && ' ID: ' + lecturer.id + ' - TÊN: ' +
+                    lecturer.name + ' - KHOA: ' + lecturer.department.name}</h3>
                   <form onSubmit={onUpdate}>
                     <div className="form-group">
                       <label htmlFor="departmentUpdateInput">Khoa</label>

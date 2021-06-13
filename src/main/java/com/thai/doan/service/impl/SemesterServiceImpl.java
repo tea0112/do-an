@@ -7,6 +7,7 @@ import com.thai.doan.dao.repository.FeeRepository;
 import com.thai.doan.dao.repository.SemesterRepository;
 import com.thai.doan.dao.repository.SessionRepository;
 import com.thai.doan.dto.request.SemesterAddingRequest;
+import com.thai.doan.dto.request.SemesterUpdatingRequest;
 import com.thai.doan.service.SemesterService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,29 @@ public class SemesterServiceImpl implements SemesterService {
                 .termNumber(semesterAddingReq.getTermNumber())
                 .startDay(semesterAddingReq.getStartDay())
                 .endDay(semesterAddingReq.getEndDay())
+                .session(session)
+                .fee(fee)
+                .build();
+            semesterRepo.save(semester);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public void updateWithId(SemesterUpdatingRequest semesterUpdatingReq, Integer id) {
+        try {
+            Session session = sessionRepo.findById(semesterUpdatingReq.getSessionId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Fee fee = feeRepo.findById(1).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Semester semester = Semester.builder()
+                .id(id)
+                .termNumber(semesterUpdatingReq.getTermNumber())
+                .startDay(semesterUpdatingReq.getStartDay())
+                .endDay(semesterUpdatingReq.getEndDay())
                 .session(session)
                 .fee(fee)
                 .build();

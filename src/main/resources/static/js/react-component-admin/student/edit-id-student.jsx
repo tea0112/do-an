@@ -105,7 +105,7 @@ function App() {
   // -return
   return (
     <div>
-      <h1>Sửa Sinh Viên Id: {student && student.id}</h1>
+      <h1 className="h3 mb-4 text-gray-800">Sửa Sinh Viên Id: {student && student.id}</h1>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           {student && <input type="text" id="idInput" value={student.id} style={{display: 'none'}}/>}
