@@ -2,6 +2,7 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dto.request.SubjectAddingRequest;
+import com.thai.doan.dto.request.SubjectUpdatingRequest;
 import com.thai.doan.service.SubjectService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ public class SubjectController {
         return new ModelAndView("admin/subject/add-subject");
     }
 
+    @GetMapping("/admin/mon/sua")
+    public ModelAndView getEditPage() {
+        return new ModelAndView("admin/subject/edit-subject");
+    }
+
     // RestFul api
     @GetMapping("/admin/subject")
     public @ResponseBody
@@ -37,9 +43,21 @@ public class SubjectController {
         return subjectSv.getBySubjectTypeAndDepartment(subjectType, departmentId);
     }
 
+    @RequestMapping(value = "/admin/subjects", method = RequestMethod.GET, params = {"subjectType", "departmentId"})
+    public List<Subject> getWithDepartment(@RequestParam int subjectType, @RequestParam int departmentId) {
+        return subjectSv.getBySubjectTypeAndDepartment(subjectType, departmentId);
+    }
+
     @PostMapping("/admin/subjects")
     public ResponseEntity<?> add(@RequestBody @Valid SubjectAddingRequest subjectAddingReq) {
         subjectSv.addOne(subjectAddingReq);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/admin/subjects/{id}")
+    public ResponseEntity<?> updateWithId(@PathVariable Integer id,
+                                          @RequestBody SubjectUpdatingRequest subjectUpdatingReq) {
+        subjectSv.updateWithId(id, subjectUpdatingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Admin Pannel</title>
+
+  <!-- Custom fonts for this template-->
+  <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
+  <script th:src="@{/static/admin/vendor/jquery/jquery.min.js}"></script>
+  <!---react-->
+  <script src="/static/js/reactjs/polyfill.js"></script>
+  <script
+    crossorigin
+    src="/static/js/reactjs/react.development.js"
+  ></script>
+  <script
+    crossorigin
+    src="/static/js/reactjs/react-dom.development.js"
+  ></script>
+  <script src="/static/js/reactjs/babel.min.js"></script>
+  <script src="/static/js/axios.min.js"></script>
+  <link href="/static/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <div th:replace="~{admin/fragments/side-bar :: sidebar}"></div>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+      <!-- Topbar -->
+      <div th:replace="~{/admin/fragments/navbar :: navbar}"></div>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <h1></h1>
+        <!-- Page Heading -->
+        <div id="app"></div>
+        <script type="text/babel">
+          function App() {
+            // -state
+            const [departments, setDepartments] = React.useState(null)
+            const [subjectType, setSubjectType] = React.useState(null)
+            const [subjects, setSubjects] = React.useState(null)
+            const [subject, setSubject] = React.useState(null)
+            // -ref
+            const departmentInputRef = React.useRef(null);
+            const subjectTypeRef = React.useRef(null);
+            const subjectNameInputRef = React.useRef(null);
+            const departmentChangeInputRef = React.useRef(null);
+            const subjectNameChangeInputRef = React.useRef(null);
+            const subjectTypeChangeRef = React.useRef(null);
+            // -effect
+            React.useEffect(() => {
+              getDepartment()
+                .then((departments) => {
+                  setDepartments(departments)
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+            }, [])
+            React.useEffect(() => {
+              if (subjects) {
+                getTabulator()
+              }
+            }, [subjects])
+            React.useEffect(() => {
+              if (subject) {
+                console.log(subject)
+              }
+            }, [subject])
+            // -fetch
+            const getDepartment = () => axios.get('/api/departments')
+            const getSubjects = (subjectType, departmentId) => {
+              return axios.get(`/admin/subjects?subjectType=${subjectType}&departmentId=${departmentId}`)
+            }
+            const getTabulator = () => {
+              const newSubjects = subjects.map(sj => {
+                if (sj.subjectType === 0) {
+                  sj.subjectType = 'lý thuyết'
+                }
+                if (sj.subjectType === 1) {
+                  sj.subjectType = 'thực hành'
+                }
+                return sj
+              })
+              return new Tabulator("#schedule-table", {
+                data: newSubjects,
+                layout: "fitColumns",
+                columns: [
+                  {title: "Tên Môn", field: "name"},
+                  {title: "Kiểu Môn", field: "subjectType"},
+                  {title: "Thuộc Khoa", field: "department.name"},
+                ],
+                rowClick: function (e, row) {
+                  newSubjects.forEach(e => {
+                    if (e.id === row.getData().id) {
+                      setSubject(subjects.filter(subject => subject.id === e.id)[0])
+                    }
+                  })
+                },
+              })
+            }
+            // -component
+            const departmentOption = (departmentData) => departmentData.map((department) => {
+              return (
+                <option key={department.id} value={department.id}>{department.name}</option>
+              )
+            })
+            const subjectUpdatingField = (subject) => {
+              const changeSubjectType = (name) => {
+                if (name === 'lý thuyết') {
+                  return 0
+                }
+                else {
+                  return 1
+                }
+              }
+              return (
+                <form onSubmit={onSubmit}>
+                  <hr/>
+                  <div className="form-group">
+                    <label htmlFor="departmentChangeInput">Khoa</label>
+                    <select className="form-control" id="departmentChangeInput"
+                            key={subject.id}
+                            defaultValue={subject.department.id}
+                            ref={departmentChangeInputRef}>
+                      {departments && departmentOption(departments)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="subjectNameChangeInput">Tên Môn</label>
+                    <input type="text" id="subjectNameChangeInput" ref={subjectNameChangeInputRef}
+                           key={subject.id}
+                           defaultValue={subject.name}
+                           className="form-control"/>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="subjectTypeChangeInput">Kiểu Môn</label>
+                    <select className="form-control" key={subject.id}
+                            defaultValue={changeSubjectType(subject.subjectType)}
+                            ref={subjectTypeChangeRef}
+                            id="subjectTypeChangeInput">
+                      <option value="0">lý thuyết</option>
+                      <option value="1">thực hành</option>
+                    </select>
+                </div>
+                  <button type="submit" className="btn btn-primary">Thêm</button>
+                </form>
+              )
+            }
+            // -submit
+            const onSubmit = (e) => {
+              e.preventDefault()
+              axios({
+                method: 'PATCH',
+                url: `/admin/subjects/${subject.id}`,
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                data: {
+                  name: subjectNameChangeInputRef.current.value,
+                  subjectType: subjectTypeChangeRef.current.value,
+                  departmentId: departmentChangeInputRef.current.value
+                }
+              })
+                .then(() => {
+                  alert('Cập Nhật Thành Công')
+                  location.reload()
+                })
+                .catch(err => {
+                  alert('Cập Nhật Thất Bại ' + err)
+                  location.reload()
+                })
+            }
+            const onFind = (e) => {
+              e.preventDefault()
+              setSubject(null)
+              getSubjects(subjectTypeRef.current.value, departmentInputRef.current.value)
+                .then((newSubjects) => {
+                  setSubjects(newSubjects)
+                })
+                .catch(err => console.log(err))
+            }
+            // -change
+            return (
+              <div>
+                <h1>Sửa Môn</h1>
+                <form onSubmit={onFind}>
+                  <div className="form-group">
+                    <label>Khoa</label>
+                    <select className="form-control" id="departmentInput"
+                            ref={departmentInputRef}>
+                      {departments && departmentOption(departments)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="subjectTypeInput">Kiểu Môn</label>
+                    <select className="form-control" ref={subjectTypeRef} id="subjectTypeInput">
+                      <option value="0">lý thuyết</option>
+                      <option value="1">thực hành</option>
+                    </select>
+                  </div>
+                  <button type="submit" className="btn btn-primary">Tìm</button>
+                </form>
+                <hr/>
+                <div id="schedule-table"/>
+                {subject && subjectUpdatingField(subject)}
+              </div>
+            )
+          }
+
+          ReactDOM.render(React.createElement(App), document.getElementById('app'))
+        </script>
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="~{/admin/fragments/logout-modal :: logout}"></div>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/static/admin/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/static/admin/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/static/admin/js/sb-admin-2.min.js}"></script>
+</body>
+
+</html>

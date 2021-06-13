@@ -5,6 +5,7 @@ import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dao.repository.DepartmentRepository;
 import com.thai.doan.dao.repository.SubjectRepository;
 import com.thai.doan.dto.request.SubjectAddingRequest;
+import com.thai.doan.dto.request.SubjectUpdatingRequest;
 import com.thai.doan.service.SubjectService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,24 @@ public class SubjectServiceImpl implements SubjectService {
             Subject subject = Subject.builder()
                 .name(subjectAddingRequest.getName())
                 .subjectType(subjectAddingRequest.getSubjectType())
+                .department(department)
+                .build();
+            subjectRepo.save(subject);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public void updateWithId(Integer id, SubjectUpdatingRequest subjectUpdatingReq) {
+        try {
+            Department department = departmentRepo.findById(subjectUpdatingReq.getDepartmentId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Subject subject = Subject.builder()
+                .id(id)
+                .name(subjectUpdatingReq.getName())
+                .subjectType(subjectUpdatingReq.getSubjectType())
                 .department(department)
                 .build();
             subjectRepo.save(subject);
