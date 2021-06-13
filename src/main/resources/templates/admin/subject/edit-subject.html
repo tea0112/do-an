@@ -34,6 +34,8 @@
   <script src="/static/js/axios.min.js"></script>
   <link href="/static/css/tabulator.min.css" rel="stylesheet">
   <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+  <script src="/static/js/immutable.min.js"></script>
+  <script src="/static/js/immutable.js"></script>
 </head>
 
 <body id="page-top">
@@ -86,12 +88,13 @@
             }, [])
             React.useEffect(() => {
               if (subjects) {
+                console.log('subject after get', subjects)
                 getTabulator()
               }
             }, [subjects])
             React.useEffect(() => {
               if (subject) {
-                console.log(subject)
+                console.log("subject after click", subject)
               }
             }, [subject])
             // -fetch
@@ -100,7 +103,7 @@
               return axios.get(`/admin/subjects?subjectType=${subjectType}&departmentId=${departmentId}`)
             }
             const getTabulator = () => {
-              const newSubjects = subjects.map(sj => {
+              const newSubjects = subjects.toJS().map(sj => {
                 if (sj.subjectType === 0) {
                   sj.subjectType = 'lý thuyết'
                 }
@@ -120,7 +123,7 @@
                 rowClick: function (e, row) {
                   newSubjects.forEach(e => {
                     if (e.id === row.getData().id) {
-                      setSubject(subjects.filter(subject => subject.id === e.id)[0])
+                      setSubject(subjects.toJS().filter(subject => subject.id === e.id)[0])
                     }
                   })
                 },
@@ -133,11 +136,11 @@
               )
             })
             const subjectUpdatingField = (subject) => {
+              console.log('update field', subject)
               const changeSubjectType = (name) => {
                 if (name === 'lý thuyết') {
                   return 0
-                }
-                else {
+                } else {
                   return 1
                 }
               }
@@ -169,7 +172,7 @@
                       <option value="0">lý thuyết</option>
                       <option value="1">thực hành</option>
                     </select>
-                </div>
+                  </div>
                   <button type="submit" className="btn btn-primary">Thêm</button>
                 </form>
               )
@@ -203,7 +206,7 @@
               setSubject(null)
               getSubjects(subjectTypeRef.current.value, departmentInputRef.current.value)
                 .then((newSubjects) => {
-                  setSubjects(newSubjects)
+                  setSubjects(Immutable.fromJS(newSubjects))
                 })
                 .catch(err => console.log(err))
             }
