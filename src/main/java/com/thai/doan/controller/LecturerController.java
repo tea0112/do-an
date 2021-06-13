@@ -2,6 +2,7 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Lecturer;
 import com.thai.doan.dto.request.LecturerAddingRequest;
+import com.thai.doan.dto.request.LecturerUpdatingRequest;
 import com.thai.doan.service.LecturerService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,12 @@ public class LecturerController {
     // view
     @GetMapping("/admin/giang-vien/them")
     public ModelAndView getAdd() {
-        ModelAndView mav = new ModelAndView("admin/lecturer/add-lecturer");
-        return mav;
+        return new ModelAndView("admin/lecturer/add-lecturer");
+    }
+
+    @GetMapping("/admin/giang-vien/sua")
+    public ModelAndView getEdit() {
+        return new ModelAndView("admin/lecturer/edit-lecturer");
     }
 
     //Restful api
@@ -41,4 +46,17 @@ public class LecturerController {
         lecturerSv.add(lecturerAddingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/api/admin/lecturers/{id}")
+    public ResponseEntity<?> getOne(@PathVariable String id) {
+        return new ResponseEntity<>(lecturerSv.getOne(id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/api/admin/lecturers/{id}")
+    public ResponseEntity<?> update(@RequestBody @Valid LecturerUpdatingRequest lecturerUpdatingReq,
+                                    @PathVariable @RequestBody Integer id) {
+        lecturerSv.updateWithId(lecturerUpdatingReq, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

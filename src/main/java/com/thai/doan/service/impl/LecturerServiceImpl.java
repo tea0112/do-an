@@ -5,6 +5,7 @@ import com.thai.doan.dao.model.Lecturer;
 import com.thai.doan.dao.repository.DepartmentRepository;
 import com.thai.doan.dao.repository.LecturerRepository;
 import com.thai.doan.dto.request.LecturerAddingRequest;
+import com.thai.doan.dto.request.LecturerUpdatingRequest;
 import com.thai.doan.service.LecturerService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,31 @@ public class LecturerServiceImpl implements LecturerService {
                 .name(lecturerAddingReq.getName())
                 .department(department)
                 .build();
+            lecturerRepo.save(lecturer);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public Lecturer getOne(String id) {
+        try {
+            return lecturerRepo.findById(Integer.parseInt(id))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public void updateWithId(LecturerUpdatingRequest lecturerUpdatingReq, Integer id) {
+        try {
+            Lecturer lecturer = lecturerRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            Department department = departmentRepo.findById(lecturerUpdatingReq.getDepartmentId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            lecturer.setName(lecturerUpdatingReq.getName());
+            lecturer.setDepartment(department);
             lecturerRepo.save(lecturer);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
