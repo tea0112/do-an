@@ -46,6 +46,13 @@ public class ClassController {
 
 
     // api
+    @GetMapping("/api/admin/classes")
+    public List<Classes> getWithClassTypeAndDepartment(@RequestParam Integer classType,
+                                                       @RequestParam Integer departmentId,
+                                                       @RequestParam Integer sessionId) {
+        return classSv.getWithClassTypeAndDepartmentAndSession(classType, departmentId, sessionId);
+    }
+
     @GetMapping("/admin/classes")
     public List<Classes> getWithDepartmentAndSession(
         @RequestParam(name = "department") String departmentName, @RequestParam(name = "session") int sessionId) {
@@ -76,4 +83,13 @@ public class ClassController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/api/classes", method = RequestMethod.GET, params = "sessionId")
+    public List<Classes> getGeneralWithSession(@RequestParam Integer sessionId) {
+        return classSv.getGeneralWithSession(sessionId);
+    }
+
+    @RequestMapping(value = "/api/specializedClass", method = RequestMethod.GET, params = "sessionId")
+    public List<Classes> getSpecializedClassWithSessionId(@RequestParam Integer sessionId) {
+        return classSv.getSpecializedClassWithSessionId(sessionId);
+    }
 }

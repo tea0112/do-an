@@ -3,10 +3,7 @@ package com.thai.doan.dto.request;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
@@ -43,4 +40,7 @@ public class NewStudentRequest {
     @NotBlank(message = "Không được để trống")
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Lỗi định dạng")
     private String sessionName;
+
+    @Min(0)
+    private Integer classId;
 }

@@ -77,4 +77,5 @@ public class StudentController {
     public Student getCurrent() {
         return studentService.getAuthenticated();
     }
+
 }

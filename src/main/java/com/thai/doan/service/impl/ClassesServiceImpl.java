@@ -89,4 +89,43 @@ public class ClassesServiceImpl implements ClassesService {
         }
     }
 
+    @Override
+    public List<Classes> getWithClassTypeAndDepartmentAndSession(Integer classType, Integer departmentId,
+                                                                 Integer sessionId) {
+        try {
+            Department department = departmentRepo.findById(departmentId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            Session session = sessionRepo.findById(sessionId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            return classesRepo.findByClassTypeAndDepartmentAndSession(classType, department, session);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public List<Classes> getGeneralWithSession(Integer sessionId) {
+        try {
+            Session session = sessionRepo.findById(sessionId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            return classesRepo.findBySessionAndDepartment_IsGeneralTrue(session);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public List<Classes> getSpecializedClassWithSessionId(Integer sessionId) {
+        try {
+            Session session = sessionRepo.findById(sessionId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            return classesRepo.findBySessionAndClassType(session, Classes.TYPE.SPECIALIZED_CLASS.ordinal());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

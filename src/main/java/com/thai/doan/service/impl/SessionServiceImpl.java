@@ -56,4 +56,11 @@ public class SessionServiceImpl implements SessionService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public Session getWithName(String name) {
+        return sessionRepo.findByName(name).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+    }
 }

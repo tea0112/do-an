@@ -12,4 +12,7 @@ public interface ClassesService {
     void add(ClassAddingRequest classAddingReq);
     void updateWithId(int id, ClassUpdatingRequest classUpdatingReq);
     void deleteWithId(int id);
+    List<Classes> getWithClassTypeAndDepartmentAndSession(Integer classType, Integer departmentId, Integer sessionId);
+    List<Classes> getGeneralWithSession(Integer sessionId);
+    List<Classes> getSpecializedClassWithSessionId(Integer sessionId);
 }

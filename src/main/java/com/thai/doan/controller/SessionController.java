@@ -21,6 +21,7 @@ import java.util.List;
 @Data
 public class SessionController {
     private final SessionService sessionSv;
+
     //view
     @GetMapping("/admin/nien-khoa/them")
     public ModelAndView addSession() {
@@ -41,7 +42,7 @@ public class SessionController {
     //curd
     @PostMapping("/admin/nien-khoa/them")
     public ModelAndView createSession(@Valid SessionCreation sessionCreation,
-                                BindingResult result) {
+                                      BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView mv = new ModelAndView("admin/session/add-session", result.getModel());
             mv.addObject("sessionCreation", new SessionCreation());
@@ -49,6 +50,11 @@ public class SessionController {
             return mv;
         }
         return sessionSv.createSession(sessionCreation.getName(), result);
+    }
+
+    @GetMapping("/api/admin/sessions")
+    public Session getWithName(@RequestParam String name) {
+        return sessionSv.getWithName(name);
     }
 
     @GetMapping("/admin/session")
@@ -63,7 +69,7 @@ public class SessionController {
 
     @PatchMapping("/admin/sessions/{id}")
     public ResponseEntity<?> updateWithId(@PathVariable String id,
-    @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
+                                          @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
         sessionSv.updateWithId(id, sessionUpdatingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }

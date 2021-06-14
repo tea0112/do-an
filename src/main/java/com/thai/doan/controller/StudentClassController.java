@@ -15,6 +15,7 @@ import javax.validation.Valid;
 public class StudentClassController {
     private final StudentClassRelationService studentClassRelationSv;
 
+    // restful api
     @PostMapping("/api/admin/studentClass")
     public ResponseEntity<?> add(@RequestBody @Valid StudentClassAddingRequest studentClassAddingReq) {
         studentClassRelationSv.addStudentToClass(studentClassAddingReq.getStudentId(),

@@ -43,4 +43,8 @@ public class Classes implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    public enum TYPE {
+        GENERAL_CLASS,
+        SPECIALIZED_CLASS,
+    }
 }

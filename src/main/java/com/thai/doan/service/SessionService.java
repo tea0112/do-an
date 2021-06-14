@@ -11,4 +11,5 @@ public interface SessionService {
     ModelAndView createSession(String name, BindingResult result);
     List<Session> getAllSession();
     void updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq);
+    Session getWithName(String name);
 }
