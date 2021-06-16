@@ -30,6 +30,11 @@ public class LecturerController {
         return new ModelAndView("admin/lecturer/edit-lecturer");
     }
 
+    @GetMapping("/admin/giang-vien/xoa")
+    public ModelAndView getDelete() {
+        return new ModelAndView("admin/lecturer/delete-lecturer");
+    }
+
     //Restful api
     @GetMapping("/admin/lecturers")
     public @ResponseBody List<Lecturer> getAllLecturerWithDepartment(@RequestParam String department) {
@@ -56,6 +61,12 @@ public class LecturerController {
     public ResponseEntity<?> update(@RequestBody @Valid LecturerUpdatingRequest lecturerUpdatingReq,
                                     @PathVariable @RequestBody Integer id) {
         lecturerSv.updateWithId(lecturerUpdatingReq, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/admin/lecturers/{id}")
+    public ResponseEntity<?> delete(@PathVariable @RequestBody Integer id) {
+        lecturerSv.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

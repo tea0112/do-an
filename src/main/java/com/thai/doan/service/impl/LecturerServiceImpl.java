@@ -75,4 +75,15 @@ public class LecturerServiceImpl implements LecturerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public void delete(Integer id) {
+        try {
+            Lecturer lecturer = lecturerRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            lecturerRepo.delete(lecturer);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

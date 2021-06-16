@@ -40,11 +40,11 @@ function App() {
       }
     })
       .then(() => {
-        alert('Cập Nhật Thành Công')
+        alert('Thêm Thành Công')
         location.reload()
       })
       .catch(err => {
-        alert('Cập Nhật Thất Bại ' + err)
+        alert('Thêm Thất Bại ' + err)
         location.reload()
       })
   }

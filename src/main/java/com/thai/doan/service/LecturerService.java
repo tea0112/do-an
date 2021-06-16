@@ -12,4 +12,5 @@ public interface LecturerService {
     void add(LecturerAddingRequest lecturerAddingReq);
     Lecturer getOne(String id);
     void updateWithId(LecturerUpdatingRequest lecturerUpdatingReq, Integer id);
+    void delete(Integer id);
 }

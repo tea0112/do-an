@@ -107,14 +107,14 @@ function App() {
           </select>
         </div>
         <button type="button" onClick={preDeleteClick} className="btn btn-primary">Xoá</button>
-        {/*modal*/}
+        {/*start modal*/}
         <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog"
              aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">
-                  Bạn chắc chắn muốn xoá khoa "{subject && <b>{subject.name}</b>}":
+                  Bạn chắc chắn muốn xoá môn "{subject && <b>{subject.name}</b>}":
                 </h5>
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -130,6 +130,7 @@ function App() {
             </div>
           </div>
         </div>
+        {/*end modal*/}
       </form>
     )
   }
