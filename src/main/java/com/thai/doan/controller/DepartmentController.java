@@ -31,7 +31,7 @@ public class DepartmentController {
 
     @GetMapping("/admin/khoa/xoa")
     public ModelAndView getDeletePage() {
-        return new ModelAndView("admin/department/edit-department");
+        return new ModelAndView("admin/department/delete-department");
     }
 
     // RESTFul api
@@ -51,6 +51,13 @@ public class DepartmentController {
     public ResponseEntity<?> update(@PathVariable Integer id,
                                     @Valid @RequestBody DepartmentUpdatingRequest departmentUpdatingReq) {
         departmentService.update(id, departmentUpdatingReq);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/admin/departments/{id}",
+        method = RequestMethod.DELETE)
+    public ResponseEntity<?> update(@PathVariable Integer id) {
+        departmentService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

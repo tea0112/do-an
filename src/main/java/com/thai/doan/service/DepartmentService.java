@@ -10,4 +10,5 @@ public interface DepartmentService {
     List<Department> getAllDepartments();
     void add(DepartmentAddingRequest departmentAddingReq);
     void update(Integer id, DepartmentUpdatingRequest departmentUpdatingReq);
+    void delete(Integer id);
 }

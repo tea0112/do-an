@@ -32,7 +32,7 @@ public class ScheduleController {
 
     @GetMapping("/thoi-khoa-bieu/ly-thuyet")
     public ModelAndView getTheorySchedule() {
-        ModelAndView mav = new ModelAndView("schedule/theory");
+        ModelAndView mav = new ModelAndView("client/schedule/theory");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         mav.addObject("currentTime", dtf.format(now));
@@ -41,7 +41,7 @@ public class ScheduleController {
 
     @GetMapping("/thoi-khoa-bieu/thuc-hanh")
     public ModelAndView getPracticeSchedule() {
-        ModelAndView mav = new ModelAndView("schedule/practice");
+        ModelAndView mav = new ModelAndView("client/schedule/practice");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         mav.addObject("currentTime", dtf.format(now));

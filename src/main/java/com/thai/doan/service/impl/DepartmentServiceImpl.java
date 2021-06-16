@@ -61,5 +61,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+    @Override
+    public void delete(Integer id) {
+        try {
+            Department department = departmentRepo.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            departmentRepo.delete(department);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
 }
 

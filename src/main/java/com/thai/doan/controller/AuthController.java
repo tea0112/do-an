@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthController {
     @GetMapping({"/", "/index"})
     public ModelAndView getHome() {
-        ModelAndView userView = new ModelAndView("index");
+        ModelAndView userView = new ModelAndView("client/index");
         ModelAndView adminView = new ModelAndView("admin/index");
         if (UserChecker.doesUserIsAdmin()) {
             return adminView;
@@ -22,7 +22,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public ModelAndView getLogin() {
-        return new ModelAndView("login");
+        return new ModelAndView("client/login");
     }
 
     @GetMapping("/logout")
@@ -32,7 +32,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegister() {
-        return "register";
+        return "client/register";
     }
 
     @GetMapping("/login_success")
