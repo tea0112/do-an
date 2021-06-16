@@ -10,4 +10,5 @@ public interface SemesterService {
     List<Semester> getWithSession(int sessionId);
     void add(SemesterAddingRequest semesterAddingReq);
     void updateWithId(SemesterUpdatingRequest semesterUpdatingReq, Integer id);
+    void delete(Integer id);
 }

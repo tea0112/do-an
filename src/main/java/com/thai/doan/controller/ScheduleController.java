@@ -67,6 +67,11 @@ public class ScheduleController {
         return new ModelAndView("admin/schedule/id-edit-schedule");
     }
 
+    @GetMapping("/admin/thoi-khoa-bieu/xoa")
+    public ModelAndView getAdminDeleteSchedule() {
+        return new ModelAndView("admin/schedule/delete-schedule");
+    }
+
     // curd
     @PostMapping("/admin/thoi-khoa-bieu/them")
     public ModelAndView createNewSchedule(
@@ -109,4 +114,11 @@ public class ScheduleController {
         scheduleSv.updateSchedule(scheduleUpdatingReq, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/api/admin/schedules/{id}")
+    public ResponseEntity<?> updateSchedule(@PathVariable String id) {
+        scheduleSv.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

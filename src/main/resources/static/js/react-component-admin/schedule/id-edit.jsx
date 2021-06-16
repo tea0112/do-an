@@ -208,11 +208,11 @@ function App() {
     })
   }
   const periodTypeOption = (current) => {
-    return Array(2).fill(null).map((e, i) => {
+    return Array(3).fill(null).map((e, i) => {
       if (current === i) {
-        return <option key={i} value={i}>{i === 0 ? 'Sáng' : 'Chiều'}</option>
+        return <option key={i} value={i}>{i === 0 && 'Sáng'}{i === 1 && 'chiều'}{i === 2 && 'tối'}</option>
       }
-      return <option key={i} value={i}>{i === 0 ? 'Sáng' : 'Chiều'}</option>
+      return <option key={i} value={i}>{i === 0 && 'Sáng'}{i === 1 && 'chiều'}{i === 2 && 'tối'}</option>
     })
   }
   // onChange

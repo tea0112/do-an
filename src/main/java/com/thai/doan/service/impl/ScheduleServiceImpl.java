@@ -164,4 +164,17 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
+
+    @Override
+    public void delete(String id) {
+        try {
+            Optional<Schedule> schedule = scheduleRepo.findById(Integer.parseInt(id));
+            if (!schedule.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            scheduleRepo.delete(schedule.get());
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
 }

@@ -30,6 +30,11 @@ public class SemesterController {
         return new ModelAndView("admin/semester/edit-semester");
     }
 
+    @GetMapping("/admin/hoc-ky/xoa")
+    public ModelAndView getDeletePage() {
+        return new ModelAndView("admin/semester/delete-semester");
+    }
+
     // restful api
     @GetMapping("/api/semesters")
     public List<Semester> getWithSession(@RequestParam int sessionId) {
@@ -46,6 +51,12 @@ public class SemesterController {
     public ResponseEntity<?> update(@Valid @RequestBody SemesterUpdatingRequest semesterUpdatingReq,
                                     @PathVariable Integer id) {
         semesterSv.updateWithId(semesterUpdatingReq, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/admin/semesters/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        semesterSv.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

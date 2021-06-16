@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Admin Pannel</title>
+  <title>Thêm Thời Khoá Biểu</title>
 
   <!-- Custom fonts for this template-->
   <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -156,6 +156,7 @@
             <select class="form-control form-control-sm" th:field="*{periodType}" id="periodType">
               <option th:value="0">Sáng</option>
               <option th:value="1">Chiều</option>
+              <option th:value="2">Tối</option>
             </select>
             <p style ="color: red;" th:if="${#fields.hasErrors('periodType')}" th:errors="*{periodType}"></p>
           </div>

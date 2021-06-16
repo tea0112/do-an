@@ -6,6 +6,7 @@ function App() {
   const [classes, setClasses] = React.useState(null);
   const [semesters, setSemesters] = React.useState(null);
   const [schedules, setSchedules] = React.useState(null);
+  const [scheduleId, setScheduleId] = React.useState(null);
   const [tabulator, setTabulator] = React.useState(null);
   const sessionInputRef = React.useRef();
   const departmentInputRef = React.useRef();
@@ -39,6 +40,12 @@ function App() {
       getSemester();
     }
   }, [classes]);
+  React.useEffect(() => {
+    if (scheduleId) {
+    }
+  }, [scheduleId]);
+
+
   const getSessionPromise = () => axios.get('/admin/session');
   const getDepartmentPromise = () => axios.get('/api/departments');
   const getSemester = () => {
@@ -71,7 +78,8 @@ function App() {
   const handleClassChange = () => {
     getSemester();
   };
-  const handleSemesterChange = () => {};
+  const handleSemesterChange = () => {
+  };
   //click
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -124,7 +132,41 @@ function App() {
         </option>
       );
     });
+  // request
+  const onDelete = () => {
+    axios({
+      method: 'DELETE',
+      url: `/api/admin/schedules/${scheduleId}`,
+    })
+      .then(() => {
+        alert('Xoá Thành Công')
+        location.reload()
+      })
+      .catch(err => {
+        alert('Xoá Thất Bại ' + err)
+        location.reload()
+      })
+  }
+  const preDeleteClick = (setSchId) => {
+    console.log(setSchId)
+    setScheduleId(setSchId)
+    $("#deleteModal").modal()
+  }
+
   // utils
+  const getSubjectName = (schedules, id) => {
+    if (schedules) {
+      if (id) {
+        const schedule = schedules.find(s => s.id === id)
+        if (schedule) {
+          if (schedule.subject !== undefined) {
+            return schedule.subject.name
+          }
+        }
+      }
+    }
+  }
+
   const getTabulator = () => {
     const changedSchedules = Immutable.fromJS(schedules).toJS().map(s => {
       if (s.subject.subjectType === 0) {
@@ -149,23 +191,22 @@ function App() {
       data: JSON.parse(JSON.stringify(changedSchedules)),
       layout: 'fitColumns',
       columns: [
-        { title: 'Môn', field: 'subject.name' },
-        { title: 'Loại Môn', field: 'subject.subjectType' },
-        { title: 'Giảng Viên', field: 'lecturer.name' },
-        { title: 'Thứ', field: 'weekDay' },
-        { title: 'Tiết Bắt Đầu', field: 'startPeriod' },
-        { title: 'Tiết Kết Thúc', field: 'endPeriod' },
-        { title: 'Buổi', field: 'periodType' },
+        {title: 'Môn', field: 'subject.name'},
+        {title: 'Loại Môn', field: 'subject.subjectType'},
+        {title: 'Giảng Viên', field: 'lecturer.name'},
+        {title: 'Thứ', field: 'weekDay'},
+        {title: 'Tiết Bắt Đầu', field: 'startPeriod'},
+        {title: 'Tiết Kết Thúc', field: 'endPeriod'},
+        {title: 'Buổi', field: 'periodType'},
       ],
       rowClick: function (e, row) {
-        window.location.href =
-          '/admin/thoi-khoa-bieu/sua?scheduleId=' + row.getData().id;
+        preDeleteClick(row.getData().id)
       },
     })
   }
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Sửa Thời Khoá Biểu</h1>
+      <h1 className="h3 mb-4 text-gray-800">Xoá Thời Khoá Biểu</h1>
       <form name="addStudent" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Khoá</label>
@@ -212,8 +253,32 @@ function App() {
           Tìm
         </button>
       </form>
-      <br />
-      <div id="schedule-table" ref={scheduleTableRef} />
+      <br/>
+      <div id="schedule-table" ref={scheduleTableRef}/>
+      {/*start modal*/}
+      {scheduleId && schedules && (
+        <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Bạn chắc chắn muốn xoá
+                  môn <b>{scheduleId && schedules && getSubjectName(schedules, scheduleId)}</b>?
+                </h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" onClick={onDelete} className="btn btn-primary">Xoá</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/*end modal*/}
     </div>
   );
 }

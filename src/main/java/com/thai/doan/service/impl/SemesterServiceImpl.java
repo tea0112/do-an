@@ -74,4 +74,16 @@ public class SemesterServiceImpl implements SemesterService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public void delete(Integer id) {
+        try {
+            Semester semester = semesterRepo.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            semesterRepo.delete(semester);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }
