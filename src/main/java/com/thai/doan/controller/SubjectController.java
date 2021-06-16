@@ -29,6 +29,11 @@ public class SubjectController {
         return new ModelAndView("admin/subject/edit-subject");
     }
 
+    @GetMapping("/admin/mon/xoa")
+    public ModelAndView getDeletePage() {
+        return new ModelAndView("admin/subject/delete-subject");
+    }
+
     // RestFul api
     @GetMapping("/admin/subject")
     public @ResponseBody
@@ -60,4 +65,11 @@ public class SubjectController {
         subjectSv.updateWithId(id, subjectUpdatingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/admin/subjects/{id}")
+    public ResponseEntity<?> updateWithId(@PathVariable Integer id) {
+        subjectSv.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

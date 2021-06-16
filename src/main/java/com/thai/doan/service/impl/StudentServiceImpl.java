@@ -57,16 +57,16 @@ public class StudentServiceImpl implements StudentService {
             return addStudent;
         }
         Student student = Student.builder()
-            .lastName(stdReq.getLastName())
-            .firstName(stdReq.getFirstName())
+            .lastName(stdReq.getLastName().trim())
+            .firstName(stdReq.getFirstName().trim())
             .birth(stdReq.getBirth())
-            .place(stdReq.getPlace())
-            .phoneNumber(stdReq.getPhoneNumber())
+            .place(stdReq.getPlace().trim())
+            .phoneNumber(stdReq.getPhoneNumber().trim())
             .session(sessionOpl.get())
             .build();
         User user = User.builder()
             .admin(false)
-            .username(stdReq.getUsername())
+            .username(stdReq.getUsername().trim())
             .password(pwdEcd.encode(stdReq.getPassword()))
             .student(student)
             .build();

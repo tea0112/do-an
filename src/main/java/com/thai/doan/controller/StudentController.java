@@ -44,7 +44,7 @@ public class StudentController {
     }
 
     //curd
-    @PostMapping("/admin/sinh-vien/sua")
+    @PostMapping("/admin/sinh-vien/them")
     public ModelAndView addNewStudent(@Valid NewStudentRequest stdReq, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView mvc = new ModelAndView("admin/student/add-student", result.getModel());

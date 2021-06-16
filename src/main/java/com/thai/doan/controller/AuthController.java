@@ -22,7 +22,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public ModelAndView getLogin() {
-        return new ModelAndView("client/login");
+        return new ModelAndView("client/login/index");
     }
 
     @GetMapping("/logout")

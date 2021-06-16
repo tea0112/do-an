@@ -90,4 +90,16 @@ public class SubjectServiceImpl implements SubjectService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public void delete(Integer id) {
+        try {
+            Subject subject = subjectRepo.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            subjectRepo.delete(subject);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

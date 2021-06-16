@@ -4,193 +4,22 @@
   <script th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
   <link rel="stylesheet" th:href="@{/static/css/bootstrap/bootstrap.min.css}"/>
   <script th:src="@{/static/js/bootstrap/bootstrap.min.js}"></script>
-  <!--  <link rel="stylesheet" th:href="@{/static/css/login.css}">-->
-  <style>
-      body {
-          margin: 0;
-          padding: 0;
-          font-family: sans-serif;
-          background: linear-gradient(to right, #b92b27, #1565c0)
-      }
-
-      .card {
-          margin-bottom: 20px;
-          border: none
-      }
-
-      .box {
-          width: 500px;
-          padding: 40px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          background: #191919;;
-          text-align: center;
-          transition: 0.25s;
-          margin-top: 100px
-      }
-
-      .box input[type="text"],
-      .box input[type="password"] {
-          border: 0;
-          background: none;
-          display: block;
-          margin: 20px auto;
-          text-align: center;
-          border: 2px solid #3498db;
-          padding: 10px 10px;
-          width: 250px;
-          outline: none;
-          color: white;
-          border-radius: 24px;
-          transition: 0.25s
-      }
-
-      .box h1 {
-          color: white;
-          text-transform: uppercase;
-          font-weight: 500
-      }
-
-      .box input[type="text"]:focus,
-      .box input[type="password"]:focus {
-          width: 300px;
-          border-color: #2ecc71
-      }
-
-      .box input[type="submit"] {
-          border: 0;
-          background: none;
-          display: block;
-          margin: 20px auto;
-          text-align: center;
-          border: 2px solid #2ecc71;
-          padding: 14px 40px;
-          outline: none;
-          color: white;
-          border-radius: 24px;
-          transition: 0.25s;
-          cursor: pointer
-      }
-
-      .box input[type="submit"]:hover {
-          background: #2ecc71
-      }
-
-      .forgot {
-          text-decoration: underline
-      }
-
-      ul.social-network {
-          list-style: none;
-          display: inline;
-          margin-left: 0 !important;
-          padding: 0
-      }
-
-      ul.social-network li {
-          display: inline;
-          margin: 0 5px
-      }
-
-      .social-network a.icoFacebook:hover {
-          background-color: #3B5998
-      }
-
-      .social-network a.icoTwitter:hover {
-          background-color: #33ccff
-      }
-
-      .social-network a.icoGoogle:hover {
-          background-color: #BD3518
-      }
-
-      .social-network a.icoFacebook:hover i,
-      .social-network a.icoTwitter:hover i,
-      .social-network a.icoGoogle:hover i {
-          color: #fff
-      }
-
-      a.socialIcon:hover,
-      .socialHoverClass {
-          color: #44BCDD
-      }
-
-      .social-circle li a {
-          display: inline-block;
-          position: relative;
-          margin: 0 auto 0 auto;
-          border-radius: 50%;
-          text-align: center;
-          width: 50px;
-          height: 50px;
-          font-size: 20px
-      }
-
-      .social-circle li i {
-          margin: 0;
-          line-height: 50px;
-          text-align: center
-      }
-
-      .social-circle li a:hover i,
-      .triggeredHover {
-          transform: rotate(360deg);
-          transition: all 0.2s
-      }
-
-      .social-circle i {
-          color: #fff;
-          transition: all 0.8s;
-          transition: all 0.8s
-      }
-  </style>
+  <link rel="stylesheet" th:href="@{/static/css/login.css}">
 </head>
 <body>
-<!--<div class="wrapper fadeInDown">-->
-<!--  <img th:src="@{/static/images/login/hactech.png}" alt="">-->
-<!--  <div id="formContent">-->
-<!--    <div th:if="${param.error}">-->
-<!--      <h3>Sai Tên Tài Khoản Hoặc Mật Khẩu</h3>-->
-<!--    </div>-->
-<!--    <div th:if="${param.logout}">-->
-<!--      <h3>Bạn Đã Đăng Xuất</h3>-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    &lt;!&ndash; Login Form &ndash;&gt;-->
-<!--    <form th:action="@{/login}" method="post">-->
-<!--      <input type="text" id="login" class="fadeIn second" name="username" placeholder="Tài Khoản">-->
-<!--      <br>-->
-<!--      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Mật Khẩu">-->
-<!--      <input type="submit" class="fadeIn fourth" value="Đăng Nhập">-->
-<!--    </form>-->
-<!--    <div id="formFooter">-->
-<!--      <a class="underlineHover" href="#">Quên Mật Khẩu?</a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <form th:action="@{/login}" method="post" class="box">
-          <a th:href="@{/login}">
-            <img th:src="@{/static/images/login/hactech.png}" alt="Logo Hactech">
-          </a>
-          <br>
-          <br>
-          <div th:if="${param.error}"></div>
-          <br>
-          <h1 className="h3 mb-4 text-gray-800">Đăng Nhập</h1>
-          <p class="text-muted"> Hãy nhập số sinh viên và mật khẩu của bạn!</p>
-          <input type="text" name="username" placeholder="Username">
-          <input type="password" name="password" placeholder="Password">
-<!--          <a class="forgot text-muted" href="#">Quên Mật Khẩu</a>-->
-          <input type="submit" name="" value="Đăng Nhập" href="#">
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="bg-image"></div>
+<div class="bg-text">
+  <img th:src="@{/static/images/login/hactech.png}" alt="Logo Hactech" width="500" height="130">
+  <hr style="border: 0.1px solid white;"/>
+  <form class="form-signin" th:action="@{/login}" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Đăng Nhập</h1>
+    <label for="inputEmail" class="sr-only">Mã Số Sinh Viên</label>
+    <input type="email" id="inputEmail" class="form-control" name="username" placeholder="Mã Số Sinh Viên" required
+           autofocus>
+    <label for="inputPassword" class="sr-only">Mật Khẩu</label>
+    <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Mật Khẩu" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng Nhập</button>
+  </form>
 </div>
 </body>
 </html>

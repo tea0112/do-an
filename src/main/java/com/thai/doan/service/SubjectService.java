@@ -11,4 +11,5 @@ public interface SubjectService {
     List<Subject> getBySubjectTypeAndDepartment(int subjectType, int departmentId);
     void addOne(SubjectAddingRequest subjectAddingRequest);
     void updateWithId(Integer id, SubjectUpdatingRequest subjectUpdatingReq);
+    void delete(Integer id);
 }
