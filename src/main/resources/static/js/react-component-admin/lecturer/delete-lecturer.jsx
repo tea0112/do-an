@@ -2,7 +2,6 @@ function App() {
   const [departments, setDepartments] = React.useState(null)
   const [lecturers, setLecturers] = React.useState(null)
   const [lecturer, setLecturer] = React.useState(null)
-  const [updatingLecturers, setUpdatingLecturers] = React.useState(null)
   const [departmentUpdateInput, setDepartmentUpdateInput] = React.useState(null)
 
   const departmentInputRef = React.useRef()

@@ -1,7 +1,6 @@
 function App() {
   const [student, setStudent] = React.useState(null);
   const [firstName, setFirstName] = React.useState(null);
-  const [sessions, setSessions] = React.useState(null);
   const [lastName, setLastName] = React.useState(null);
   const [birth, setBirth] = React.useState(null);
   const [phoneNumber, setPhoneNumber] = React.useState(null);
@@ -169,7 +168,7 @@ function App() {
                     id="genderInput"
                     ref={genderInputRef}
                     onChange={onGenderChange}
-                    value={student && gender === true ? 'true' : 'false'}>
+                    value={student && gender}>
               <option value="false">Nam</option>
               <option value="true">Nữ</option>
             </select>
