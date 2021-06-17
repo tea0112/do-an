@@ -48,6 +48,9 @@ public class Student implements Serializable {
     @Pattern(regexp = "((09|03|07|08|05)+([0-9]{8})\\b)", message = "lỗi định dạng số điện thoại")
     private String phoneNumber;
 
+    @Column(name = "gender")
+    private Boolean gender;
+
     @ManyToOne
     @JoinColumn(name = "retraining_id")
     private Retraining retraining;
@@ -57,6 +60,10 @@ public class Student implements Serializable {
     private List<StudentScheduleRelation> studentScheduleRelations;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<StudentClassRelation> studentClassRelations;
+
+//    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @NotNull

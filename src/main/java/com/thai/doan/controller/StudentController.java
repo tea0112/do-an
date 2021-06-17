@@ -38,6 +38,11 @@ public class StudentController {
         return new ModelAndView("admin/student/edit-student");
     }
 
+    @GetMapping("/admin/sinh-vien/xoa")
+    public ModelAndView deleteStudent() {
+        return new ModelAndView("admin/student/delete-student");
+    }
+
     @RequestMapping(value = "/admin/sinh-vien/sua", params = "studentId", method = RequestMethod.GET)
     public ModelAndView editStudentWithId(@RequestParam int studentId) {
         return new ModelAndView("admin/student/edit-id-student.html");
@@ -66,7 +71,7 @@ public class StudentController {
         return studentService.getWithId(id);
     }
 
-    @PatchMapping("/api/sinh-vien/sua")
+    @PatchMapping("/api/students")
     public ResponseEntity<?> updateWithId(@Valid @RequestBody StudentUpdatingRequest studentUpdatingReq,
                                           @RequestParam String studentId) {
         studentService.updateWithId(studentUpdatingReq, studentId);
@@ -78,4 +83,9 @@ public class StudentController {
         return studentService.getAuthenticated();
     }
 
+    @DeleteMapping("/api/students/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        studentService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

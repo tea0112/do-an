@@ -11,4 +11,5 @@ public interface StudentService {
     void updateWithId(StudentUpdatingRequest studentUpdatingReq, String id);
     Student getWithId(String studentId);
     Student getAuthenticated();
+    void delete(Integer studentId);
 }

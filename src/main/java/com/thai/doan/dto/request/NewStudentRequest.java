@@ -43,4 +43,7 @@ public class NewStudentRequest {
 
     @Min(0)
     private Integer classId;
+
+    @NotNull
+    private Boolean gender;
 }

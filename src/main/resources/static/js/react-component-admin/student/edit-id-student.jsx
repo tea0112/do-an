@@ -1,11 +1,16 @@
 function App() {
   const [student, setStudent] = React.useState(null);
   const [firstName, setFirstName] = React.useState(null);
+  const [sessions, setSessions] = React.useState(null);
   const [lastName, setLastName] = React.useState(null);
   const [birth, setBirth] = React.useState(null);
   const [phoneNumber, setPhoneNumber] = React.useState(null);
   const [place, setPlace] = React.useState(null);
+  const [gender, setGender] = React.useState(null);
+
   const birthRef = React.useRef()
+  const classInputRef = React.useRef()
+  const genderInputRef = React.useRef()
   const firstNameRef = React.useRef()
   const lastNameRef = React.useRef()
   const phoneNumberRef = React.useRef()
@@ -25,14 +30,23 @@ function App() {
       setBirth(student.birth)
       setPlace(student.place)
       setPhoneNumber(student.phoneNumber)
+      setGender(student.gender)
     }
   }, [student])
+
+  // fetch
   const getStudent = (studentId) => {
     return axios.get(
       `/api/admin/students/${studentId}`
     )
   }
+
   // -component
+  const sessionOption = (sessionData) => sessionData.map((session) => {
+    return (
+      <option key={session.id} value={session.id}>{session.name}</option>
+    )
+  })
 
   // -onChange
   const onFirstNameChange = (e) => {
@@ -50,12 +64,15 @@ function App() {
   const onPlaceChange = (e) => {
     setPlace(e.target.value)
   }
+  const onGenderChange = (e) => {
+    setGender(e.target.value)
+  }
   // -onSubmit
   const onSubmit = (e) => {
     e.preventDefault()
     axios({
       method: 'PATCH',
-      url: `/api/sinh-vien/sua?studentId=${getParamValue('studentId')}`,
+      url: `/api/students?studentId=${getParamValue('studentId')}`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -65,6 +82,7 @@ function App() {
         birth: birthRef.current.value,
         place: placeRef.current.value,
         phoneNumber: phoneNumberRef.current.value,
+        gender: genderInputRef.current.value,
       }
     })
       .then(() => {
@@ -108,6 +126,12 @@ function App() {
       <h1 className="h3 mb-4 text-gray-800">Sửa Sinh Viên Id: {student && student.id}</h1>
       <form onSubmit={onSubmit}>
         <div className="form-group">
+          <label htmlFor="phoneNumberInput">Mã Số Sinh Viên</label>
+          <input type="text" id="phoneNumberInput" value={student && student.user.username}
+                 disabled={true}
+                 className="form-control"/>
+        </div>
+        <div className="form-group">
           {student && <input type="text" id="idInput" value={student.id} style={{display: 'none'}}/>}
         </div>
         <div className="form-group">
@@ -122,7 +146,7 @@ function App() {
                  ref={lastNameRef} className="form-control"/>
         </div>
         <div className="form-group">
-          <label htmlFor="birthInput">Năm Sinh</label>
+          <label htmlFor="birthInput">Ngày Sinh</label>
           <input className="form-control" value={student && birth} onChange={onBirthChange}
                  ref={birthRef}
                  type="date" id="birthInput"/>
@@ -137,6 +161,20 @@ function App() {
           <input type="text" id="phoneNumberInput" ref={phoneNumberRef} value={student && phoneNumber}
                  onChange={onPhoneNumberChange}
                  className="form-control"/>
+        </div>
+        <div className="form-group">
+          <label htmlFor="classInput">Giới Tính:</label>
+          <div>
+            <select className="form-control"
+                    id="genderInput"
+                    ref={genderInputRef}
+                    onChange={onGenderChange}
+                    value={student && gender === true ? 'true' : 'false'}>
+              <option value="false">Nam</option>
+              <option value="true">Nữ</option>
+            </select>
+
+          </div>
         </div>
         <button type="submit" className="btn btn-primary">Cập Nhật</button>
       </form>
