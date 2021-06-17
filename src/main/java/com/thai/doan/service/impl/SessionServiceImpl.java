@@ -63,4 +63,16 @@ public class SessionServiceImpl implements SessionService {
             () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
         );
     }
+
+    @Override
+    public void delete(String id) {
+        try {
+            Session session = sessionRepo.findById(Integer.parseInt(id)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            sessionRepo.delete(session);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
 }

@@ -12,4 +12,5 @@ public interface SessionService {
     List<Session> getAllSession();
     void updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq);
     Session getWithName(String name);
+    void delete(String id);
 }

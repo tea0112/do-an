@@ -39,6 +39,11 @@ public class SessionController {
         return mv;
     }
 
+    @GetMapping("/admin/nien-khoa/xoa")
+    public ModelAndView deleteSession() {
+        return new ModelAndView("admin/session/delete-session");
+    }
+
     //curd
     @PostMapping("/admin/nien-khoa/them")
     public ModelAndView createSession(@Valid SessionCreation sessionCreation,
@@ -71,6 +76,12 @@ public class SessionController {
     public ResponseEntity<?> updateWithId(@PathVariable String id,
                                           @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
         sessionSv.updateWithId(id, sessionUpdatingReq);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/admin/sessions/{id}")
+    public ResponseEntity<?> updateWithId(@PathVariable String id) {
+        sessionSv.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
