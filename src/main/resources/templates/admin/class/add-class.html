@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Thêm Giảng Viên</title>
+  <title>Thêm Lớp</title>
 
   <!-- Custom fonts for this template-->
   <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -63,6 +63,10 @@
             // -state
             const [sessions, setSessions] = React.useState(null)
             const [departments, setDepartments] = React.useState(null)
+            const [classTypeInputStatus, setClassTypeInputStatus] = React.useState(null)
+            const [departmentInputStatus, setDepartmentInputStatus] = React.useState(null)
+            const [disabledDepartment, setDisabledDepartment] = React.useState(null)
+            const [disabledDepartmentOption, setDisabledDepartmentOption] = React.useState(false)
             // -ref
             const departmentInputRef = React.useRef();
             const sessionInputRef = React.useRef(null);
@@ -85,6 +89,30 @@
                   console.log(err)
                 })
             }, [])
+            React.useEffect(() => {
+              if (departments) {
+                setClassTypeInputStatus(classTypeInputRef.current.value)
+              }
+            }, [departments])
+            React.useEffect(() => {
+              if (classTypeInputStatus) {
+                if (classTypeInputStatus === '0') {
+                  setDepartmentInputStatus(departments.find(d => d.isGeneral).id.toString())
+                  setDisabledDepartment(true)
+                } else {
+                  setDepartmentInputStatus('')
+                  setDisabledDepartmentOption(true)
+                }
+              }
+            }, [classTypeInputStatus])
+            React.useEffect(() => {
+              if (departmentInputStatus) {
+                if (departments.find(d => d.isGeneral).id === departmentInputStatus) {
+                  setDisabledDepartment(true)
+                }
+              }
+            }, [departmentInputStatus])
+
             // -fetch
             const getSessions = () => axios.get('/admin/sessions')
             const getDepartment = () => axios.get('/api/departments')
@@ -95,6 +123,10 @@
               )
             })
             const departmentOption = (departmentData) => departmentData.map((department) => {
+              if (department.isGeneral) {
+                return <option key={department.id} disabled={disabledDepartmentOption}
+                               value={department.id}>{department.name}</option>
+              }
               return (
                 <option key={department.id} value={department.id}>{department.name}</option>
               )
@@ -124,7 +156,15 @@
                   location.reload()
                 })
             }
+            // utils
             // -change
+            const classTypeChange = (e) => {
+              setDisabledDepartment(false)
+              setClassTypeInputStatus(e.target.value)
+            }
+            const departmentInputChange = (e) => {
+              setDepartmentInputStatus(e.target.value)
+            }
             return (
               <div>
                 <h1 className="h3 mb-4 text-gray-800">Thêm Lớp</h1>
@@ -136,7 +176,10 @@
                   </div>
                   <div className="form-group">
                     <label htmlFor="subjectTypeInput">Kiểu Lớp</label>
-                    <select className="form-control" ref={classTypeInputRef} id="subjectTypeInput">
+                    <select className="form-control" ref={classTypeInputRef} id="subjectTypeInput"
+                            value={classTypeInputStatus || ''}
+                            onChange={classTypeChange}
+                    >
                       <option value="0">đại cương</option>
                       <option value="1">chuyên ngành</option>
                     </select>
@@ -151,6 +194,9 @@
                   <div className="form-group">
                     <label>Khoa</label>
                     <select className="form-control" id="departmentInput"
+                            onChange={departmentInputChange}
+                            value={departmentInputStatus || ''}
+                            disabled={disabledDepartment}
                             ref={departmentInputRef}>
                       {departments && departmentOption(departments)}
                     </select>

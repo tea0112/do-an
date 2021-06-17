@@ -1,8 +1,10 @@
 function App() {
-  const [departments, setDepartments] = React.useState(null)
-  const [lecturers, setLecturers] = React.useState(null)
-  const [lecturer, setLecturer] = React.useState(null)
-  const [departmentUpdateInput, setDepartmentUpdateInput] = React.useState(null)
+  const [state, setState] = React.useState({
+    departments: null,
+    lecturers: null,
+    lecturer: null,
+    departmentUpdateInput: null,
+  })
 
   const departmentInputRef = React.useRef()
   const lecturerInputRef = React.useRef()
@@ -13,49 +15,68 @@ function App() {
   React.useEffect(() => {
     getDepartment()
       .then((departments) => {
-        setDepartments(deepFreeze(departments))
-        setDepartmentUpdateInput(departmentInputRef.current.value)
+        setState(preState => deepFreeze(({
+            ...preState,
+            departments: deepFreeze(departments),
+            departmentUpdateInput: departmentInputRef.current.value
+          })
+        ))
       })
       .catch(err => console.log(err))
   }, [])
   React.useEffect(() => {
-    if (departments) {
+    if (state.departments) {
       getLecturers(departmentInputRef.current.value)
         .then((lecturers) => {
-          setLecturers(deepFreeze(lecturers))
+          setState(prevState => deepFreeze({
+            ...prevState,
+            lecturers: deepFreeze(lecturers)
+          }))
         })
         .catch(err => console.log(err))
     }
-  }, [departments])
+  }, [state.departments])
   React.useEffect(() => {
-    if (lecturers) {
+    if (state.lecturers) {
       getLecturer(lecturerInputRef.current.value)
         .then((lecturer) => {
-          setLecturer(deepFreeze(lecturer))
+          setState(prevState => deepFreeze({
+            ...prevState,
+            lecturer: deepFreeze(lecturer),
+          }))
         })
         .catch(err => console.log(err))
     }
-  }, [lecturers])
+  }, [state.lecturers])
   React.useEffect(() => {
-    if (lecturer) {
-      lecturerUpdateInputRef.current.value = lecturer.name
+    if (state.lecturer) {
+      lecturerUpdateInputRef.current.value = state.lecturer.name
     }
-  }, [lecturer])
+  }, [state.lecturer])
 
   // change
   const departmentInputChange = () => {
     departmentUpdateInputRef.current.value = departmentInputRef.current.value
-    setDepartmentUpdateInput(departmentInputRef.current.value)
+    setState(prevState => deepFreeze({
+      ...prevState,
+      departmentUpdateInput: departmentInputRef.current.value
+    }))
     getLecturers(departmentInputRef.current.value)
       .then((lecturers) => {
-        setLecturers(deepFreeze(lecturers))
+        setState(prevState => deepFreeze({
+          ...prevState,
+          lecturers
+        }))
       })
       .catch(err => console.log(err))
   }
   const lecturerInputChange = () => {
     getLecturer(lecturerInputRef.current.value)
       .then((lecturer) => {
-        setLecturer(deepFreeze(lecturer))
+        setState(prevState => deepFreeze({
+          ...prevState,
+          lecturer
+        }))
       })
       .catch(err => console.log(err))
   }
@@ -68,7 +89,7 @@ function App() {
     e.preventDefault()
     axios({
       method: 'DELETE',
-      url: `/api/admin/lecturers/${lecturer.id}`,
+      url: `/api/admin/lecturers/${state.lecturer.id}`,
     })
       .then(() => {
         alert('Xoá Thành Công')
@@ -112,7 +133,7 @@ function App() {
           <label htmlFor="departmentInput">Khoa</label>
           <select className="form-control" id="departmentInput"
                   ref={departmentInputRef} onChange={departmentInputChange}>
-            {departments && departmentOption(departments)}
+            {state.departments && departmentOption(state.departments)}
           </select>
         </div>
         <div className="form-group">
@@ -121,34 +142,35 @@ function App() {
                   ref={lecturerInputRef}
                   onChange={lecturerInputChange}
                   id="lecturerInput">
-            {lecturers && lecturersOption(lecturers)}
+            {state.lecturers && lecturersOption(state.lecturers)}
           </select>
         </div>
       </form>
       <hr/>
       <div>
         <i>Id hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.id}/>
+        <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.id}/>
         <i>Tên hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.name}/>
+        <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.name}/>
         <i>Khoa hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.department.name}/>
+        <input type="text" className="form-control" disabled={true}
+               value={state.lecturer && state.lecturer.department.name}/>
         <hr/>
         <h4>Thay đổi:</h4>
         <form onSubmit={onUpdate}>
           <div className="form-group">
             <label htmlFor="departmentUpdateInput">Khoa</label>
             <select className="form-control" id="departmentUpdateInput"
-                    defaultValue={departmentUpdateInput && departmentUpdateInput}
+                    defaultValue={state.departmentUpdateInput && state.departmentUpdateInput}
                     ref={departmentUpdateInputRef} onChange={departmentInputUpdateChange}>
-              {departments && departmentOption(departments)}
+              {state.departments && departmentOption(state.departments)}
             </select>
           </div>
           <div className="form-group">
             <label htmlFor="lecturerUpdateInput">Tên Giảng Viên</label>
             <input className="form-control" type="text" id="lecturerUpdateInput"
                    ref={lecturerUpdateInputRef}
-                   defaultValue={lecturer && lecturer.name}/>
+                   defaultValue={state.lecturer && state.lecturer.name}/>
           </div>
           <button type="button" onClick={preDeleteClick} className="btn btn-primary">Xoá</button>
           {/*start modal*/}
@@ -158,14 +180,14 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="exampleModalLabel">
-                    Bạn chắc chắn muốn xoá giảng viên "{lecturer && <b>{lecturer.name}</b>}":
+                    Bạn chắc chắn muốn xoá giảng viên "{state.lecturer && <b>{state.lecturer.name}</b>}":
                   </h5>
                   <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div className="modal-body">
-                  {lecturer && <span>{lecturer.id} - {lecturer.name}</span>}
+                  {state.lecturer && <span>{state.lecturer.id} - {state.lecturer.name}</span>}
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-dismiss="modal">Đóng</button>
