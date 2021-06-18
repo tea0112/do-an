@@ -22,6 +22,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
                 "select distinct max(st.termNumber) " +
                 "from Semester st " +
                 "join Session ss on st.session = ss" +
+                " where ss.id = :currentSession" +
             ") " +
             "and sj.subjectType = :subjectType " +
             "and sd.classes = ( " +
@@ -33,7 +34,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
                 "and std = :currentStudent" +
             ")"
     )
-    List<Schedule> getCurrentSchedules(Student currentStudent, int classType, int subjectType);
+    List<Schedule> getCurrentSchedules(Student currentStudent, int classType, int subjectType, int currentSession);
 
     @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);

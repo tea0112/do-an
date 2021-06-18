@@ -2,6 +2,7 @@ package com.thai.doan;
 
 import com.thai.doan.dao.model.User;
 import com.thai.doan.dao.repository.UserRepository;
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,8 @@ public class DoAnApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(DoAnApplication.class, args);
+
+        PropertyConfigurator.configure("src/log4j.properties");
     }
 
     @Autowired

@@ -36,6 +36,7 @@
   <script src="/static/js/axios.min.js"></script>
   <script src="/static/js/immutable.min.js"></script>
   <script src="/static/js/immutable.js"></script>
+  <script src="/static/js/xlsx.full.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -44,7 +45,7 @@
 <div id="wrapper">
 
   <!-- Sidebar -->
-  <div th:replace="~{fragments/side-bar :: sidebar}"></div>
+  <div th:replace="~{client/fragments/side-bar :: sidebar}"></div>
   <!-- End of Sidebar -->
 
   <!-- Content Wrapper -->
@@ -54,7 +55,7 @@
     <div id="content">
 
       <!-- Topbar -->
-      <div th:replace="~{fragments/navbar :: navbar}"></div>
+      <div th:replace="~{client/fragments/navbar :: navbar}"></div>
       <!-- End of Topbar -->
 
       <!-- Begin Page Content -->

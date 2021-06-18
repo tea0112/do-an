@@ -3,9 +3,11 @@ package com.thai.doan.service.impl;
 import com.thai.doan.dao.model.Classes;
 import com.thai.doan.dao.model.Student;
 import com.thai.doan.dao.model.StudentClassRelation;
+import com.thai.doan.dao.model.User;
 import com.thai.doan.dao.repository.ClassesRepository;
 import com.thai.doan.dao.repository.StudentClassRelationRepository;
 import com.thai.doan.dao.repository.StudentRepository;
+import com.thai.doan.dao.repository.UserRepository;
 import com.thai.doan.exception.ErrorCode;
 import com.thai.doan.service.StudentClassRelationService;
 import lombok.Data;
@@ -22,6 +24,7 @@ public class StudentClassRelationServiceImpl implements StudentClassRelationServ
     private final StudentClassRelationRepository studentClassRelationRepo;
     private final StudentRepository studentRepo;
     private final ClassesRepository classesRepo;
+    private final UserRepository userRepo;
 
     @Override
     public List<Student> getWithClassId(String classId) {
@@ -76,6 +79,17 @@ public class StudentClassRelationServiceImpl implements StudentClassRelationServ
             studentClassRelationRepo.delete(studentClassRlt);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public List<StudentClassRelation> getWithStudentId(Integer studentId) {
+        try {
+            Student student =
+                studentRepo.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            return studentClassRelationRepo.findByStudentId(student);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 }

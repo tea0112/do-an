@@ -10,6 +10,9 @@ function App() {
   const [startDayInput, setStartDayInput] = React.useState(null)
   const [endDayInput, setEndDayInput] = React.useState(null)
   const [periodType, setPeriodType] = React.useState(null)
+  const [subjectType, setSubjectType] = React.useState(null)
+  const [subjectName, setSubjectName] = React.useState(null)
+
   const departmentRef = React.useRef();
   const subjectTypeRef = React.useRef();
   const subjectRef = React.useRef();
@@ -23,6 +26,7 @@ function App() {
   const semesterRef = React.useRef()
   const classRef = React.useRef()
   const lecturerRef = React.useRef()
+
   React.useEffect(() => {
     getSchedule()
       .then(response => {
@@ -30,6 +34,9 @@ function App() {
         setStartDayInput(response.startDay)
         setEndDayInput(response.endDay)
         setId(response.id)
+        setSubjectType(response.subject.subjectType)
+        setSubjectName(response.subject.id)
+        setPeriodType(response.periodType)
       })
       .catch((err) => {
         console.log(err)
@@ -75,6 +82,14 @@ function App() {
         .catch((err) => console.log(err))
     }
   }, [schedule])
+  React.useEffect(() => {
+    if (subjectType) {
+      getSubject(subjectTypeRef.current.value, schedule.subject.department.id)
+        .then((subjects) => setSubjects(subjects))
+        .catch((err) => console.log(err))
+    }
+  }, [subjectType])
+
   // fetch
   const getSchedule = () => {
     return axios.get(`/api/admin/schedules/${getParamValue('scheduleId')}`)
@@ -216,6 +231,9 @@ function App() {
     })
   }
   // onChange
+  const subjectNameChange = (e) => {
+    setSubjectName(e.target.value)
+  }
   const handleChangeDepartment = (e) => {
     getSubject(subjectTypeRef.current.value, e.target.value)
       .then(subjects => setSubjects(subjects))
@@ -227,12 +245,13 @@ function App() {
       .then(classes => setClasses(classes))
   }
   const onSubjectTypeChange = (e) => {
+    setSubjectType(e.target.value)
     getSubject(e.target.value, departmentRef.current.value)
       .then((subjects) => setSubjects(subjects))
       .catch((err) => console.log(err))
   }
   const handlePeriodTypeChange = (e) => {
-
+    setPeriodType(e.target.value)
   }
   const handleClassChange = (e) => {
 
@@ -300,14 +319,17 @@ function App() {
         </div>
         <div className="form-group">
           <label htmlFor="subjectTypeInput">Kiểu Môn</label>
-          <select className="form-control" ref={subjectTypeRef} id="subjectTypeInput" onChange={onSubjectTypeChange}>
-            <option value="0">Lý Thuyết</option>
-            <option value="1">Thực Hành</option>
+          <select className="form-control" ref={subjectTypeRef} id="subjectTypeInput"
+                  value={subjectType}
+                  onChange={onSubjectTypeChange}>
+            <option value="0">lý thuyết</option>
+            <option value="1">thực hành</option>
           </select>
         </div>
         <div className="form-group">
           <label htmlFor="subjectInput">Tên Môn</label>
-          <select className="form-control" id="subjectInput" ref={subjectRef}>
+          <select className="form-control" id="subjectInput" value={subjectName} onChange={subjectNameChange}
+                  ref={subjectRef}>
             {schedule && subjects && subjectOption(subjects, schedule.subject)}
           </select>
         </div>
@@ -373,7 +395,7 @@ function App() {
           <label htmlFor="periodType">Buổi</label>
           <select className="form-control form-control-sm" id="periodType"
                   ref={periodTypeRef}
-                  defaultValue={schedule && schedule.periodType}
+                  value={periodType && periodType}
                   onChange={handlePeriodTypeChange}>
             {schedule && periodTypeOption(schedule.periodType)}
           </select>

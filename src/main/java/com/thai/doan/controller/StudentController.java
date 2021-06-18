@@ -24,6 +24,15 @@ public class StudentController {
     private final StudentService studentService;
     private final StudentClassRelationService studentClassRelationSv;
 
+    // client view
+    @GetMapping("/sinh-vien/ho-so")
+    public ModelAndView studentProfile() {
+        ModelAndView mvc = new ModelAndView("client/student/profile");
+        mvc.addObject("sessionNames", sessionSv.getAllSession());
+        mvc.addObject("newStudentRequest", new NewStudentRequest());
+        return mvc;
+    }
+
     // admin view
     @GetMapping("/admin/sinh-vien/them")
     public ModelAndView addStudent() {

@@ -48,17 +48,27 @@
     </ul>
   </nav>
   <script type="text/javascript">
-    const studentName = document.getElementById("studentName")
-    axios.get('/api/students/current')
-      .then((student) => {
-        const paragraph = document.createElement("b");
-        const text = document.createTextNode(student.firstName + ' ' + student.lastName);
-        paragraph.appendChild(text);
-        studentName.appendChild(paragraph)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    const getStudentWithClass = async () => {
+      const student = await getCurrentStudent()
+      const classes = await getClassOfCurrentStudent(student.id)
+      const studentInformation = classes.reduce((acc, crv, idx) => {
+        return idx === 0 ? crv.classId.name : acc + ', ' + crv.classId.name
+      }, '')
+      const studentName = document.getElementById("studentName")
+      const paragraph = document.createElement("b")
+      const text = document.createTextNode(student.firstName + ' ' + student.lastName + ' - ' + studentInformation +
+        ' - ' + student.phoneNumber)
+      paragraph.appendChild(text);
+      studentName.appendChild(paragraph)
+    }
+    const getClassOfCurrentStudent = async (studentId) => {
+      return await axios.get(`/api/studentClass?studentId=${studentId}`)
+    }
+    const getCurrentStudent = async () => {
+      return await axios.get('/api/students/current')
+    }
+
+    getStudentWithClass()
   </script>
 </div>
 
