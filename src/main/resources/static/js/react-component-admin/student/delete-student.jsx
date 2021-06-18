@@ -31,15 +31,13 @@ function App() {
   }, [sessions, departments]);
   React.useEffect(() => {
     if (students) {
-      console.log("set tabulor")
       while (scheduleTableRef.current.firstElementChild) {
         scheduleTableRef.current.removeChild(scheduleTableRef.current.firstChild)
       }
-      setTabulator(getTabulator())
+      getTabulator()
     }
   }, [students]);
   React.useEffect(() => {
-    console.log('state')
     if (student) {
       preDeleteClick()
       console.log(student)
@@ -91,7 +89,6 @@ function App() {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(classInputRef.current.value)
     if (classInputRef.current.value !== "") {
       getStudents(classInputRef.current.value)
         .then((students) => {
@@ -141,22 +138,44 @@ function App() {
   }
 
   // function setStudentOutside = ()
-  const getTabulator = () => new Tabulator("#schedule-table", {
-    // height: 205
-    data: students, //assign data to table
-    layout: "fitColumns", //fit columns to width of table (optional)
-    columns: [ //Define Table Columns
-      {title: "Họ", field: "firstName"},
-      {title: "Tên", field: "lastName"},
-      {title: "Ngày Sinh", field: "birth"},
-      {title: "Nơi Sinh", field: "place"},
-      {title: "Số Điện Thoại", field: "phoneNumber"},
-    ],
-    rowClick: function (e, row) {
-      const current = _.cloneDeep(row.getData())
-      comparePreviousStateAndSetStudent(current)
-    },
-  });
+  const getTabulator = () => {
+    const table = new Tabulator("#schedule-table", {
+      // height: 205
+      data: students, //assign data to table
+      layout: "fitColumns", //fit columns to width of table (optional)
+      columns: [ //Define Table Columns
+        {title: "Họ", field: "firstName"},
+        {title: "Tên", field: "lastName"},
+        {title: "Ngày Sinh", field: "birth"},
+        {title: "Nơi Sinh", field: "place"},
+        {title: "Số Điện Thoại", field: "phoneNumber"},
+      ],
+      rowClick: function (e, row) {
+        const current = _.cloneDeep(row.getData())
+        comparePreviousStateAndSetStudent(current)
+      },
+      downloadReady: function (fileContents, blob) {
+        //fileContents - the unencoded contents of the file
+        //blob - the blob object for the download
+
+        //custom action to send blob to server could be included here
+        return blob; //must return a blob to proceed with the download, return false to abort download
+      },
+      downloadComplete: function () {
+      },
+    })
+    if (students.length > 0) {
+      //trigger download of data.csv file
+      document.getElementById("download-csv").addEventListener("click",
+        () => {
+          table.download("csv", "data-" + Math.random().toString().replace('0\.', '') + ".csv")
+        });
+      //trigger download of data.xlsx file
+      document.getElementById("download-xlsx").addEventListener("click", () =>
+        table.download("xlsx", "data-" + Math.random().toString().replace('0\.', '') + ".xlsx",
+          {sheetName: "Data"}));
+    }
+  }
   return (
     <div>
       <h1 className="h3 mb-4 text-gray-800">Xoá Sinh Viên</h1>
@@ -183,6 +202,12 @@ function App() {
         </button>
       </form>
       <br/>
+      {students && students.length > 0 &&
+      <div>
+        <button id="download-csv" className="btn btn-success mr-2 mb-2">Tải CSV(Table)</button>
+        <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
+      </div>
+      }
       <div id="schedule-table" ref={scheduleTableRef}/>
       {/*start modal*/}
       {student && (

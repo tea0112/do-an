@@ -23,7 +23,7 @@ public class DoAnApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminAccount = "adminhactech2021@gmail.com";
+        String adminAccount = "admin";
         String password = "1";
         User user = userRepository.findByUsername(adminAccount).orElseGet(() -> {
             User newAdmin = new User();
@@ -33,12 +33,5 @@ public class DoAnApplication implements CommandLineRunner {
             return newAdmin;
         });
         userRepository.save(user);
-//        userRepository.save(new User(
-//            null,
-//            "thaiviptn1201@gmail.com",
-//            passwordEncoder.encode("thai1201"),
-//            false,
-//            null
-//        ));
     }
 }

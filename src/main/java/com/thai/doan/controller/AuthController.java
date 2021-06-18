@@ -3,7 +3,9 @@ package com.thai.doan.controller;
 import com.thai.doan.dao.model.User;
 import com.thai.doan.util.UserChecker;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -23,6 +25,12 @@ public class AuthController {
     @GetMapping("/login")
     public ModelAndView getLogin() {
         return new ModelAndView("client/login/index");
+    }
+
+    @RequestMapping("/login-error")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "client/login/index";
     }
 
     @GetMapping("/logout")

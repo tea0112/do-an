@@ -23,15 +23,10 @@ function App() {
   }, [])
   React.useEffect(() => {
     if (subjects) {
-      console.log('subject after get', subjects)
       getTabulator()
     }
   }, [subjects])
-  React.useEffect(() => {
-    if (subject) {
-      console.log("subject after click", subject)
-    }
-  }, [subject])
+
   // -fetch
   const getDepartment = () => axios.get('/api/departments')
   const getSubjects = (subjectType, departmentId) => {
@@ -47,7 +42,7 @@ function App() {
       }
       return sj
     })
-    return new Tabulator("#schedule-table", {
+    const table = new Tabulator("#schedule-table", {
       data: newSubjects,
       layout: "fitColumns",
       columns: [
@@ -63,6 +58,17 @@ function App() {
         })
       },
     })
+    if (newSubjects.length > 0) {
+      //trigger download of data.csv file
+      document.getElementById("download-csv").addEventListener("click",
+        () => {
+          table.download("csv", "data-" + Math.random().toString().replace('0\.', '') + ".csv")
+        });
+      //trigger download of data.xlsx file
+      document.getElementById("download-xlsx").addEventListener("click", () =>
+        table.download("xlsx", "data-" + Math.random().toString().replace('0\.', '') + ".xlsx",
+          {sheetName: "Data"}));
+    }
   }
   // -component
   const departmentOption = (departmentData) => departmentData.map((department) => {
@@ -166,6 +172,12 @@ function App() {
         <button type="submit" className="btn btn-primary">Tìm</button>
       </form>
       <hr/>
+      {subjects &&
+      <div>
+        <button id="download-csv" className="btn btn-success mr-2 mb-2">Tải CSV(Table)</button>
+        <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
+      </div>
+      }
       <div id="schedule-table"/>
       {subject && subjectUpdatingField(subject)}
     </div>

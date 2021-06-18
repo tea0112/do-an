@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("admin@gmail.com")
+            .withUser("admin")
             .password(passwordEncoder().encode("admin")).roles("ADMIN");
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
             .loginPage("/login")
             .defaultSuccessUrl("/login_success", true)
-            .failureUrl("/login?error=true")
+            .failureUrl("/login-error")
             .permitAll()
             .and()
             .logout()

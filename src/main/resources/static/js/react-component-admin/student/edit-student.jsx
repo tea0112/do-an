@@ -102,21 +102,34 @@ function App() {
     )
   })
   // utils
-  const getTabulator = () => new Tabulator("#schedule-table", {
-    // height: 205
-    data: students, //assign data to table
-    layout: "fitColumns", //fit columns to width of table (optional)
-    columns: [ //Define Table Columns
-      {title: "Họ", field: "firstName"},
-      {title: "Tên", field: "lastName"},
-      {title: "Ngày Sinh", field: "birth"},
-      {title: "Nơi Sinh", field: "place"},
-      {title: "Số Điện Thoại", field: "phoneNumber"},
-    ],
-    rowClick: function (e, row) {
-      window.location.href = "/admin/sinh-vien/sua?studentId=" + row.getData().id
-    },
-  });
+  const getTabulator = () => {
+    const table = new Tabulator("#schedule-table", {
+      // height: 205
+      data: students, //assign data to table
+      layout: "fitColumns", //fit columns to width of table (optional)
+      columns: [ //Define Table Columns
+        {title: "Họ", field: "firstName"},
+        {title: "Tên", field: "lastName"},
+        {title: "Ngày Sinh", field: "birth"},
+        {title: "Nơi Sinh", field: "place"},
+        {title: "Số Điện Thoại", field: "phoneNumber"},
+      ],
+      rowClick: function (e, row) {
+        window.location.href = "/admin/sinh-vien/sua?studentId=" + row.getData().id
+      },
+    })
+    if (students.length > 0) {
+      //trigger download of data.csv file
+      document.getElementById("download-csv").addEventListener("click",
+        () => {
+          table.download("csv", "data-" + Math.random().toString().replace('0\.', '') + ".csv")
+        });
+      //trigger download of data.xlsx file
+      document.getElementById("download-xlsx").addEventListener("click", () =>
+        table.download("xlsx", "data-" + Math.random().toString().replace('0\.', '') + ".xlsx",
+          {sheetName: "Data"}));
+    }
+  };
   return (
     <div>
       <h1 className="h3 mb-4 text-gray-800">Sửa Sinh Viên</h1>
@@ -144,6 +157,12 @@ function App() {
         </button>
       </form>
       <br/>
+      {students && students.length > 0 &&
+      <div>
+        <button id="download-csv" className="btn btn-success mr-2 mb-2">Tải CSV(Table)</button>
+        <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
+      </div>
+      }
       <div id="schedule-table" ref={scheduleTableRef}/>
     </div>
   )

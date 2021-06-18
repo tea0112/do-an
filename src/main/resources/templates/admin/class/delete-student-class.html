@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Xoá Sinh Viên Khỏi Lớp Chuyên Ngành</title>
+  <title>Xoá Sinh Viên Khỏi Lớp</title>
 
   <!-- Custom fonts for this template-->
   <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -34,6 +34,7 @@
   <script src="/static/js/axios.min.js"></script>
   <link href="/static/css/tabulator.min.css" rel="stylesheet">
   <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+  <script src="/static/js/xlsx.full.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -202,27 +203,40 @@
               )
             })
             // utils
-            const getTabulator = () => new Tabulator("#student-table", {
-              // height: 205
-              data: students, //assign data to table
-              layout: "fitColumns", //fit columns to width of table (optional)
-              columns: [ //Define Table Columns
-                {title: "Họ", field: "firstName"},
-                {title: "Tên", field: "lastName"},
-                {title: "Ngày Sinh", field: "birth"},
-                {title: "Nơi Sinh", field: "place"},
-                {title: "Số Điện Thoại", field: "phoneNumber"},
-              ],
-              rowClick: function (e, row) {
-                setStudent(row.getData())
-                getChangingClass(sessionInputRef.current.value)
-                  .then((classes) => {
-                    console.log(classes)
-                    setChangingClass(classes)
-                  })
-                  .catch(err => console.log(err))
-              },
-            });
+            const getTabulator = () => {
+              const table = new Tabulator("#student-table", {
+                // height: 205
+                data: students, //assign data to table
+                layout: "fitColumns", //fit columns to width of table (optional)
+                columns: [ //Define Table Columns
+                  {title: "Họ", field: "firstName"},
+                  {title: "Tên", field: "lastName"},
+                  {title: "Ngày Sinh", field: "birth"},
+                  {title: "Nơi Sinh", field: "place"},
+                  {title: "Số Điện Thoại", field: "phoneNumber"},
+                ],
+                rowClick: function (e, row) {
+                  setStudent(row.getData())
+                  getChangingClass(sessionInputRef.current.value)
+                    .then((classes) => {
+                      console.log(classes)
+                      setChangingClass(classes)
+                    })
+                    .catch(err => console.log(err))
+                },
+              })
+              if (students.length > 0) {
+                //trigger download of data.csv file
+                document.getElementById("download-csv").addEventListener("click",
+                  () => {
+                    table.download("csv", "data-" + Math.random().toString().replace('0\.', '') + ".csv")
+                  });
+                //trigger download of data.xlsx file
+                document.getElementById("download-xlsx").addEventListener("click", () =>
+                  table.download("xlsx", "data-" + Math.random().toString().replace('0\.', '') + ".xlsx",
+                    {sheetName: "Data"}));
+              }
+            }
             return (
               <div>
                 <h1 className="h3 mb-4 text-gray-800">Xoá Sinh Viên Khỏi Lớp Chuyên Ngành</h1>
@@ -244,7 +258,7 @@
                   <div className="form-group">
                     <label>Thuộc Lớp</label>
                     <select className="form-control" id="classInput" ref={classInputRef}
-                      onChange={classInputChange}>
+                            onChange={classInputChange}>
                       {classes && classOption(classes)}
                     </select>
                   </div>
@@ -253,6 +267,12 @@
                   </button>
                 </form>
                 <br/>
+                {students && students.length > 0 &&
+                <div>
+                  <button id="download-csv" className="btn btn-success mr-2 mb-2">Tải CSV(Table)</button>
+                  <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
+                </div>
+                }
                 <div id="student-table" ref={studentTableRef}/>
                 <hr/>
                 {student &&

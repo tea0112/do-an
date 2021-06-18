@@ -34,6 +34,7 @@
   <script src="/static/js/axios.min.js"></script>
   <link href="/static/css/tabulator.min.css" rel="stylesheet">
   <script type="text/javascript" src="/static/js/tabulator.min.js"></script>
+  <script src="/static/js/xlsx.full.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -207,23 +208,36 @@
               )
             }
             // utils
-            const getTabulator = () => new Tabulator("#schedule-table", {
-              data: classes,
-              layout: "fitColumns",
-              columns: [
-                {title: "Tên Lớp", field: "name"},
-                {title: "Kiểu Lớp", field: "classType"},
-                {title: "Thuộc Khoa", field: "department.name"},
-                {title: "Khoá", field: "session.name"},
-              ],
-              rowClick: function (e, row) {
-                classes.forEach(e => {
-                  if (e.id === row.getData().id) {
-                    setClazz(e)
-                  }
-                })
-              },
-            });
+            const getTabulator = () => {
+              const table = new Tabulator("#schedule-table", {
+                data: classes,
+                layout: "fitColumns",
+                columns: [
+                  {title: "Tên Lớp", field: "name"},
+                  {title: "Kiểu Lớp", field: "classType"},
+                  {title: "Thuộc Khoa", field: "department.name"},
+                  {title: "Khoá", field: "session.name"},
+                ],
+                rowClick: function (e, row) {
+                  classes.forEach(e => {
+                    if (e.id === row.getData().id) {
+                      setClazz(e)
+                    }
+                  })
+                },
+              })
+              if (classes.length > 0) {
+                //trigger download of data.csv file
+                document.getElementById("download-csv").addEventListener("click",
+                  () => {
+                    table.download("csv", "data-" + Math.random().toString().replace('0\.', '') + ".csv")
+                  });
+                //trigger download of data.xlsx file
+                document.getElementById("download-xlsx").addEventListener("click", () =>
+                  table.download("xlsx", "data-" + Math.random().toString().replace('0\.', '') + ".xlsx",
+                    {sheetName: "Data"}));
+              }
+            }
             return (
               <div>
                 <h1 className="h3 mb-4 text-gray-800">Sửa Lớp</h1>
@@ -244,6 +258,12 @@
                   <button type="submit" className="btn btn-primary">Tìm</button>
                 </form>
                 <br/>
+                {classes && classes.length > 0 &&
+                <div>
+                  <button id="download-csv" className="btn btn-success mr-2 mb-2">Tải CSV(Table)</button>
+                  <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
+                </div>
+                }
                 <div id="schedule-table" ref={scheduleTableRef}/>
                 {clazz && changeField(clazz)}
               </div>
