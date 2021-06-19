@@ -38,10 +38,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         User user = customUserDetails.getUser();
         Student std = user.getStudent();
         if (semesterRepo.getMaxTermOfStudent(std) > 1) {
-            return scheduleRepo.getCurrentSchedules(std, 1, subjectType, std.getSession().getId());
+            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId());
         }
         else
-            return scheduleRepo.getCurrentSchedules(std, 0, subjectType, std.getSession().getId());
+            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId());
     }
 
     @Override

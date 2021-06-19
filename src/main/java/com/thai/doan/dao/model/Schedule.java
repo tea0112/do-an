@@ -48,10 +48,6 @@ public class Schedule implements Serializable {
     @Column(name = "end_period", nullable = false)
     private Integer endPeriod;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "scheduleId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<StudentScheduleRelation> studentScheduleRelations;
-
     @ManyToOne
     @JoinColumn(name = "semester_id")
     private Semester semester;
@@ -67,4 +63,8 @@ public class Schedule implements Serializable {
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Classes classes;
+
+    @ManyToOne
+    @JoinColumn(name = "classroom_id")
+    private Classroom classroom;
 }

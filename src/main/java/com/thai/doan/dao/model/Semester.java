@@ -40,10 +40,6 @@ public class Semester implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDay;
 
-    @ManyToOne
-    @JoinColumn(name = "fee_id")
-    private Fee fee;
-
     @JsonIgnore
     @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;

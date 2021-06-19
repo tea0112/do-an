@@ -6,6 +6,7 @@ function App() {
   const [phoneNumber, setPhoneNumber] = React.useState(null);
   const [place, setPlace] = React.useState(null);
   const [gender, setGender] = React.useState(null);
+  const [selectedAvatarFile, setSelectedAvatarFile] = React.useState(null);
 
   const birthRef = React.useRef()
   const classInputRef = React.useRef()
@@ -48,6 +49,10 @@ function App() {
   })
 
   // -onChange
+  const onUploadAvatarChange = (e) => {
+    setSelectedAvatarFile(e.target.files[0])
+    console.log(e.target.files[0])
+  }
   const onFirstNameChange = (e) => {
     setFirstName(e.target.value)
   }
@@ -67,6 +72,28 @@ function App() {
     setGender(e.target.value)
   }
   // -onSubmit
+  const onUploadAvatar = (e) => {
+    e.preventDefault()
+    const data = new FormData()
+    data.append('file', selectedAvatarFile)
+    console.warn(setSelectedAvatarFile);
+    let url = `/api/students/${getParamValue('studentId')}/avatar`;
+
+    axios.post(url, data, {
+      headers: { 'content-type': 'multipart/form-data' }
+    })
+      .then(res => { // then print response status
+        console.warn(res);
+        alert('Tải Lên Ảnh Đại Diện Thành Công ✅')
+        location.reload()
+      })
+      .catch(err => {
+        console.log(err)
+        alert('Tải Lên Ảnh Đại Diện Thất Bại ❌')
+        location.reload()
+      })
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
     axios({
@@ -107,7 +134,8 @@ function App() {
     }
     return null
   }
-  function removeAscent (str) {
+
+  function removeAscent(str) {
     if (str === null || str === undefined) return str;
     str = str.toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -119,10 +147,20 @@ function App() {
     str = str.replace(/đ/g, "d");
     return str;
   }
+
   // -return
   return (
     <div>
       <h1 className="h3 mb-4 text-gray-800">Sửa Sinh Viên Id: {student && student.id}</h1>
+      {/*<label>Tải Lên Ảnh Đại Diện Cho Sinh Viên: </label>*/}
+      {/*<form onSubmit={onUploadAvatar}>*/}
+      {/*  <div className="custom-file">*/}
+      {/*    <input type="file" className="custom-file-input" id="customFile" onChange={onUploadAvatarChange}/>*/}
+      {/*      <label className="custom-file-label" htmlFor="customFile">Chọn Ảnh</label>*/}
+      {/*  </div>*/}
+      {/*  <button type="submit" className="btn btn-success mt-2 mb-2">Tải Lên Ảnh Đại Diện</button>*/}
+      {/*</form>*/}
+
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="phoneNumberInput">Mã Số Sinh Viên</label>

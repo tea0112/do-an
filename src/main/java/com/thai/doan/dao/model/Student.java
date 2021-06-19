@@ -51,19 +51,10 @@ public class Student implements Serializable {
     @Column(name = "gender")
     private Boolean gender;
 
-    @ManyToOne
-    @JoinColumn(name = "retraining_id")
-    private Retraining retraining;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<StudentScheduleRelation> studentScheduleRelations;
-
     @JsonIgnore
     @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StudentClassRelation> studentClassRelations;
 
-//    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @NotNull

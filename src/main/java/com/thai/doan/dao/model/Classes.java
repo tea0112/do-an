@@ -28,9 +28,6 @@ public class Classes implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "class_type", nullable = false)
-    private Integer classType;
-
     @JsonIgnore
     @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
@@ -42,9 +39,4 @@ public class Classes implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    public enum TYPE {
-        GENERAL_CLASS,
-        SPECIALIZED_CLASS,
-    }
 }

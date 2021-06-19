@@ -30,11 +30,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
                 "from Student std " +
                 "join StudentClassRelation scr on std = scr.studentId " +
                 "join Classes c on scr.classId = c " +
-                "where c.classType = :classType " +
-                "and std = :currentStudent" +
+                "where std = :currentStudent" +
             ")"
     )
-    List<Schedule> getCurrentSchedules(Student currentStudent, int classType, int subjectType, int currentSession);
+    List<Schedule> getCurrentSchedules(Student currentStudent, int subjectType, int currentSession);
 
     @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -95,6 +96,12 @@ public class StudentController {
     @DeleteMapping("/api/students/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         studentService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/api/students/{studentId}/avatar")
+    public ResponseEntity<?> uploadAvatar(@RequestParam("file") MultipartFile file, @PathVariable int studentId) {
+        studentService.store(file, studentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

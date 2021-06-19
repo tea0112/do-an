@@ -45,7 +45,6 @@ public class ClassesServiceImpl implements ClassesService {
             );
             Classes clazz = Classes.builder()
                 .name(classAddingReq.getName())
-                .classType(classAddingReq.getClassType())
                 .session(session)
                 .department(department)
                 .build();
@@ -68,7 +67,6 @@ public class ClassesServiceImpl implements ClassesService {
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
             clazz.setName(classUpdatingReq.getName());
-            clazz.setClassType(classUpdatingReq.getClassType());
             clazz.setSession(session);
             clazz.setDepartment(department);
             classesRepo.save(clazz);
@@ -99,7 +97,7 @@ public class ClassesServiceImpl implements ClassesService {
             Session session = sessionRepo.findById(sessionId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            return classesRepo.findByClassTypeAndDepartmentAndSession(classType, department, session);
+            return classesRepo.findByDepartmentAndSession(department, session);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
@@ -123,7 +121,7 @@ public class ClassesServiceImpl implements ClassesService {
             Session session = sessionRepo.findById(sessionId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            return classesRepo.findBySessionAndClassType(session, Classes.TYPE.SPECIALIZED_CLASS.ordinal());
+            return classesRepo.findBySession(session);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }

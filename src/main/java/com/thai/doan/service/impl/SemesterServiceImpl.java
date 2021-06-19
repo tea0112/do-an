@@ -1,9 +1,7 @@
 package com.thai.doan.service.impl;
 
-import com.thai.doan.dao.model.Fee;
 import com.thai.doan.dao.model.Semester;
 import com.thai.doan.dao.model.Session;
-import com.thai.doan.dao.repository.FeeRepository;
 import com.thai.doan.dao.repository.SemesterRepository;
 import com.thai.doan.dao.repository.SessionRepository;
 import com.thai.doan.dto.request.SemesterAddingRequest;
@@ -22,7 +20,6 @@ import java.util.Optional;
 public class SemesterServiceImpl implements SemesterService {
     private final SessionRepository sessionRepo;
     private final SemesterRepository semesterRepo;
-    private final FeeRepository feeRepo;
 
     @Override
     public List<Semester> getWithSession(int sessionId) {
@@ -36,15 +33,11 @@ public class SemesterServiceImpl implements SemesterService {
             Session session = sessionRepo.findById(semesterAddingReq.getSessionId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            Fee fee = feeRepo.findById(1).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
             Semester semester = Semester.builder()
                 .termNumber(semesterAddingReq.getTermNumber())
                 .startDay(semesterAddingReq.getStartDay())
                 .endDay(semesterAddingReq.getEndDay())
                 .session(session)
-                .fee(fee)
                 .build();
             semesterRepo.save(semester);
         } catch (Exception e) {
@@ -58,16 +51,12 @@ public class SemesterServiceImpl implements SemesterService {
             Session session = sessionRepo.findById(semesterUpdatingReq.getSessionId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            Fee fee = feeRepo.findById(1).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
             Semester semester = Semester.builder()
                 .id(id)
                 .termNumber(semesterUpdatingReq.getTermNumber())
                 .startDay(semesterUpdatingReq.getStartDay())
                 .endDay(semesterUpdatingReq.getEndDay())
                 .session(session)
-                .fee(fee)
                 .build();
             semesterRepo.save(semester);
         } catch (Exception e) {

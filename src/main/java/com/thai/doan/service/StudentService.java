@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Student;
 import com.thai.doan.dto.request.NewStudentRequest;
 import com.thai.doan.dto.request.StudentUpdatingRequest;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 public interface StudentService {
@@ -12,4 +13,5 @@ public interface StudentService {
     Student getWithId(String studentId);
     Student getAuthenticated();
     void delete(Integer studentId);
+    void store(MultipartFile file, Integer studentId);
 }
