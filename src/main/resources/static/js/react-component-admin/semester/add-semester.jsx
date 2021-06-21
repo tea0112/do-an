@@ -49,7 +49,8 @@ function App() {
         location.reload()
       })
       .catch(err => {
-        alert('Thêm Thất Bại ' + err)
+        console.log(err)
+        alert('Thêm Thất Bại')
         location.reload()
       })
   }

@@ -30,6 +30,9 @@ public class SemesterServiceImpl implements SemesterService {
     @Override
     public void add(SemesterAddingRequest semesterAddingReq) {
         try {
+            if (semesterAddingReq.getStartDay().isAfter(semesterAddingReq.getEndDay())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
             Session session = sessionRepo.findById(semesterAddingReq.getSessionId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );

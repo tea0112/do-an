@@ -101,16 +101,19 @@ function App() {
   })
   // utils
   const getTabulator = () => {
+    const tableStudents = students.map(s => ({...s, gender: s.gender ? 'Nữ' : 'Nam'}))
     const table = new Tabulator("#schedule-table", {
       // height: 205
-      data: students, //assign data to table
+      data: tableStudents, //assign data to table
       layout: "fitColumns", //fit columns to width of table (optional)
       columns: [ //Define Table Columns
+        {title: "Mã Số Sinh Viên", field: "user.username"},
         {title: "Họ", field: "firstName"},
         {title: "Tên", field: "lastName"},
         {title: "Ngày Sinh", field: "birth"},
         {title: "Nơi Sinh", field: "place"},
         {title: "Số Điện Thoại", field: "phoneNumber"},
+        {title: "Giới Tính", field: "gender"},
       ],
       rowClick: function (e, row) {
         window.location.href = "/admin/sinh-vien/sua?studentId=" + row.getData().id
