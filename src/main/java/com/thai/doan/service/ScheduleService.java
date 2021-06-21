@@ -1,15 +1,12 @@
 package com.thai.doan.service;
 
 import com.thai.doan.dao.model.Schedule;
-import com.thai.doan.dto.model.ScheduleSearchCriteria;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ScheduleService {
     List<Schedule> getSchedule(int subjectType);

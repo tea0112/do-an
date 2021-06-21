@@ -15,6 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +38,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final SessionRepository sessionRepo;
     private final ClassesRepository classesRepo;
     private final ClassroomRepository classroomRepo;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<Schedule> getSchedule(int subjectType) {
@@ -84,6 +93,99 @@ public class ScheduleServiceImpl implements ScheduleService {
             addSchedule.addObject("message", "error");
             return addSchedule;
         }
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Schedule> query = builder.createQuery(Schedule.class);
+        Root<Schedule> root = query.from(Schedule.class);
+
+        Predicate isSameSemester = builder.equal(root.get("semester").get("id"), newSchlReq.getSemester());
+        Predicate isSameSubject = builder.equal(root.get("subject").get("id"), newSchlReq.getSubject());
+        Predicate isSameWeekDay = builder.equal(root.get("weekDay"), newSchlReq.getWeek());
+        Predicate isSamePeriodType = builder.equal(root.get("periodType"), newSchlReq.getPeriodType());
+
+        Predicate isStartEqualStartPeriod = builder.equal(root.get("startPeriod"), newSchlReq.getStartPeriod());
+        Predicate isEndEqualStartPeriod = builder.equal(root.get("startPeriod"), newSchlReq.getEndPeriod());
+
+        Predicate isStartEqualEndPeriod = builder.equal(root.get("endPeriod"), newSchlReq.getEndPeriod());
+        Predicate isEndEqualEndPeriod = builder.equal(root.get("endPeriod"), newSchlReq.getStartPeriod());
+
+        Predicate hasStartPeriod = builder.greaterThanOrEqualTo(root.get("startPeriod"), newSchlReq.getStartPeriod());
+        Predicate hasEndPeriod = builder.lessThanOrEqualTo(root.get("endPeriod"), newSchlReq.getEndPeriod());
+
+        query.where(builder.and(isSameSemester, isSameSubject, isSameWeekDay, isSamePeriodType));
+
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng buổi học trong ngày");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+
+        // bằng bắt đầu
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualStartPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+
+        // bằng kết thúc
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+
+        // cùng lúc lớn hơn bằng bắt đầu và nhỏ hơn bằng kết thúc
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, hasStartPeriod, hasEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new Exception("Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            addSchedule.addObject("allDepartment", departmentRepo.findAll());
+            addSchedule.addObject("message", "error");
+            return addSchedule;
+        }
+
         Schedule schedule = Schedule.builder()
             .startPeriod(newSchlReq.getStartPeriod())
             .endPeriod(newSchlReq.getEndPeriod())
@@ -98,6 +200,12 @@ public class ScheduleServiceImpl implements ScheduleService {
             .classroom(classroom.get())
             .build();
         try {
+            if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
+                throw new Exception("Trùng buổi học trong ngày");
+            }
+            if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
+                throw new Exception("Trùng buổi học trong ngày");
+            }
             scheduleRepo.save(schedule);
         } catch (Exception e) {
             addSchedule.addObject("allDepartment", departmentRepo.findAll());

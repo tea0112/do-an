@@ -51,4 +51,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
     Optional<Schedule> findById(int id);
 
     List<Schedule> findAll(@Nullable Specification<Schedule> spec);
+
 }

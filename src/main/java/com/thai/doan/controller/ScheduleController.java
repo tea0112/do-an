@@ -2,7 +2,6 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Subject;
-import com.thai.doan.dto.model.ScheduleSearchCriteria;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.service.DepartmentService;
@@ -19,7 +18,6 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Data
