@@ -2,13 +2,13 @@ package com.thai.doan;
 
 import com.thai.doan.dao.model.User;
 import com.thai.doan.dao.repository.UserRepository;
-import org.apache.log4j.PropertyConfigurator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@Data
 @SpringBootApplication
 public class DoAnApplication implements CommandLineRunner {
 
@@ -16,11 +16,9 @@ public class DoAnApplication implements CommandLineRunner {
         SpringApplication.run(DoAnApplication.class, args);
     }
 
-    @Autowired
-    UserRepository userRepository;
+    public final UserRepository userRepository;
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    public final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
