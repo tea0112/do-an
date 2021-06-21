@@ -153,7 +153,8 @@
           </div>
           <div class="form-group">
             <label for="periodType">Buổi</label>
-            <select class="form-control form-control-sm" th:field="*{periodType}" id="periodType">
+            <select class="form-control form-control-sm" th:field="*{periodType}" id="periodType"
+              onchange="handlePeriodTypeChange(this.value)">
               <option th:value="0">Sáng</option>
               <option th:value="1">Chiều</option>
               <option th:value="2">Tối</option>
@@ -250,6 +251,9 @@
 
   function handleSelectLectureHallChange(lectureHallValue) {
     setClassroomSelect(document.getElementById('classroom'), lectureHallValue)
+  }
+  function handlePeriodTypeChange(periodTypeValue) {
+
   }
 </script>
 </body>

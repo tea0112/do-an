@@ -6,8 +6,8 @@ import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.ScheduleService;
-import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +40,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Student std = user.getStudent();
         if (semesterRepo.getMaxTermOfStudent(std) > 1) {
             return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), false);
-        }
-        else
+        } else
             return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), true);
     }
 
@@ -186,5 +185,38 @@ public class ScheduleServiceImpl implements ScheduleService {
         } catch (NumberFormatException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
+    }
+
+    //test specification
+    @Override
+    public List<Schedule> lecturerNameLike(String name) {
+        if (name == null) {
+            return scheduleRepo.findAll();
+        }
+        Specification<Schedule> scheduleSpecifications = ((root, criteriaQuery, criteriaBuilder)
+            -> criteriaBuilder.like(root.get("lecturer").get("name"), "%" + name + "%"));
+        return scheduleRepo.findAll(scheduleSpecifications);
+    }
+
+    @Override
+    public List<Schedule> retrieveSchedules(Integer weekDay,
+                                            Integer periodType,
+                                            Integer semesterId) {
+        if (weekDay == null && periodType == null && semesterId == null) {
+            return new ArrayList<>();
+        }
+
+        Specification<Schedule> weekDayEqualTo = (root, query, builder) -> Optional.ofNullable(weekDay).map(
+            wkDay -> builder.equal(root.get("weekDay"), wkDay)).orElse(null);
+
+        Specification<Schedule> periodTypeEqualTo = (root, query, builder) -> Optional.ofNullable(periodType).map(
+            pdType -> builder.equal(root.get("periodType"), pdType)).orElse(null);
+
+        Specification<Schedule> semesterIdEqualTo = (root, query, builder) -> Optional.ofNullable(semesterId).map(
+            smesterId -> builder.equal(root.get("semester").<Integer>get("id"), smesterId)).orElse(null);
+
+        Specification<Schedule> scheduleSpecifications = weekDayEqualTo.and(periodTypeEqualTo).and(semesterIdEqualTo);
+
+        return scheduleRepo.findAll(scheduleSpecifications);
     }
 }

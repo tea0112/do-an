@@ -2,8 +2,8 @@ package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Subject;
+import com.thai.doan.dto.model.ScheduleSearchCriteria;
 import com.thai.doan.dto.request.NewScheduleRequest;
-import com.thai.doan.dto.request.NewStudentRequest;
 import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.service.DepartmentService;
 import com.thai.doan.service.LecturerService;
@@ -11,7 +11,6 @@ import com.thai.doan.service.ScheduleService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +19,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Data
@@ -121,4 +121,20 @@ public class ScheduleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/api/schedules/lecturer")
+    public ResponseEntity<List<Schedule>> retrieveLecturerLike(
+        @RequestParam(required = false) String name
+    ) {
+        List<Schedule> schedules = scheduleSv.lecturerNameLike(name);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/schedules/search")
+    public ResponseEntity<List<Schedule>> retrieveSchedules(
+        @RequestParam(required = false) Integer weekDay,
+        @RequestParam(required = false) Integer periodType,
+        @RequestParam(required = false) Integer semesterId) {
+        List<Schedule> schedules = scheduleSv.retrieveSchedules(weekDay, periodType, semesterId);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
 }

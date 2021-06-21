@@ -1,9 +1,11 @@
 package com.thai.doan.dao.repository;
 
+import com.sun.istack.Nullable;
 import com.thai.doan.dao.model.Classes;
 import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Semester;
 import com.thai.doan.dao.model.Student;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -47,4 +49,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
     List<Schedule> findByClassesAndSemester(Classes clazz, Semester semester);
 
     Optional<Schedule> findById(int id);
+
+    List<Schedule> findAll(@Nullable Specification<Schedule> spec);
 }

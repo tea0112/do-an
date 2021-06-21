@@ -10,4 +10,5 @@ public class ErrorCode {
     public static final String SAVE_ERROR = "có lỗi trong quá trình lưu";
     public static final String LECTURE_HALL_NOT_FOUND = "không tìm thấy giảng đường";
     public static final String CLASSROOM_NOT_FOUND = "không tìm thấy phòng học";
+    public static final String SEMESTER_NOT_FOUND = "không tìm thấy niên khoá";
 }
