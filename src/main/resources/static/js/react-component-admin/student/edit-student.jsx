@@ -28,7 +28,6 @@ function App() {
   }, [sessions, departments]);
   React.useEffect(() => {
     if (students) {
-      console.log("set tabulor")
       while (scheduleTableRef.current.firstElementChild) {
         scheduleTableRef.current.removeChild(scheduleTableRef.current.firstChild)
       }
@@ -66,7 +65,6 @@ function App() {
   // onSubmit
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(classInputRef.current.value)
     if (classInputRef.current.value !== "") {
       getStudents(classInputRef.current.value)
         .then((students) => {

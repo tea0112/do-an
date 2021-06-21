@@ -83,9 +83,13 @@ function App() {
   //click
   const handleSubmit = (e) => {
     e.preventDefault();
-    getSchedule();
-    if (scheduleTableRef.current.hasAttribute('class')) {
-      scheduleTableRef.current.removeAttribute('class');
+    if (semesterInputRef.current.value) {
+      getSchedule();
+      if (scheduleTableRef.current.hasAttribute('class')) {
+        scheduleTableRef.current.removeAttribute('class');
+      }
+    } else {
+      alert('Không có dữ liệu')
     }
   };
   // option

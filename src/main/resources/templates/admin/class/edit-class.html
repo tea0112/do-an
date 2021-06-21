@@ -75,7 +75,6 @@
             const classInputRef = React.useRef()
             const scheduleTableRef = React.useRef()
             const classNameChangeInputRef = React.useRef();
-            const classTypeChangeInputRef = React.useRef();
             const sessionChangeInputRef = React.useRef();
             const departmentChangeInputRef = React.useRef();
             React.useEffect(() => {
@@ -135,7 +134,6 @@
                 data: {
                   name: classNameChangeInputRef.current.value,
                   departmentId: departmentChangeInputRef.current.value,
-                  classType: classTypeChangeInputRef.current.value,
                   sessionId: sessionChangeInputRef.current.value,
                 }
               })
@@ -175,16 +173,6 @@
                       <input type="text" id="classNameChangeInput" key={clazz.id} ref={classNameChangeInputRef}
                              defaultValue={clazz.name}
                              className="form-control"/>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="subjectTypeChangeInput">Kiểu Lớp</label>
-                      <select className="form-control" key={clazz.id}
-                              defaultValue={clazz.classType && getValueClassType(clazz.classType)}
-                              ref={classTypeChangeInputRef}
-                              id="subjectTypeInput">
-                        <option value="0">đại cương</option>
-                        <option value="1">chuyên ngành</option>
-                      </select>
                     </div>
                     <div className="form-group">
                       <label>Khoá</label>

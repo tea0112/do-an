@@ -30,6 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final LecturerRepository lecturerRepo;
     private final SessionRepository sessionRepo;
     private final ClassesRepository classesRepo;
+    private final ClassroomRepository classroomRepo;
 
     @Override
     public List<Schedule> getSchedule(int subjectType) {
@@ -38,10 +39,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         User user = customUserDetails.getUser();
         Student std = user.getStudent();
         if (semesterRepo.getMaxTermOfStudent(std) > 1) {
-            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId());
+            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), false);
         }
         else
-            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId());
+            return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), true);
     }
 
     @Override
@@ -53,6 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Optional<Lecturer> lecturer = lecturerRepo.findByIdAndDepartment(newSchlReq.getLecturer(), department.get());
         Optional<Classes> studentsClass = classesRepo.findById(newSchlReq.getClassId());
         Optional<Semester> semester = semesterRepo.findById(newSchlReq.getSemester());
+        Optional<Classroom> classroom = classroomRepo.findById(newSchlReq.getClassroomId());
         if (!department.isPresent()) {
             result.rejectValue("department", "department", "Khoa không tồn tại");
             hasInvalidField = true;
@@ -67,6 +69,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             hasInvalidField = true;
         } else if (!semester.isPresent()) {
             result.rejectValue("semester", "semester", "Khoá không tồn tại");
+            hasInvalidField = true;
+        } else if (!classroom.isPresent()) {
+            result.rejectValue("classroom", "classroom", "Phòng học không tồn tại");
             hasInvalidField = true;
         } else if (newSchlReq.getStartDay() == null) {
             result.rejectValue("startDay", "startDay", "Ngày bắt đầu không được trống");
@@ -91,6 +96,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             .lecturer(lecturer.get())
             .subject(subject.get())
             .classes(studentsClass.get())
+            .classroom(classroom.get())
             .build();
         try {
             scheduleRepo.save(schedule);
@@ -134,6 +140,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             Classes clazz = classesRepo.findById(scheduleUpdatingReq.getClasses()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
+            Classroom classroom = classroomRepo.findById(scheduleUpdatingReq.getClassroomId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+
             Schedule schedule = scheduleOpl.get();
             schedule.setStartDay(scheduleUpdatingReq.getStartDay());
             schedule.setEndDay(scheduleUpdatingReq.getEndDay());
@@ -145,6 +155,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedule.setLecturer(lecturer);
             schedule.setSubject(subject);
             schedule.setClasses(clazz);
+            schedule.setClassroom(classroom);
             scheduleRepo.save(schedule);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());

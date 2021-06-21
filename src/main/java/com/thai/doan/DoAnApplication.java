@@ -14,8 +14,6 @@ public class DoAnApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(DoAnApplication.class, args);
-
-        PropertyConfigurator.configure("src/log4j.properties");
     }
 
     @Autowired

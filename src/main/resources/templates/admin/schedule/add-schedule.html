@@ -19,10 +19,10 @@
 
   <!-- Custom styles for this template-->
   <link th:href="@{/static/admin/css/sb-admin-2.min.css}" rel="stylesheet">
-
+  <script src="/static/js/axios.min.js"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="myFunction()">
 
 <div id="alert" th:if="${message}" th:class="${message}"></div>
 
@@ -48,7 +48,8 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Thêm Thời Khoá Biểu</h1>
         <!-- Form Thêm-->
-        <form name="addStudent" th:action="@{/admin/thoi-khoa-bieu/them}" th:object="${newScheduleRequest}" method="post">
+        <form name="addStudent" th:action="@{/admin/thoi-khoa-bieu/them}" th:object="${newScheduleRequest}"
+              method="post">
           <div class="form-group">
             <label for="departmentInput">Khoa</label>
             <div th:if="${allDepartment != null and allDepartment.size() &gt; 0}">
@@ -61,7 +62,6 @@
             <div style="color: red;" th:if="${allDepartment == null or allDepartment.size == 0}">
               Không thể tạo sinh viên mới vì thiếu Khoa trong cơ sở dữ liệu
             </div>
-            <!--            <p style="color: red;" th:if="${#fields.hasErrors('sessionName')}" th:errors="*{sessionName}"></p>-->
           </div>
           <div class="form-group">
             <label for="subjectTypeInput">Kiểu Môn</label>
@@ -70,13 +70,13 @@
               <option th:value="0">Lý Thuyết</option>
               <option th:value="1">Thực Hành</option>
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('subjectType')}" th:errors="*{subjectType}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('subjectType')}" th:errors="*{subjectType}"></p>
           </div>
           <div class="form-group">
             <label for="subjectInput">Tên Môn</label>
             <select class="form-control" th:field="*{subject}" id="subjectInput">
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></p>
           </div>
           <div class="form-group">
             <label for="lecturerInput">Giảng Viên</label>
@@ -84,25 +84,25 @@
               <select class="form-control" th:field="*{lecturer}" id="lecturerInput">
               </select>
             </div>
-            <p style ="color: red;" th:if="${#fields.hasErrors('lecturer')}" th:errors="*{lecturer}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('lecturer')}" th:errors="*{lecturer}"></p>
           </div>
           <div class="form-group">
             <label for="sessionInput">Khoá</label>
             <select class="form-control" th:field="*{session}" id="sessionInput" onchange="handleSessionChange()">
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('session')}" th:errors="*{session}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('session')}" th:errors="*{session}"></p>
           </div>
           <div class="form-group">
             <label for="classInput">Lớp</label>
             <select class="form-control" th:field="*{classId}" id="classInput" onchange="handleClassChange()">
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('classId')}" th:errors="*{classId}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('classId')}" th:errors="*{classId}"></p>
           </div>
           <div class="form-group">
             <label for="semesterInput">Học Kỳ</label>
             <select class="form-control" th:field="*{semester}" id="semesterInput">
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('semester')}" th:errors="*{semester}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('semester')}" th:errors="*{semester}"></p>
           </div>
           <div class="form-group">
             <label for="startPeriodInput">Tiết Bắt Đầu</label>
@@ -114,7 +114,7 @@
               <option th:value="5">5</option>
               <option th:value="6">6</option>
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('startPeriod')}" th:errors="*{startPeriod}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('startPeriod')}" th:errors="*{startPeriod}"></p>
           </div>
           <div class="form-group">
             <label for="endPeriodInput">Tiết Kết Thúc</label>
@@ -126,7 +126,7 @@
               <option th:value="5">5</option>
               <option th:value="6">6</option>
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('endPeriod')}" th:errors="*{endPeriod}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('endPeriod')}" th:errors="*{endPeriod}"></p>
           </div>
           <div class="form-group">
             <label for="weekDayInput">Thứ</label>
@@ -139,17 +139,17 @@
               <option th:value="7">7</option>
               <option th:value="8">8</option>
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('week')}" th:errors="*{week}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('week')}" th:errors="*{week}"></p>
           </div>
           <div class="form-group">
             <label for="startDayInput">Ngày Bắt Đầu</label>
             <input class="form-control" th:field="*{startDay}" type="date" value="2011-08-19" id="startDayInput">
-            <p style ="color: red;" th:if="${#fields.hasErrors('startDay')}" th:errors="*{startDay}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('startDay')}" th:errors="*{startDay}"></p>
           </div>
           <div class="form-group">
             <label for="endDayInput">Ngày Kết Thúc</label>
             <input class="form-control" th:field="*{endDay}" type="date" value="2011-08-19" id="endDayInput">
-            <p style ="color: red;" th:if="${#fields.hasErrors('endDay')}" th:errors="*{endDay}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('endDay')}" th:errors="*{endDay}"></p>
           </div>
           <div class="form-group">
             <label for="periodType">Buổi</label>
@@ -158,7 +158,23 @@
               <option th:value="1">Chiều</option>
               <option th:value="2">Tối</option>
             </select>
-            <p style ="color: red;" th:if="${#fields.hasErrors('periodType')}" th:errors="*{periodType}"></p>
+            <p style="color: red;" th:if="${#fields.hasErrors('periodType')}" th:errors="*{periodType}"></p>
+          </div>
+          <div class="form-group">
+            <label for="lectureHall">Chọn Giảng Đường</label>
+            <select class="form-control"
+                    id="lectureHall"
+                    onchange="handleSelectLectureHallChange(this.value)"
+            >
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="classroom">Chọn Phòng Học</label>
+            <select class="form-control"
+                    id="classroom"
+                    th:field="*{classroomId}"
+            >
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Thêm</button>
         </form>
@@ -193,7 +209,49 @@
 <script th:src="@{/static/admin/js/sb-admin-2.min.js}"></script>
 
 <script th:src="@{/static/admin/js/schedule-add.js}"></script>
+<script>
+  function myFunction() {
+    const lectureHallSelect = document.getElementById('lectureHall')
+    const classroomSelect = document.getElementById('classroom')
+    setLectureHallSelect(classroomSelect, lectureHallSelect)
+  }
 
+  async function setLectureHallSelect(classroomSelect, lectureHallSelect) {
+    const lectureHalls = await getLectureHall()
+    lectureHalls.forEach(lH => {
+      const lectureHallOption = document.createElement('OPTION')
+      lectureHallOption.value = lH.id
+      lectureHallOption.text = lH.name + ' - ' + lH.address
+      lectureHallSelect.append(lectureHallOption)
+    })
+    await setClassroomSelect(classroomSelect, lectureHallSelect.value)
+  }
+
+  async function setClassroomSelect(classroomSelect, lectureHallSelectValue) {
+    while (classroomSelect.firstChild) {
+      classroomSelect.removeChild(classroomSelect.lastChild)
+    }
+    const classrooms = await getClassroomWithLectureHallId(lectureHallSelectValue)
+    classrooms.forEach(clr => {
+      const clrOption = document.createElement('OPTION')
+      clrOption.value = clr.id
+      clrOption.text = clr.name
+      classroomSelect.append(clrOption)
+    })
+  }
+
+  function getLectureHall() {
+    return axios.get(`/api/lecturerHalls`)
+  }
+
+  function getClassroomWithLectureHallId(lectureHallId) {
+    return axios.get(`/api/admin/classrooms?lectureHallId=${lectureHallId}`)
+  }
+
+  function handleSelectLectureHallChange(lectureHallValue) {
+    setClassroomSelect(document.getElementById('classroom'), lectureHallValue)
+  }
+</script>
 </body>
 
 </html>

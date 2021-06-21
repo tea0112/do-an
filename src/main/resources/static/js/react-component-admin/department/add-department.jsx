@@ -8,14 +8,16 @@ function App() {
     if (generalCheckRef) {
       if (generalCheckRef.current.value !== '') {
         try {
-          const response = await axios.post(`/api/admin/departments`, {
+          await axios.post(`/api/admin/departments`, {
             name: nameRef.current.value,
             isGeneral: generalCheckRef.current.checked
           })
           alert('Thêm Khoa thành công')
+          location.reload()
         } catch (e) {
           console.log(e)
           alert('Thêm Khoa thất bại')
+          location.reload()
         }
       }
     }
@@ -36,7 +38,7 @@ function App() {
             ref={generalCheckRef}
           />
           <label>
-            Là Khoa Chung
+            Là Khoa Cơ Bản
           </label>
         </div>
         <button className="btn btn-primary">Thêm</button>

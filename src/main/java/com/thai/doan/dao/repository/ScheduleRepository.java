@@ -19,24 +19,32 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
             "join Subject sj on sd.subject = sj " +
             "join Lecturer l on sd.lecturer = l " +
             "where st.termNumber = (" +
-                "select distinct max(st.termNumber) " +
-                "from Semester st " +
-                "join Session ss on st.session = ss" +
-                " where ss.id = :currentSession" +
+            "select distinct max(st.termNumber) " +
+            "from Semester st " +
+            "join Session ss on st.session = ss" +
+            " where ss.id = :currentSession" +
             ") " +
             "and sj.subjectType = :subjectType " +
             "and sd.classes = ( " +
-                "select distinct c " +
-                "from Student std " +
-                "join StudentClassRelation scr on std = scr.studentId " +
-                "join Classes c on scr.classId = c " +
-                "where std = :currentStudent" +
+            "select distinct c " +
+            "from Student std " +
+            "join StudentClassRelation scr on std = scr.studentId " +
+            "join Classes c on scr.classId = c " +
+            "where std = :currentStudent " +
+            "and c.id in (" +
+            "select cl.id " +
+            "from Department d " +
+            "join Classes cl on d.id = cl.department.id " +
+            "where d.isGeneral = :isGeneral" +
+            ")" +
             ")"
     )
-    List<Schedule> getCurrentSchedules(Student currentStudent, int subjectType, int currentSession);
+    List<Schedule> getCurrentSchedules(Student currentStudent, int subjectType, int currentSession, boolean isGeneral);
 
     @Query("select schdl from Schedule schdl where schdl.classes.id = :classId and schdl.semester.id = :semesterId")
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
+
     List<Schedule> findByClassesAndSemester(Classes clazz, Semester semester);
+
     Optional<Schedule> findById(int id);
 }

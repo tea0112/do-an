@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Thêm Sinh Viên Vào Lớp Chuyên Ngành</title>
+  <title>Thêm Sinh Viên Vào Lớp</title>
 
   <!-- Custom fonts for this template-->
   <link th:href="@{/static/admin/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -106,7 +106,7 @@
               return axios.get(`/api/classes?sessionId=${sessionId}`)
             }
             const getStudents = (classId) => {
-              return axios.get(`/api/admin/students?classId=${classId}`)
+              return axios.get(`/api/students?sessionId=${classId}`)
             }
             const getChangingClass = (sessionId) => {
               return axios.get(`/api/specializedClass?sessionId=${sessionId}`)
@@ -130,8 +130,8 @@
             // onSubmit
             const handleFind = (e) => {
               e.preventDefault()
-              if (classInputRef.current.value !== "") {
-                getStudents(classInputRef.current.value)
+              if (sessionInputRef.current.value !== "") {
+                getStudents(sessionInputRef.current.value)
                   .then((students) => {
                     setStudents(students)
                   })
@@ -178,22 +178,24 @@
             })
             // utils
             const getTabulator = () => {
+              const tableStudents = students.map(s => ({...s, gender: s.gender ? 'Nữ' : 'Nam'}))
               const table = new Tabulator("#student-table", {
                 // height: 205
-                data: students, //assign data to table
+                data: tableStudents, //assign data to table
                 layout: "fitColumns", //fit columns to width of table (optional)
                 columns: [ //Define Table Columns
+                  {title: "Mã Sinh Viên", field: "user.username"},
                   {title: "Họ", field: "firstName"},
                   {title: "Tên", field: "lastName"},
                   {title: "Ngày Sinh", field: "birth"},
                   {title: "Nơi Sinh", field: "place"},
                   {title: "Số Điện Thoại", field: "phoneNumber"},
+                  {title: "Giới Tính", field: "gender"},
                 ],
                 rowClick: function (e, row) {
                   setStudent(row.getData())
                   getChangingClass(sessionInputRef.current.value)
                     .then((classes) => {
-                      console.log(classes)
                       setChangingClass(classes)
                     })
                     .catch(err => console.log(err))
@@ -213,19 +215,13 @@
             }
             return (
               <div>
-                <h1 className="h3 mb-4 text-gray-800">Thêm Sinh Viên Vào Lớp Chuyên Ngành</h1>
+                <h1 className="h3 mb-4 text-gray-800">Thêm Sinh Viên Vào Lớp</h1>
                 <form name="addStudent" onSubmit={handleFind}>
                   <div className="form-group">
                     <label>Khoá</label>
                     <select className="form-control" id="sessionInput" onChange={sessionInputChange}
                             ref={sessionInputRef}>
                       {sessions && sessionOption(sessions)}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label>Lớp Đại Cương</label>
-                    <select className="form-control" id="classInput" ref={classInputRef}>
-                      {classes && classOption(classes)}
                     </select>
                   </div>
                   <button type="submit" className="btn btn-primary"

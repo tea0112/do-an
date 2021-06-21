@@ -8,8 +8,6 @@ function App() {
 
   const departmentInputRef = React.useRef()
   const lecturerInputRef = React.useRef()
-  const departmentUpdateInputRef = React.useRef()
-  const lecturerUpdateInputRef = React.useRef()
 
   // effect
   React.useEffect(() => {
@@ -48,15 +46,9 @@ function App() {
         .catch(err => console.log(err))
     }
   }, [state.lecturers])
-  React.useEffect(() => {
-    if (state.lecturer) {
-      lecturerUpdateInputRef.current.value = state.lecturer.name
-    }
-  }, [state.lecturer])
 
   // change
   const departmentInputChange = () => {
-    departmentUpdateInputRef.current.value = departmentInputRef.current.value
     setState(prevState => deepFreeze({
       ...prevState,
       departmentUpdateInput: departmentInputRef.current.value
@@ -79,9 +71,6 @@ function App() {
         }))
       })
       .catch(err => console.log(err))
-  }
-  const departmentInputUpdateChange = () => {
-
   }
 
   // submit
@@ -148,30 +137,19 @@ function App() {
       </form>
       <hr/>
       <div>
-        <i>Id hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.id}/>
-        <i>Tên hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.name}/>
-        <i>Khoa hiện tại</i>
-        <input type="text" className="form-control" disabled={true}
-               value={state.lecturer && state.lecturer.department.name}/>
+        {state.lecturers && state.lecturers.length > 0 && (
+          <div>
+            <i>Id hiện tại</i>
+            <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.id}/>
+            <i>Tên hiện tại</i>
+            <input type="text" className="form-control" disabled={true} value={state.lecturer && state.lecturer.name}/>
+            <i>Khoa hiện tại</i>
+            <input type="text" className="form-control" disabled={true}
+                   value={state.lecturer && state.lecturer.department.name}/>
+          </div>
+        )}
         <hr/>
-        <h4>Thay đổi:</h4>
         <form onSubmit={onUpdate}>
-          <div className="form-group">
-            <label htmlFor="departmentUpdateInput">Khoa</label>
-            <select className="form-control" id="departmentUpdateInput"
-                    defaultValue={state.departmentUpdateInput && state.departmentUpdateInput}
-                    ref={departmentUpdateInputRef} onChange={departmentInputUpdateChange}>
-              {state.departments && departmentOption(state.departments)}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="lecturerUpdateInput">Tên Giảng Viên</label>
-            <input className="form-control" type="text" id="lecturerUpdateInput"
-                   ref={lecturerUpdateInputRef}
-                   defaultValue={state.lecturer && state.lecturer.name}/>
-          </div>
           <button type="button" onClick={preDeleteClick} className="btn btn-primary">Xoá</button>
           {/*start modal*/}
           <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog"

@@ -12,6 +12,10 @@ function App() {
   const [periodType, setPeriodType] = React.useState(null)
   const [subjectType, setSubjectType] = React.useState(null)
   const [subjectName, setSubjectName] = React.useState(null)
+  const [lectureHall, setLectureHall] = React.useState(null)
+  const [classroom, setClassroom] = React.useState(null)
+  const [lectureHalls, setLectureHalls] = React.useState(null)
+  const [classrooms, setClassrooms] = React.useState(null)
 
   const departmentRef = React.useRef();
   const subjectTypeRef = React.useRef();
@@ -27,7 +31,7 @@ function App() {
   const classRef = React.useRef()
   const lecturerRef = React.useRef()
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     getSchedule()
       .then(response => {
         setSchedule(response)
@@ -48,6 +52,8 @@ function App() {
       .catch((err) => {
         console.log(err)
       })
+    const lectureHalls = await getLectureHall()
+    setLectureHalls(lectureHalls)
   }, [])
   React.useEffect(() => {
     getSession()
@@ -77,6 +83,8 @@ function App() {
   }, [schedule])
   React.useEffect(() => {
     if (schedule) {
+      setLectureHall(schedule.classroom.lectureHall.id)
+      setClassroom(schedule.classroom.id)
       getClasses(schedule.subject.department.id, schedule.semester.session.id)
         .then((classes) => setClasses(classes))
         .catch((err) => console.log(err))
@@ -84,11 +92,25 @@ function App() {
   }, [schedule])
   React.useEffect(() => {
     if (subjectType) {
-      getSubject(subjectTypeRef.current.value, schedule.subject.department.id)
+      getSubject(subjectTypeRef.current.value, departmentRef.current.value)
         .then((subjects) => setSubjects(subjects))
         .catch((err) => console.log(err))
     }
   }, [subjectType])
+  React.useEffect(async () => {
+    if (lectureHalls && lectureHalls.length > 0) {
+    }
+  }, [lectureHalls])
+  React.useEffect(async () => {
+    if (lectureHall) {
+      const classrooms = await getClassroomWithLectureHallId(lectureHall)
+      setClassrooms(classrooms)
+    }
+  }, [lectureHall])
+  React.useEffect(async () => {
+    if (classrooms && classrooms.length > 0) {
+    }
+  }, [classrooms])
 
   // fetch
   const getSchedule = () => {
@@ -121,6 +143,13 @@ function App() {
     return axios.get(
       `/api/semesters?sessionId=${sessionId}`
     )
+  }
+  const getLectureHall = () => {
+    return axios.get(`/api/lecturerHalls`)
+  }
+
+  const getClassroomWithLectureHallId = (lectureHallId) => {
+    return axios.get(`/api/admin/classrooms?lectureHallId=${lectureHallId}`)
   }
   // component
   const departmentOption = (departmentData, currentDepartment) => departmentData.map((department) => {
@@ -230,6 +259,16 @@ function App() {
       return <option key={i} value={i}>{i === 0 && 'Sáng'}{i === 1 && 'chiều'}{i === 2 && 'tối'}</option>
     })
   }
+  const lectureHallOption = (lectureHall) => lectureHall.map((lectureHall) => {
+    return (
+      <option key={lectureHall.id} value={lectureHall.id}>{lectureHall.name} - {lectureHall.address}</option>
+    )
+  })
+  const classroomOption = (classroom) => classroom.map((classroom) => {
+    return (
+      <option key={classroom.id} value={classroom.id}>{classroom.name}</option>
+    )
+  })
   // onChange
   const subjectNameChange = (e) => {
     setSubjectName(e.target.value)
@@ -237,18 +276,15 @@ function App() {
   const handleChangeDepartment = (e) => {
     getSubject(subjectTypeRef.current.value, e.target.value)
       .then(subjects => setSubjects(subjects))
-      .catch(err => console.log("change department err - subject", err))
+      .catch(err => console.log(err))
     getLecturer(e.target.value)
       .then(lecturers => setLecturers(lecturers))
-      .catch(err => console.log("change department err - lecturer", err))
+      .catch(err => console.log(err))
     getClasses(e.target.value, sessionRef.current.value)
       .then(classes => setClasses(classes))
   }
   const onSubjectTypeChange = (e) => {
     setSubjectType(e.target.value)
-    getSubject(e.target.value, departmentRef.current.value)
-      .then((subjects) => setSubjects(subjects))
-      .catch((err) => console.log(err))
   }
   const handlePeriodTypeChange = (e) => {
     setPeriodType(e.target.value)
@@ -264,6 +300,13 @@ function App() {
       .then((semesters) => setSemesters(semesters))
       .catch((err) => console.log(err))
   }
+  const handleSelectLectureHallChange = (e) => {
+    setLectureHall(e.target.value)
+  }
+  const handleClassroomChange = (e) => {
+    setClassroom(e.target.value)
+  }
+
   // onSubmit
   const onSubmit = (e) => {
     e.preventDefault()
@@ -284,6 +327,7 @@ function App() {
         lecturer: lecturerRef.current.value,
         subject: subjectRef.current.value,
         classes: classRef.current.value,
+        classroomId: parseInt(classroom)
       }
     })
       .then(() => {
@@ -307,6 +351,10 @@ function App() {
   }
   return (
     <div>
+      <div className="font-weight-bold">Chỉnh sửa cho: {schedule && <span>{schedule.id} - {schedule.classes.name} -
+        &nbsp;{schedule.subject.name} - {schedule.subject.subjectType ? 'thực hành' : 'lý thuyết'} -
+        &nbsp;{schedule.lecturer.name}
+      </span>}</div>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           {schedule && <input type="text" id="idInput" value={id} style={{display: 'none'}}/>}
@@ -393,11 +441,29 @@ function App() {
         </div>
         <div className="form-group">
           <label htmlFor="periodType">Buổi</label>
-          <select className="form-control form-control-sm" id="periodType"
+          <select className="form-control" id="periodType"
                   ref={periodTypeRef}
                   value={periodType && periodType}
                   onChange={handlePeriodTypeChange}>
             {schedule && periodTypeOption(schedule.periodType)}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="lectureHall">Chọn Giảng Đường</label>
+          <select className="form-control"
+                  id="lectureHall"
+                  value={lectureHall}
+                  onChange={handleSelectLectureHallChange}>
+            {lectureHalls && lectureHallOption(lectureHalls)}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="classroom">Chọn Phòng Học</label>
+          <select className="form-control"
+                  value={classroom}
+                  onChange={handleClassroomChange}
+                  id="classroom">
+            {classrooms && classroomOption(classrooms)}
           </select>
         </div>
         <button type="submit" className="btn btn-primary">Cập Nhật</button>

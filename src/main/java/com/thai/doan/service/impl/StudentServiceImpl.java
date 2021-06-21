@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -144,14 +145,13 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    @Transactional
     @Override
-    public void store(MultipartFile file, Integer studentId) {
+    public List<Student> getWithSession(Integer sessionId) {
         try {
-            Student student = studentRepo.findById(studentId).orElseThrow(
+            Session session = sessionRepo.findById(sessionId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            studentRepo.save(student);
+            return studentRepo.findBySession(session);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }

@@ -55,7 +55,7 @@ function App() {
             disabled={true}
           />
           <label>
-            Là Khoa Chung
+            Là Khoa Cơ Bản
           </label>
         </div>
       </div>

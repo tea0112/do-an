@@ -93,15 +93,15 @@ public class StudentController {
         return studentService.getAuthenticated();
     }
 
+    @GetMapping("/api/students")
+    public List<Student> getWithSession(@RequestParam Integer sessionId) {
+        return studentService.getWithSession(sessionId);
+    }
+
     @DeleteMapping("/api/students/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         studentService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/api/students/{studentId}/avatar")
-    public ResponseEntity<?> uploadAvatar(@RequestParam("file") MultipartFile file, @PathVariable int studentId) {
-        studentService.store(file, studentId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

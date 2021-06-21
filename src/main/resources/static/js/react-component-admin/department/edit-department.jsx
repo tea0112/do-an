@@ -54,7 +54,7 @@ function App() {
             defaultChecked={choseDepartment.isGeneral}
           />
           <label>
-            Là Khoa Chung
+            Là Khoa Cơ Bản
           </label>
         </div>
       </div>

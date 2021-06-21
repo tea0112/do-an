@@ -53,4 +53,7 @@ public class NewScheduleRequest {
 
     @Min(0)
     private int periodType;
+
+    @Min(0)
+    private int classroomId;
 }

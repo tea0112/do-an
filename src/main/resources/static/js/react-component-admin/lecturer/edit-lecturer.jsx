@@ -29,23 +29,25 @@ function App() {
     }
   }, [departments])
   React.useEffect(() => {
-    if (lecturers) {
+    if (lecturers && lecturers.length !== 0) {
       getLecturer(lecturerInputRef.current.value)
         .then((lecturer) => {
           setLecturer(deepFreeze(lecturer))
         })
         .catch(err => console.log(err))
+    } else {
+      setLecturer(null)
     }
   }, [lecturers])
   React.useEffect(() => {
     if (lecturer) {
+      departmentUpdateInputRef.current.value = departmentInputRef.current.value
       lecturerUpdateInputRef.current.value = lecturer.name
     }
   }, [lecturer])
 
   // change
   const departmentInputChange = () => {
-    departmentUpdateInputRef.current.value = departmentInputRef.current.value
     setDepartmentUpdateInput(departmentInputRef.current.value)
     getLecturers(departmentInputRef.current.value)
       .then((lecturers) => {
@@ -83,7 +85,7 @@ function App() {
         location.reload()
       })
       .catch(err => {
-        alert('Cập Nhật Thất Bại ' + err)
+        alert('Cập Nhật Thất Bại')
         location.reload()
       })
   }
@@ -109,6 +111,35 @@ function App() {
       <option key={lecturer.id} value={lecturer.id}>{lecturer.name}</option>
     )
   })
+  const lecturerChange = (lecturer) => (
+    <div>
+      <i>Id hiện tại</i>
+      <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.id}/>
+      <i>Tên hiện tại</i>
+      <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.name}/>
+      <i>Khoa hiện tại</i>
+      <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.department.name}/>
+      <hr/>
+      <h4>Thay đổi:</h4>
+      <form onSubmit={onUpdate}>
+        <div className="form-group">
+          <label htmlFor="departmentUpdateInput">Khoa</label>
+          <select className="form-control" id="departmentUpdateInput"
+                  defaultValue={departmentUpdateInput && departmentUpdateInput}
+                  ref={departmentUpdateInputRef} onChange={departmentInputUpdateChange}>
+            {departments && departmentOption(departments)}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="lecturerUpdateInput">Tên Giảng Viên</label>
+          <input className="form-control" type="text" id="lecturerUpdateInput"
+                 ref={lecturerUpdateInputRef}
+                 defaultValue={lecturer && lecturer.name}/>
+        </div>
+        <button type="submit" className="btn btn-primary">Cập Nhật</button>
+      </form>
+    </div>
+  )
   return (
     <div>
       <h1 className="h3 mb-4 text-gray-800">Sửa Giảng Viên</h1>
@@ -131,33 +162,7 @@ function App() {
         </div>
       </form>
       <hr/>
-      <div>
-        <i>Id hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.id}/>
-        <i>Tên hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.name}/>
-        <i>Khoa hiện tại</i>
-        <input type="text" className="form-control" disabled={true} value={lecturer && lecturer.department.name}/>
-        <hr/>
-        <h4>Thay đổi:</h4>
-        <form onSubmit={onUpdate}>
-          <div className="form-group">
-            <label htmlFor="departmentUpdateInput">Khoa</label>
-            <select className="form-control" id="departmentUpdateInput"
-                    defaultValue={departmentUpdateInput && departmentUpdateInput}
-                    ref={departmentUpdateInputRef} onChange={departmentInputUpdateChange}>
-              {departments && departmentOption(departments)}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="lecturerUpdateInput">Tên Giảng Viên</label>
-            <input className="form-control" type="text" id="lecturerUpdateInput"
-                   ref={lecturerUpdateInputRef}
-                   defaultValue={lecturer && lecturer.name}/>
-          </div>
-          <button type="submit" className="btn btn-primary">Cập Nhật</button>
-        </form>
-      </div>
+      {lecturer && lecturerChange(lecturer)}
     </div>
   )
 }

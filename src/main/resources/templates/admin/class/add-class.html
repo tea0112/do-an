@@ -92,11 +92,6 @@
                 })
             }, [])
             React.useEffect(() => {
-              if (departments) {
-                setClassTypeInputStatus(classTypeInputRef.current.value)
-              }
-            }, [departments])
-            React.useEffect(() => {
               if (classTypeInputStatus) {
                 if (classTypeInputStatus === '0') {
                   setDepartmentInputStatus(departments.find(d => d.isGeneral).id.toString())
@@ -145,7 +140,6 @@
                 data: {
                   name: classNameInputRef.current.value,
                   departmentId: departmentInputRef.current.value,
-                  classType: classTypeInputRef.current.value,
                   sessionId: sessionInputRef.current.value,
                 }
               })
@@ -180,16 +174,6 @@
                            value={classNameInputValue || ''}
                            onChange={classNameInputValueChange}
                            className="form-control"/>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="subjectTypeInput">Kiểu Lớp</label>
-                    <select className="form-control" ref={classTypeInputRef} id="subjectTypeInput"
-                            value={classTypeInputStatus || ''}
-                            onChange={classTypeChange}
-                    >
-                      <option value="0">đại cương</option>
-                      <option value="1">chuyên ngành</option>
-                    </select>
                   </div>
                   <div className="form-group">
                     <label>Khoá</label>
