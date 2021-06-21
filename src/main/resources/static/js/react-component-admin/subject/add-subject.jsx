@@ -77,8 +77,8 @@ function App() {
         <div className="form-group">
           <label htmlFor="subjectTypeInput">Kiểu Môn</label>
           <select className="form-control" ref={subjectTypeRef} id="subjectTypeInput" onChange={onSubjectTypeChange}>
-            <option value="0">Lý Thuyết</option>
-            <option value="1">Thực Hành</option>
+            <option value="0">lý thuyết</option>
+            <option value="1">thực hành</option>
           </select>
         </div>
         <button type="submit" className="btn btn-primary">Thêm</button>
