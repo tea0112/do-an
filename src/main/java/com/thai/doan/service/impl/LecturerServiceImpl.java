@@ -57,7 +57,7 @@ public class LecturerServiceImpl implements LecturerService {
             return lecturerRepo.findById(Integer.parseInt(id))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
