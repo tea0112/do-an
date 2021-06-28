@@ -43,6 +43,8 @@ public class AuthController {
             String jwt = jwtTokenUtils.generateJwt(customUserDetails);
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setAccessToken(jwt);
+            loginResponse.setUser(customUserDetails.getUser());
+            loginResponse.setStudent(customUserDetails.getUser().getStudent());
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
