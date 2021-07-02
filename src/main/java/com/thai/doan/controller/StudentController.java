@@ -58,19 +58,12 @@ public class StudentController {
         return new ModelAndView("admin/student/edit-id-student.html");
     }
 
-    //curd
-    @PostMapping("/admin/sinh-vien/them")
-    public ModelAndView addNewStudent(@Valid NewStudentRequest stdReq, BindingResult result) {
-        if (result.hasErrors()) {
-            ModelAndView mvc = new ModelAndView("admin/student/add-student", result.getModel());
-            mvc.addObject("sessionNames", sessionSv.getAllSession());
-            mvc.addObject("newStudentRequest", new NewStudentRequest());
-            return mvc;
-        }
-        return studentService.createNewStudent(stdReq, result);
+    // restful api
+    @PostMapping("/api/admin/student/add")
+    public Student addNewStudent(@RequestBody @Valid NewStudentRequest stdReq) {
+        return studentService.createNewStudent(stdReq);
     }
 
-    // restful api
     @GetMapping("/api/admin/students")
     public List<Student> getWithClass(@RequestParam String classId) {
         return studentClassRelationSv.getWithClassId(classId);

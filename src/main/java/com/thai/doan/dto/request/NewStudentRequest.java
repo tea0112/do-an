@@ -37,9 +37,8 @@ public class NewStudentRequest {
     @Pattern(regexp = "^[0-9]+$", message = "Lỗi định dạng")
     private String phoneNumber;
 
-    @NotBlank(message = "Không được để trống")
-    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Lỗi định dạng")
-    private String sessionName;
+    @Min(0)
+    private Integer sessionId;
 
     @Min(0)
     private Integer classId;

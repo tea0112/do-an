@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.*;
 import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewStudentRequest;
 import com.thai.doan.dto.request.StudentUpdatingRequest;
+import com.thai.doan.exception.ErrorCode;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentService;
@@ -36,39 +37,18 @@ public class StudentServiceImpl implements StudentService {
     private final SessionService sessionSv;
 
     @Override
-    public ModelAndView createNewStudent(NewStudentRequest stdReq, BindingResult result) {
-        ModelAndView addStudent = new ModelAndView("admin/student/add-student");
-        Optional<Session> sessionOpl = sessionRepo.findByName(stdReq.getSessionName());
-        Optional<Classes> clazz = classesRepo.findById(stdReq.getClassId());
-        boolean hasInvalidField = false;
-        if (!sessionOpl.isPresent()) {
-            result.rejectValue("sessionName", "sessionNotFound", "Niên khoá không tồn tại");
-            hasInvalidField = true;
-        } else if (!stdReq.getPassword().equals(stdReq.getRepassword())) {
-            result.rejectValue("repassword", "repassword", "Mật khẩu nhập lại không khớp");
-            hasInvalidField = true;
-        } else if (!VNCharacterUtils.removeAccent(stdReq.getFirstName()).matches("^[a-zA-Z ]+$")) {
-            result.rejectValue("firstName", "firstName", "Tên chỉ chứa ký tự là chữ");
-            hasInvalidField = true;
-        } else if (!VNCharacterUtils.removeAccent(stdReq.getLastName()).matches("^[a-zA-Z ]+$")) {
-            result.rejectValue("lastName", "lastName", "Họ chỉ chứa ký tự là chữ");
-            hasInvalidField = true;
-        } else if (!clazz.isPresent()) {
-            result.rejectValue("classId", "classId", "Không tồn tại lớp");
-            hasInvalidField = true;
-        }
-        if (hasInvalidField) {
-            addStudent.addObject("sessionNames", sessionSv.getAllSession());
-            addStudent.addObject("message", "error");
-            return addStudent;
-        }
+    public Student createNewStudent(NewStudentRequest stdReq) {
+        Session session = sessionRepo.findById(stdReq.getSessionId()).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SESSION_NOT_FOUND));
+        Classes clazz = classesRepo.findById(stdReq.getClassId()).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.CLASS_NOT_FOUND));
         Student student = Student.builder()
             .lastName(stdReq.getLastName().trim())
             .firstName(stdReq.getFirstName().trim())
             .birth(stdReq.getBirth())
             .place(stdReq.getPlace().trim())
             .phoneNumber(stdReq.getPhoneNumber().trim())
-            .session(sessionOpl.get())
+            .session(session)
             .gender(stdReq.getGender())
             .build();
         User user = User.builder()
@@ -81,18 +61,15 @@ public class StudentServiceImpl implements StudentService {
         try {
             Student saved = studentRepo.save(student);
             StudentClassRelation studentClassRelation = StudentClassRelation.builder()
-                .classId(clazz.get())
+                .classId(clazz)
                 .studentId(saved)
                 .build();
             studentClassRelationRepo.save(studentClassRelation);
-        } catch (DataIntegrityViolationException e) {
-            addStudent.addObject("sessionNames", sessionSv.getAllSession());
-            result.rejectValue("username", "username", "username đã tồn tại");
-            return addStudent;
+            return saved;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SAVE_ERROR);
         }
-        ModelAndView redirect = new ModelAndView("redirect:/admin/sinh-vien/them");
-        redirect.addObject("message", "success");
-        return redirect;
     }
 
     @Override
