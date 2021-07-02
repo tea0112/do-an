@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(StudentClassRelationFK.class)
-@Table(name = "student_class_relation")
+@Table(name = "student_class_relations")
 public class StudentClassRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;

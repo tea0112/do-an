@@ -45,7 +45,7 @@ public class Student implements Serializable {
     private String place;
 
     @Column(name = "phone_number")
-    @Pattern(regexp = "((09|03|07|08|05)+([0-9]{8})\\b)", message = "lỗi định dạng số điện thoại")
+    @Pattern(regexp = "((01|02|03|04|05|06|07|08|09)+([0-9]{8})\\b)", message = "lỗi định dạng số điện thoại")
     private String phoneNumber;
 
     @Column(name = "gender")

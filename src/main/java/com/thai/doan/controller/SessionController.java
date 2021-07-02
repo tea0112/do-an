@@ -57,17 +57,12 @@ public class SessionController {
         return sessionSv.createSession(sessionCreation.getName(), result);
     }
 
-    @GetMapping("/api/admin/sessions")
+    @RequestMapping(value = "/api/admin/sessions", method = RequestMethod.GET, params = "name")
     public Session getWithName(@RequestParam String name) {
         return sessionSv.getWithName(name);
     }
 
-    @GetMapping("/admin/session")
-    public List<Session> getAllSession() {
-        return sessionSv.getAllSession();
-    }
-
-    @GetMapping("/admin/sessions")
+    @GetMapping("/api/admin/sessions")
     public List<Session> getAllSessions() {
         return sessionSv.getAllSession();
     }

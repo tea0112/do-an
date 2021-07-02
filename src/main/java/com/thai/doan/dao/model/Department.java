@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "department")
+@Table(name = "departments")
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
