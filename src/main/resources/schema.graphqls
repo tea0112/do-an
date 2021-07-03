@@ -1,0 +1,99 @@
+scalar Date
+scalar DateTime
+
+type Query {
+    sessionById(id: Int!): Session
+    session: [Session]
+}
+
+type LectureHall {
+    id: ID!
+    name: String!
+    address: String!
+}
+
+type Department {
+    id: ID!
+    name: String!
+    isGeneral: Boolean!
+}
+
+type Session {
+    id: ID!
+    name: String!
+    students: [Student]
+}
+
+type User {
+    id: ID!
+    username: String!
+    password: String!
+    isAdmin: Boolean!
+}
+
+type Classroom {
+    id: ID!
+    name: String!
+    lectureHall: LectureHall!
+}
+
+type Subject {
+    id: ID!
+    name: String!
+    subjectType: Int!
+    department: Department!
+}
+
+type Lecturer {
+    id: ID!
+    name: String!
+    department: Department!
+}
+
+type Semester {
+    id: ID!
+    termNumber: Int!
+    startDay: Date!
+    endDay: Date!
+    session: Session!
+}
+
+type Class {
+    id: ID!
+    name: String!
+    session: Session!
+    department: Department!
+}
+
+type Student {
+    id: ID!
+    lastName: String!
+    firstName: String!
+    birth: Date!
+    place: String!
+    phoneNumber: String!
+    user: User!
+    session: Session!
+    gender: Boolean!
+    studentClassRelations: [StudentClassRelation]
+}
+
+type Schedule {
+    id: ID!
+    semester: Semester!
+    endDay: Date!
+    weekDay: Int!
+    lecturer: Lecturer!
+    class: Class!
+    subject: Subject!
+    startDay: Date!
+    startPeriod: Int!
+    endPeriod: Int!
+    periodType: Int!
+    classroom: Classroom!
+}
+
+type StudentClassRelation {
+    studentId: Student!
+    classId: Class!
+}
