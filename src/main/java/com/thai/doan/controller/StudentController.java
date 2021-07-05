@@ -9,10 +9,7 @@ import com.thai.doan.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -74,11 +71,10 @@ public class StudentController {
         return studentService.getWithId(id);
     }
 
-    @PatchMapping("/api/students")
-    public ResponseEntity<?> updateWithId(@Valid @RequestBody StudentUpdatingRequest studentUpdatingReq,
-                                          @RequestParam String studentId) {
-        studentService.updateWithId(studentUpdatingReq, studentId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @RequestMapping(value = "/api/students/{studentId}", method = RequestMethod.PATCH)
+    public ResponseEntity<Student> updateWithId(@RequestBody StudentUpdatingRequest studentUpdatingReq,
+                                                @PathVariable String studentId) {
+        return new ResponseEntity<>(studentService.updateWithId(studentUpdatingReq, studentId), HttpStatus.OK);
     }
 
     @GetMapping("/api/students/current")

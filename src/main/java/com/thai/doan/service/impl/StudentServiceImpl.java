@@ -73,7 +73,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateWithId(StudentUpdatingRequest studentUpdatingReq, String id) {
+    public Student updateWithId(StudentUpdatingRequest studentUpdatingReq, String id) {
         try {
             Student student = studentRepo.findById(Integer.parseInt(id)).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
@@ -84,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
             student.setBirth(studentUpdatingReq.getBirth());
             student.setPlace(studentUpdatingReq.getPlace());
             student.setPhoneNumber(studentUpdatingReq.getPhoneNumber());
-            studentRepo.save(student);
+            return studentRepo.save(student);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }

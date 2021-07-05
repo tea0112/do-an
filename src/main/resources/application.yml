@@ -8,9 +8,11 @@ spring:
       ddl-auto: validate
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://host.docker.internal:3306/doan
+    url: jdbc:mysql://host.docker.internal:3306/doan?useUnicode=yes&characterEncoding=UTF-8
     username: root
     password: thai1201
+    hikari:
+      max-lifetime: 30000
   flyway:
     enabled: true
     baseline-on-migrate: true

@@ -3,6 +3,7 @@ package com.thai.doan.graphql;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.thai.doan.graphql.datafetcher.AllSessionFetcher;
+import com.thai.doan.graphql.datafetcher.ClassFilterFetcher;
 import com.thai.doan.graphql.datafetcher.SessionFetcher;
 import graphql.GraphQL;
 import graphql.scalars.ExtendedScalars;
@@ -28,6 +29,7 @@ public class GraphQLProvider {
 
     private final AllSessionFetcher allSessionFetcher;
     private final SessionFetcher sessionFetcher;
+    private final ClassFilterFetcher classFilterFetcher;
 
     @Bean
     private GraphQL graphQL() {
@@ -36,7 +38,7 @@ public class GraphQLProvider {
 
     @PostConstruct
     public void init() throws IOException {
-        URL url = Resources.getResource("schema.graphqls");
+        URL url = Resources.getResource("graphql/schema.graphqls");
         String sdl = Resources.toString(url, Charsets.UTF_8);
         GraphQLSchema graphQLSchema = buildSchema(sdl);
         this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
@@ -57,6 +59,8 @@ public class GraphQLProvider {
                 .dataFetcher("sessionById", sessionFetcher))
             .type(newTypeWiring("Query")
                 .dataFetcher("session", allSessionFetcher))
+            .type(newTypeWiring("Query")
+                .dataFetcher("classes", classFilterFetcher))
             .build();
     }
 }

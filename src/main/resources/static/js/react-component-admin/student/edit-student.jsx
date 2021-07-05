@@ -164,9 +164,9 @@ function App() {
         <button id="download-xlsx" className="btn btn-success mb-2">Tải XLSX(Excel)</button>
       </div>
       }
-      <div id="schedule-table" ref={scheduleTableRef}/>
+      <div id="schedule-table" ref={scheduletableref}/>
     </div>
   )
 }
 
-ReactDOM.render(React.createElement(App), document.getElementById('app'))
+reactdom.render(react.createelement(app), document.getelementbyid('app'))

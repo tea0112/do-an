@@ -71,7 +71,7 @@ function App() {
     e.preventDefault()
     axios({
       method: 'PATCH',
-      url: `/api/students?studentId=${getParamValue('studentId')}`,
+      url: `/api/students/${getParamValue('studentId')}`,
       headers: {
         'Content-Type': 'application/json'
       },

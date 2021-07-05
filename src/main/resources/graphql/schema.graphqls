@@ -4,8 +4,16 @@ scalar DateTime
 type Query {
     sessionById(id: Int!): Session
     session: [Session]
+    classes(filter: ClassFilter): [Class]!
 }
 
+# belong query
+input ClassFilter {
+    sessionId: Int!
+    departmentId: Int!
+}
+
+# belong schema
 type LectureHall {
     id: ID!
     name: String!

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface StudentService {
     Student createNewStudent(NewStudentRequest newStudentRequest);
-    void updateWithId(StudentUpdatingRequest studentUpdatingReq, String id);
+    Student updateWithId(StudentUpdatingRequest studentUpdatingReq, String id);
     Student getWithId(String studentId);
     Student getAuthenticated();
     void delete(Integer studentId);
