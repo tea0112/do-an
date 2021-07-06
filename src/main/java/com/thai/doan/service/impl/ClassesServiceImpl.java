@@ -126,4 +126,16 @@ public class ClassesServiceImpl implements ClassesService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
     }
+
+    @Override
+    public List<Classes> getWithSession(Integer sessionId) {
+        try {
+            Session session = sessionRepo.findById(sessionId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+            );
+            return classesRepo.findBySession(session);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.toString());
+        }
+    }
 }

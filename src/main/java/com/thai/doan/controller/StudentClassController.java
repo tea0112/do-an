@@ -1,6 +1,7 @@
 package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Classes;
+import com.thai.doan.dao.model.Student;
 import com.thai.doan.dao.model.StudentClassRelation;
 import com.thai.doan.dto.request.StudentClassAddingRequest;
 import com.thai.doan.service.StudentClassRelationService;
@@ -20,10 +21,10 @@ public class StudentClassController {
 
     // restful api
     @PostMapping("/api/admin/studentClass")
-    public ResponseEntity<?> add(@RequestBody @Valid StudentClassAddingRequest studentClassAddingReq) {
-        studentClassRelationSv.addStudentToClass(studentClassAddingReq.getStudentId(),
-            studentClassAddingReq.getClassId());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Student> add(@RequestBody @Valid StudentClassAddingRequest studentClassAddingReq) {
+        return new ResponseEntity<>(
+            studentClassRelationSv.addStudentToClass(studentClassAddingReq.getStudentId(),
+            studentClassAddingReq.getClassId()), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/admin/studentClass")

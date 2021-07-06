@@ -72,7 +72,7 @@ public class ClassController {
 
     @PatchMapping("/api/admin/classes")
     public ResponseEntity<?> updateWithId(@RequestBody @Valid ClassUpdatingRequest classUpdatingReq,
-                                 @RequestParam int classId) {
+                                          @RequestParam int classId) {
         classSv.updateWithId(classId, classUpdatingReq);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -91,5 +91,10 @@ public class ClassController {
     @RequestMapping(value = "/api/specializedClass", method = RequestMethod.GET, params = "sessionId")
     public List<Classes> getSpecializedClassWithSessionId(@RequestParam Integer sessionId) {
         return classSv.getSpecializedClassWithSessionId(sessionId);
+    }
+
+    @RequestMapping(value = "/api/admin/classes", method = RequestMethod.GET, params = "sessionId")
+    public List<Classes> getWithSession(@RequestParam Integer sessionId) {
+        return classSv.getWithSession(sessionId);
     }
 }

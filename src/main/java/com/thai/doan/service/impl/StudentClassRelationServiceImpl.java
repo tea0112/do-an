@@ -52,7 +52,7 @@ public class StudentClassRelationServiceImpl implements StudentClassRelationServ
     }
 
     @Override
-    public void addStudentToClass(int studentId, int classId) {
+    public Student addStudentToClass(int studentId, int classId) {
         try {
             Classes clazz = classesRepo.findById(classId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
@@ -76,6 +76,7 @@ public class StudentClassRelationServiceImpl implements StudentClassRelationServ
                 .classId(clazz)
                 .build();
             studentClassRelationRepo.save(studentClassRlt);
+            return student;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }

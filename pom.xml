@@ -167,7 +167,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.9.0</version>
                 <configuration>
-                    <url>jdbc:mysql://host.docker.internal:3306/doan</url>
+                    <url>jdbc:mysql://localhost:3306/doan</url>
                     <user>root</user>
                     <password>thai1201</password>
                 </configuration>
