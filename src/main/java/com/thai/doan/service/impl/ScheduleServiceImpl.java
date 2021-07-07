@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.*;
 import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewScheduleRequest;
 import com.thai.doan.dto.request.ScheduleUpdatingRequest;
+import com.thai.doan.exception.ErrorCode;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.ScheduleService;
 import lombok.Data;
@@ -85,10 +86,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
         }
 
         // bằng bắt đầu
@@ -96,19 +97,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
         query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
 
         // bằng kết thúc
@@ -116,19 +117,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
         query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
 
         // cùng lúc lớn hơn bằng bắt đầu và nhỏ hơn bằng kết thúc
@@ -136,10 +137,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
 
         Schedule schedule = Schedule.builder()
@@ -155,16 +156,17 @@ public class ScheduleServiceImpl implements ScheduleService {
             .classes(studentsClass.get())
             .classroom(classroom.get())
             .build();
+
+        if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
+            throw new ResponseStatusException(HttpStatus.OK, "Tiết bắt đầu phải nhỏ hơn Tiết kết thúc. ");
+        }
+        if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
+            throw new ResponseStatusException(HttpStatus.OK, "Ngày bắt đầu phải nhỏ hơn Ngày kết thúc. ");
+        }
         try {
-            if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
-            }
-            if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
-            }
             return scheduleRepo.save(schedule);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
+            throw new ResponseStatusException(HttpStatus.OK, ErrorCode.SAVE_ERROR);
         }
     }
 
