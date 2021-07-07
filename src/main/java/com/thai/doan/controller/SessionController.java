@@ -45,16 +45,10 @@ public class SessionController {
     }
 
     //curd
-    @PostMapping("/admin/nien-khoa/them")
-    public ModelAndView createSession(@Valid SessionCreation sessionCreation,
-                                      BindingResult result) {
-        if (result.hasErrors()) {
-            ModelAndView mv = new ModelAndView("admin/session/add-session", result.getModel());
-            mv.addObject("sessionCreation", new SessionCreation());
-            mv.addObject("message", "error");
-            return mv;
-        }
-        return sessionSv.createSession(sessionCreation.getName(), result);
+    @PostMapping("/api/admin/sessions")
+    public @ResponseBody
+    ResponseEntity<Session> createSession(@RequestBody SessionCreation sessionCreation) {
+        return new ResponseEntity<>(sessionSv.createSession(sessionCreation.getName()), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/api/admin/sessions", method = RequestMethod.GET, params = "name")
@@ -67,11 +61,10 @@ public class SessionController {
         return sessionSv.getAllSession();
     }
 
-    @PatchMapping("/admin/sessions/{id}")
-    public ResponseEntity<?> updateWithId(@PathVariable String id,
-                                          @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
-        sessionSv.updateWithId(id, sessionUpdatingReq);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PatchMapping("/api/admin/sessions/{id}")
+    public ResponseEntity<Session> updateWithId(@PathVariable String id,
+                                                @Valid @RequestBody SessionUpdatingRequest sessionUpdatingReq) {
+        return new ResponseEntity<>(sessionSv.updateWithId(id, sessionUpdatingReq), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/admin/sessions/{id}")

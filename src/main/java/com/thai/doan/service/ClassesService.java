@@ -7,7 +7,7 @@ import com.thai.doan.dto.request.ClassUpdatingRequest;
 import java.util.List;
 
 public interface ClassesService {
-    List<Classes> getWithDepartmentAndSession(String departmentName, int sessionId);
+    List<Classes> getWithDepartmentAndSession(int departmentId, int sessionId);
 
     List<Classes> getWithSessionIdAndDepartmentId(int sessionId, int departmentId);
 

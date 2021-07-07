@@ -18,8 +18,8 @@ public class NewScheduleRequest {
     @Min(0)
     private int subject;
 
-    @NotBlank
-    private String department;
+    @Min(0)
+    private int department;
 
     @Min(0)
     private int lecturer;

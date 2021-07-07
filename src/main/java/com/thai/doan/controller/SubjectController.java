@@ -43,13 +43,12 @@ public class SubjectController {
         return subjectSv.getSubjectBySubjectTypeAndDepartment(subjectType, department);
     }
 
-    @RequestMapping(value = "/admin/subject", method = RequestMethod.GET, params = {"subjectType", "departmentId"})
-    public List<Subject> getSubjectsWithDepartment(@RequestParam int subjectType, @RequestParam int departmentId) {
-        return subjectSv.getBySubjectTypeAndDepartment(subjectType, departmentId);
-    }
-
-    @RequestMapping(value = "/admin/subjects", method = RequestMethod.GET, params = {"subjectType", "departmentId"})
-    public List<Subject> getWithDepartment(@RequestParam int subjectType, @RequestParam int departmentId) {
+    @RequestMapping(
+        value = "/api/admin/subjects",
+        method = RequestMethod.GET,
+        params = {"subjectType", "departmentId"})
+    public List<Subject> getWithDepartment(@RequestParam int subjectType,
+                                           @RequestParam int departmentId) {
         return subjectSv.getBySubjectTypeAndDepartment(subjectType, departmentId);
     }
 

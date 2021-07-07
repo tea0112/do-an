@@ -23,8 +23,8 @@ public class ClassesServiceImpl implements ClassesService {
     private final StudentClassRelationRepository studentClassRelationRepo;
 
     @Override
-    public List<Classes> getWithDepartmentAndSession(String departmentName, int sessionId) {
-        Optional<Department> department = departmentRepo.findByName(departmentName);
+    public List<Classes> getWithDepartmentAndSession(int departmentId, int sessionId) {
+        Optional<Department> department = departmentRepo.findById(departmentId);
         Optional<Session> session = sessionRepo.findById(sessionId);
         return classesRepo.findBySessionAndDepartment(session.get(), department.get());
     }

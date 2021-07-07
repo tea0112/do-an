@@ -8,9 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 public interface SessionService {
-    ModelAndView createSession(String name, BindingResult result);
+    Session createSession(String name);
     List<Session> getAllSession();
-    void updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq);
+    Session updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq);
     Session getWithName(String name);
     void delete(String id);
 }

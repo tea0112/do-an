@@ -54,45 +54,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ModelAndView createNewSchedule(NewScheduleRequest newSchlReq, BindingResult result) {
-        ModelAndView addSchedule = new ModelAndView("admin/schedule/add-schedule");
-        boolean hasInvalidField = false;
-        Optional<Department> department = departmentRepo.findByName(newSchlReq.getDepartment());
+    public Schedule createNewSchedule(NewScheduleRequest newSchlReq) {
+        Optional<Department> department = departmentRepo.findById(newSchlReq.getDepartment());
         Optional<Subject> subject = subjectRepo.findById(newSchlReq.getSubject());
         Optional<Lecturer> lecturer = lecturerRepo.findByIdAndDepartment(newSchlReq.getLecturer(), department.get());
         Optional<Classes> studentsClass = classesRepo.findById(newSchlReq.getClassId());
         Optional<Semester> semester = semesterRepo.findById(newSchlReq.getSemester());
         Optional<Classroom> classroom = classroomRepo.findById(newSchlReq.getClassroomId());
-        if (!department.isPresent()) {
-            result.rejectValue("department", "department", "Khoa không tồn tại");
-            hasInvalidField = true;
-        } else if (!subject.isPresent()) {
-            result.rejectValue("subject", "subject", "Môn không tồn tại");
-            hasInvalidField = true;
-        } else if (!lecturer.isPresent()) {
-            result.rejectValue("lecturer", "lecturer", "Giảng Viên không tồn tại");
-            hasInvalidField = true;
-        } else if (!studentsClass.isPresent()) {
-            result.rejectValue("classId", "classId", "Lớp không tồn tại");
-            hasInvalidField = true;
-        } else if (!semester.isPresent()) {
-            result.rejectValue("semester", "semester", "Khoá không tồn tại");
-            hasInvalidField = true;
-        } else if (!classroom.isPresent()) {
-            result.rejectValue("classroom", "classroom", "Phòng học không tồn tại");
-            hasInvalidField = true;
-        } else if (newSchlReq.getStartDay() == null) {
-            result.rejectValue("startDay", "startDay", "Ngày bắt đầu không được trống");
-            hasInvalidField = true;
-        } else if (newSchlReq.getEndDay() == null) {
-            result.rejectValue("endDay", "endDay", "Ngày kết thúc không được trống");
-            hasInvalidField = true;
-        }
-        if (hasInvalidField) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
-        }
 
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Schedule> query = builder.createQuery(Schedule.class);
@@ -117,12 +85,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng buổi học trong ngày");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
         }
 
         // bằng bắt đầu
@@ -130,23 +96,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
         }
         query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
         }
 
         // bằng kết thúc
@@ -154,23 +116,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
         }
         query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
         }
 
         // cùng lúc lớn hơn bằng bắt đầu và nhỏ hơn bằng kết thúc
@@ -178,12 +136,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new Exception("Trùng tiết trong một buổi");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
             }
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng tiết trong một buổi");
         }
 
         Schedule schedule = Schedule.builder()
@@ -201,20 +157,15 @@ public class ScheduleServiceImpl implements ScheduleService {
             .build();
         try {
             if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
-                throw new Exception("Trùng buổi học trong ngày");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
             }
             if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
-                throw new Exception("Trùng buổi học trong ngày");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
             }
-            scheduleRepo.save(schedule);
+            return scheduleRepo.save(schedule);
         } catch (Exception e) {
-            addSchedule.addObject("allDepartment", departmentRepo.findAll());
-            addSchedule.addObject("message", "error");
-            return addSchedule;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Trùng buổi học trong ngày");
         }
-        addSchedule.addObject("message", "success");
-        addSchedule.addObject("allDepartment", departmentRepo.findAll());
-        return addSchedule;
     }
 
     @Override

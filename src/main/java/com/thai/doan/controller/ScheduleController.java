@@ -70,36 +70,32 @@ public class ScheduleController {
         return new ModelAndView("admin/schedule/delete-schedule");
     }
 
-    // curd
-    @PostMapping("/admin/thoi-khoa-bieu/them")
-    public ModelAndView createNewSchedule(
-        @Valid NewScheduleRequest newSchlReq, BindingResult result) {
-        if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView("admin/schedule/add-schedule", result.getModel());
-            mav.addObject("allDepartment", departmentSv.getAllDepartments());
-            mav.addObject("newScheduleRequest", new NewScheduleRequest());
-            mav.addObject("message", "error");
-            return mav;
-        }
-        return scheduleSv.createNewSchedule(newSchlReq, result);
-    }
-
 
     // restful api
+
+    @PostMapping("/api/admin/schedules")
+    public ResponseEntity<Schedule> createNewSchedule(@RequestBody NewScheduleRequest newSchlReq) {
+        return new ResponseEntity<>(scheduleSv.createNewSchedule(newSchlReq), HttpStatus.CREATED);
+    }
+
     @GetMapping("/thoi-khoa-bieu/ly-thuyet/theory-schedule")
-    public @ResponseBody ResponseEntity<List<Schedule>> getRESTTheorySchedule() {
+    public @ResponseBody
+    ResponseEntity<List<Schedule>> getRESTTheorySchedule() {
         return new ResponseEntity<>(scheduleSv.getSchedule(Subject.SUBJECT_TYPE.THEORY.ordinal()), HttpStatus.OK);
     }
 
     @GetMapping("/thoi-khoa-bieu/thuc-hanh/practice-schedule")
-    public @ResponseBody ResponseEntity<List<Schedule>> getRESTPracticeSchedule() {
+    public @ResponseBody
+    ResponseEntity<List<Schedule>> getRESTPracticeSchedule() {
         return new ResponseEntity<>(scheduleSv.getSchedule(Subject.SUBJECT_TYPE.PRACTICE.ordinal()), HttpStatus.OK);
     }
 
     @GetMapping("/api/schedules")
     public List<Schedule> getWithClassIdAndSemesterId(@RequestParam int classId, @RequestParam int semesterId) {
         return scheduleSv.getWithClassIdAndSemesterId(classId, semesterId);
-    };
+    }
+
+    ;
 
     @GetMapping("/api/admin/schedules/{id}")
     public ResponseEntity<?> getSchedule(@PathVariable String id) {

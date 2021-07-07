@@ -46,17 +46,20 @@ public class ClassController {
 
 
     // api
-    @GetMapping("/api/admin/classes")
-    public List<Classes> getWithClassTypeAndDepartment(@RequestParam Integer classType,
-                                                       @RequestParam Integer departmentId,
-                                                       @RequestParam Integer sessionId) {
-        return classSv.getWithClassTypeAndDepartmentAndSession(classType, departmentId, sessionId);
-    }
+//    @GetMapping("/api/admin/classes")
+//    public List<Classes> getWithClassTypeAndDepartment(@RequestParam Integer classType,
+//                                                       @RequestParam Integer departmentId,
+//                                                       @RequestParam Integer sessionId) {
+//        return classSv.getWithClassTypeAndDepartmentAndSession(classType, departmentId, sessionId);
+//    }
 
-    @GetMapping("/admin/classes")
+    @RequestMapping(
+        value = "/api/admin/classes",
+        method = RequestMethod.GET,
+        params = {"sessionId", "departmentId"})
     public List<Classes> getWithDepartmentAndSession(
-        @RequestParam(name = "department") String departmentName, @RequestParam(name = "session") int sessionId) {
-        return classSv.getWithDepartmentAndSession(departmentName, sessionId);
+        @RequestParam(name = "departmentId") int departmentId, @RequestParam(name = "sessionId") int sessionId) {
+        return classSv.getWithDepartmentAndSession(departmentId, sessionId);
     }
 
     @GetMapping("/api/classes")

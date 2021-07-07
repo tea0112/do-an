@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Session;
 import com.thai.doan.dao.repository.SessionRepository;
 import com.thai.doan.dto.model.SessionCreation;
 import com.thai.doan.dto.request.SessionUpdatingRequest;
+import com.thai.doan.exception.ErrorCode;
 import com.thai.doan.service.SessionService;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,22 +22,14 @@ public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepo;
 
     @Override
-    public ModelAndView createSession(String name, BindingResult result) {
+    public Session createSession(String name) {
         Session session = new Session();
         session.setName(name);
         try {
-            sessionRepo.save(session);
+            return sessionRepo.save(session);
         } catch (DataIntegrityViolationException e) {
-            result.rejectValue("name", "name", "Tên đã tồn tại");
-            ModelAndView mv = new ModelAndView("admin/session/add-session", result.getModel());
-            mv.addObject("sessionCreation", new SessionCreation());
-            mv.addObject("message", "error");
-            return mv;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SAVE_ERROR);
         }
-        ModelAndView redirect = new ModelAndView("admin/session/add-session");
-        redirect.addObject("sessionCreation", new SessionCreation());
-        redirect.addObject("message", "success");
-        return redirect;
     }
 
     @Override
@@ -45,13 +38,13 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq) {
+    public Session updateWithId(String id, SessionUpdatingRequest sessionUpdatingReq) {
         try {
             Session session = sessionRepo.findById(Integer.parseInt(id)).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
             session.setName(sessionUpdatingReq.getName());
-            sessionRepo.save(session);
+            return sessionRepo.save(session);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }
