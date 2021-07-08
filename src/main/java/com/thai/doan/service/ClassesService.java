@@ -9,8 +9,6 @@ import java.util.List;
 public interface ClassesService {
     List<Classes> getWithDepartmentAndSession(int departmentId, int sessionId);
 
-    List<Classes> getWithSessionIdAndDepartmentId(int sessionId, int departmentId);
-
     void add(ClassAddingRequest classAddingReq);
 
     void updateWithId(int id, ClassUpdatingRequest classUpdatingReq);

@@ -30,11 +30,6 @@ public class ClassesServiceImpl implements ClassesService {
     }
 
     @Override
-    public List<Classes> getWithSessionIdAndDepartmentId(int sessionId, int departmentId) {
-        return classesRepo.findBySessionIdAndDepartmentId(sessionId, departmentId);
-    }
-
-    @Override
     public void add(ClassAddingRequest classAddingReq) {
         try {
             Session session = sessionRepo.findById(classAddingReq.getSessionId()).orElseThrow(

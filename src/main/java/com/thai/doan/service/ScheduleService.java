@@ -15,7 +15,7 @@ public interface ScheduleService {
 
     List<Schedule> getWithClassIdAndSemesterId(int classId, int semesterId);
 
-    void updateSchedule(ScheduleUpdatingRequest scheduleUpdatingReq, String id);
+    Schedule updateSchedule(ScheduleUpdatingRequest scheduleUpdatingReq, String id);
 
     Schedule getOneSchedule(String id);
 

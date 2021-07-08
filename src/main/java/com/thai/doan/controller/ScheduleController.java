@@ -103,10 +103,9 @@ public class ScheduleController {
     }
 
     @PatchMapping("/api/admin/schedules/{id}")
-    public ResponseEntity<?> updateSchedule(@RequestBody @Valid ScheduleUpdatingRequest scheduleUpdatingReq,
-                                            @PathVariable String id) {
-        scheduleSv.updateSchedule(scheduleUpdatingReq, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Schedule> updateSchedule(@RequestBody @Valid ScheduleUpdatingRequest scheduleUpdatingReq,
+                                                   @PathVariable String id) {
+        return new ResponseEntity<>(scheduleSv.updateSchedule(scheduleUpdatingReq, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/admin/schedules/{id}")

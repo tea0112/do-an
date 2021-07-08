@@ -12,13 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -26,6 +23,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Data
@@ -143,6 +141,13 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
 
+        if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
+            throw new ResponseStatusException(HttpStatus.OK, "Tiết bắt đầu phải nhỏ hơn Tiết kết thúc. ");
+        }
+        if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
+            throw new ResponseStatusException(HttpStatus.OK, "Ngày bắt đầu phải nhỏ hơn Ngày kết thúc. ");
+        }
+
         Schedule schedule = Schedule.builder()
             .startPeriod(newSchlReq.getStartPeriod())
             .endPeriod(newSchlReq.getEndPeriod())
@@ -157,12 +162,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             .classroom(classroom.get())
             .build();
 
-        if (newSchlReq.getStartPeriod() > newSchlReq.getEndPeriod()) {
-            throw new ResponseStatusException(HttpStatus.OK, "Tiết bắt đầu phải nhỏ hơn Tiết kết thúc. ");
-        }
-        if (newSchlReq.getStartDay().isAfter(newSchlReq.getEndDay())) {
-            throw new ResponseStatusException(HttpStatus.OK, "Ngày bắt đầu phải nhỏ hơn Ngày kết thúc. ");
-        }
         try {
             return scheduleRepo.save(schedule);
         } catch (Exception e) {
@@ -182,41 +181,194 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void updateSchedule(ScheduleUpdatingRequest scheduleUpdatingReq, String id) {
-        try {
-            Optional<Schedule> scheduleOpl = scheduleRepo.findById(Integer.parseInt(id));
-            if (!scheduleOpl.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-            }
-            Semester semester = semesterRepo.findById(scheduleUpdatingReq.getSemester()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Lecturer lecturer = lecturerRepo.findById(scheduleUpdatingReq.getLecturer()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Subject subject = subjectRepo.findById(scheduleUpdatingReq.getSubject()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Classes clazz = classesRepo.findById(scheduleUpdatingReq.getClasses()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Classroom classroom = classroomRepo.findById(scheduleUpdatingReq.getClassroomId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
+    public Schedule updateSchedule(ScheduleUpdatingRequest scheduleUpdatingReq, String id) {
+        Optional<Schedule> scheduleOpl = scheduleRepo.findById(Integer.parseInt(id));
+        if (!scheduleOpl.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        Semester semester = semesterRepo.findById(scheduleUpdatingReq.getSemester()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        Lecturer lecturer = lecturerRepo.findById(scheduleUpdatingReq.getLecturer()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        Subject subject = subjectRepo.findById(scheduleUpdatingReq.getSubject()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        Classes clazz = classesRepo.findById(scheduleUpdatingReq.getClasses()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
+        Classroom classroom = classroomRepo.findById(scheduleUpdatingReq.getClassroomId()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+        );
 
-            Schedule schedule = scheduleOpl.get();
-            schedule.setStartDay(scheduleUpdatingReq.getStartDay());
-            schedule.setEndDay(scheduleUpdatingReq.getEndDay());
-            schedule.setWeekDay(scheduleUpdatingReq.getWeekDay());
-            schedule.setPeriodType(scheduleUpdatingReq.getPeriodType());
-            schedule.setStartPeriod(scheduleUpdatingReq.getStartPeriod());
-            schedule.setEndPeriod(scheduleUpdatingReq.getEndPeriod());
-            schedule.setSemester(semester);
-            schedule.setLecturer(lecturer);
-            schedule.setSubject(subject);
-            schedule.setClasses(clazz);
-            schedule.setClassroom(classroom);
-            scheduleRepo.save(schedule);
+        Schedule schedule = scheduleOpl.get();
+        schedule.setStartDay(scheduleUpdatingReq.getStartDay());
+        schedule.setEndDay(scheduleUpdatingReq.getEndDay());
+        schedule.setWeekDay(scheduleUpdatingReq.getWeekDay());
+        schedule.setPeriodType(scheduleUpdatingReq.getPeriodType());
+        schedule.setStartPeriod(scheduleUpdatingReq.getStartPeriod());
+        schedule.setEndPeriod(scheduleUpdatingReq.getEndPeriod());
+        schedule.setSemester(semester);
+        schedule.setLecturer(lecturer);
+        schedule.setSubject(subject);
+        schedule.setClasses(clazz);
+        schedule.setClassroom(classroom);
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Schedule> query = builder.createQuery(Schedule.class);
+        Root<Schedule> root = query.from(Schedule.class);
+
+        Predicate isSameSemester = builder.equal(root.get("semester").get("id"), scheduleUpdatingReq.getSemester());
+        Predicate isSameSubject = builder.equal(root.get("subject").get("id"), scheduleUpdatingReq.getSubject());
+        Predicate isSameWeekDay = builder.equal(root.get("weekDay"), schedule.getWeekDay());
+        Predicate isSamePeriodType = builder.equal(root.get("periodType"), schedule.getPeriodType());
+
+        Predicate isStartEqualStartPeriod = builder.equal(root.get("startPeriod"), schedule.getStartPeriod());
+        Predicate isEndEqualStartPeriod = builder.equal(root.get("startPeriod"), schedule.getEndPeriod());
+
+        Predicate isStartEqualEndPeriod = builder.equal(root.get("endPeriod"), schedule.getEndPeriod());
+        Predicate isEndEqualEndPeriod = builder.equal(root.get("endPeriod"), schedule.getStartPeriod());
+
+        Predicate hasStartPeriod = builder.greaterThanOrEqualTo(root.get("startPeriod"), schedule.getStartPeriod());
+        Predicate hasEndPeriod = builder.lessThanOrEqualTo(root.get("endPeriod"), schedule.getEndPeriod());
+
+        query.where(builder.and(isSameSemester, isSameSubject, isSameWeekDay, isSamePeriodType));
+
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
+        }
+
+        // bằng bắt đầu
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualStartPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+        }
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+        }
+
+        // bằng kết thúc
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+        }
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+        }
+
+        // cùng lúc lớn hơn bằng bắt đầu và nhỏ hơn bằng kết thúc
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, hasStartPeriod, hasEndPeriod));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() == 1) {
+                AtomicBoolean isEqual = new AtomicBoolean(false);
+                existedSchedule.forEach(s -> {
+                    if (schedule.equals(s)) {
+                        isEqual.set(true);
+                    }
+                });
+                if (!isEqual.get()) {
+                    throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+                }
+            }
+            if (existedSchedule.size() > 1) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
+        }
+
+        if (schedule.getStartPeriod() > schedule.getEndPeriod()) {
+            throw new ResponseStatusException(HttpStatus.OK, "Tiết bắt đầu phải nhỏ hơn Tiết kết thúc. ");
+        }
+        if (schedule.getStartDay().isAfter(schedule.getEndDay())) {
+            throw new ResponseStatusException(HttpStatus.OK, "Ngày bắt đầu phải nhỏ hơn Ngày kết thúc. ");
+        }
+        try {
+            return scheduleRepo.save(schedule);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
         }

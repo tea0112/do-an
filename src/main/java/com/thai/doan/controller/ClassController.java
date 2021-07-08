@@ -54,17 +54,12 @@ public class ClassController {
 //    }
 
     @RequestMapping(
-        value = "/api/admin/classes",
+        value = "/api/classes",
         method = RequestMethod.GET,
         params = {"sessionId", "departmentId"})
     public List<Classes> getWithDepartmentAndSession(
         @RequestParam(name = "departmentId") int departmentId, @RequestParam(name = "sessionId") int sessionId) {
         return classSv.getWithDepartmentAndSession(departmentId, sessionId);
-    }
-
-    @GetMapping("/api/classes")
-    public List<Classes> getWithSessionIdAndDepartmentId(@RequestParam int session, @RequestParam int department) {
-        return classSv.getWithSessionIdAndDepartmentId(session, department);
     }
 
     @PostMapping("/api/admin/classes")
