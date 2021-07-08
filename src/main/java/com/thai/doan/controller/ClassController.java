@@ -44,15 +44,6 @@ public class ClassController {
         return new ModelAndView("admin/class/delete-student-class");
     }
 
-
-    // api
-//    @GetMapping("/api/admin/classes")
-//    public List<Classes> getWithClassTypeAndDepartment(@RequestParam Integer classType,
-//                                                       @RequestParam Integer departmentId,
-//                                                       @RequestParam Integer sessionId) {
-//        return classSv.getWithClassTypeAndDepartmentAndSession(classType, departmentId, sessionId);
-//    }
-
     @RequestMapping(
         value = "/api/classes",
         method = RequestMethod.GET,
