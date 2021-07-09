@@ -79,12 +79,11 @@ public class SubjectServiceImpl implements SubjectService {
             Department department = departmentRepo.findById(subjectUpdatingReq.getDepartmentId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
             );
-            Subject subject = Subject.builder()
-                .id(id)
-                .name(subjectUpdatingReq.getName())
-                .subjectType(subjectUpdatingReq.getSubjectType())
-                .department(department)
-                .build();
+            Subject subject =
+                subjectRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+            subject.setName(subjectUpdatingReq.getName());
+            subject.setSubjectType(subjectUpdatingReq.getSubjectType());
+            subject.setDepartment(department);
             subjectRepo.save(subject);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());

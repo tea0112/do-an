@@ -58,7 +58,7 @@ public class SubjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/admin/subjects/{id}")
+    @PatchMapping("/api/admin/subjects/{id}")
     public ResponseEntity<?> updateWithId(@PathVariable Integer id,
                                           @RequestBody SubjectUpdatingRequest subjectUpdatingReq) {
         subjectSv.updateWithId(id, subjectUpdatingReq);
