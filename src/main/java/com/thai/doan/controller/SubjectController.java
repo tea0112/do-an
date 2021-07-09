@@ -65,7 +65,7 @@ public class SubjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/admin/subjects/{id}")
+    @DeleteMapping("/api/admin/subjects/{id}")
     public ResponseEntity<?> updateWithId(@PathVariable Integer id) {
         subjectSv.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
