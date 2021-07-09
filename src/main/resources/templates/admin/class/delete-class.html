@@ -128,7 +128,7 @@
               axios.delete(`/api/admin/classes/${clazz.id}`)
                 .then(() => {
                   alert('Xoá Thành Công')
-                  location.reload()
+                  window.location.reload()
                 })
                 .catch(err => {
                   alert('Xoá Thất Bại ' + err)
