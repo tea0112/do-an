@@ -96,7 +96,7 @@ function App() {
   })
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Sửa Học Kỳ</h1>
+      <h1>Sửa Học Kỳ</h1>
       <form>
         <div className="form-group">
           <label>Khoá</label>
@@ -114,7 +114,7 @@ function App() {
         </div>
       </form>
       <hr/>
-      <h1 className="h3 mb-4 text-gray-800">
+      <h1>
         Nhập Thay Đổi Cho:&nbsp;
         <i>
           <u>

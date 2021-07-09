@@ -116,7 +116,7 @@ function App() {
   })
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Xoá Giảng Viên</h1>
+      <h1>Xoá Giảng Viên</h1>
       <form>
         <div className="form-group">
           <label htmlFor="departmentInput">Khoa</label>

@@ -121,7 +121,7 @@ function App() {
   // -return
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Thông Tin Sinh Viên</h1>
+      <h1>Thông Tin Sinh Viên</h1>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="phoneNumberInput">Mã Số Sinh Viên</label>

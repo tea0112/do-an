@@ -57,7 +57,7 @@ function App() {
   // -change
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Thêm Học Kỳ</h1>
+      <h1>Thêm Học Kỳ</h1>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label>Khoá</label>

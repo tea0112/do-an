@@ -133,7 +133,7 @@ function App() {
   };
   return (
     <div>
-      <h1 className="h3 mb-4 text-gray-800">Sửa Sinh Viên</h1>
+      <h1>Sửa Sinh Viên</h1>
       <form name="addStudent" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Khoá</label>
