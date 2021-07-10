@@ -13,4 +13,5 @@ public class ErrorCode {
     public static final String CLASS_NOT_FOUND = "Không tồn tại lớp học";
     public static final String SUBJECT_NOT_FOUND = "Không tồn tại môn";
     public static final String STUDENT_NOT_FOUND = "Không tồn tại sinh viên";
+    public static final String STUDY_NOT_FOUND = "Không tồn tại học tập";
 }
