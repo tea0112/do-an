@@ -20,6 +20,12 @@ spring:
     serialization:
       write_dates_as_timestamps: false
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
 logging:
   level:
     org.hibernate: WARN

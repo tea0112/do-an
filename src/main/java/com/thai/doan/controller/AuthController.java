@@ -37,7 +37,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            String jwt = jwtTokenUtils.generateJwt(customUserDetails);
+            String jwt = "Bearer " + jwtTokenUtils.generateJwt(customUserDetails);
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setAccessToken(jwt);
             loginResponse.setUser(customUserDetails.getUser());
@@ -49,7 +49,8 @@ public class AuthController {
     }
 
     @GetMapping("/auth")
-    public ResponseEntity<?> authenticate(@RequestParam String token) {
+    public ResponseEntity<?> authenticate(@RequestParam String bearerToken) {
+        String token = bearerToken.substring(6);
         if (jwtTokenUtils.verify(token))
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

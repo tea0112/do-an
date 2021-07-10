@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Session;
 import com.thai.doan.dto.model.SessionCreation;
 import com.thai.doan.dto.request.SessionUpdatingRequest;
 import com.thai.doan.service.SessionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @Data
 public class SessionController {
@@ -51,14 +53,14 @@ public class SessionController {
         return new ResponseEntity<>(sessionSv.createSession(sessionCreation.getName()), HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/api/admin/sessions", method = RequestMethod.GET)
+    public List<Session> getAllSessions() {
+        return sessionSv.getAllSession();
+    }
+
     @RequestMapping(value = "/api/admin/sessions", method = RequestMethod.GET, params = "name")
     public Session getWithName(@RequestParam String name) {
         return sessionSv.getWithName(name);
-    }
-
-    @GetMapping("/api/admin/sessions")
-    public List<Session> getAllSessions() {
-        return sessionSv.getAllSession();
     }
 
     @PatchMapping("/api/admin/sessions/{id}")

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,11 +37,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private AuthenticationManager authenticationManager;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain)
         throws ServletException, IOException {
 
-        final String TOKEN = request.getHeader(HttpHeaders.AUTHORIZATION);
-
+        final String BEARER_TOKEN = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String TOKEN = StringUtils.hasText(BEARER_TOKEN) ? BEARER_TOKEN.substring(6) : "";
         if (StringUtils.hasText(TOKEN) && jwtTokenUtils.verify(TOKEN)) {
             String username = jwtTokenUtils.getUsernameFromJWT(TOKEN);
             UserDetails userDetails = UserDetailsService.loadUserByUsername(username);
