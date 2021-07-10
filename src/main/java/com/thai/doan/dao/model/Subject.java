@@ -39,6 +39,10 @@ public class Subject implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Study> studies;
+
     public enum SUBJECT_TYPE {
         THEORY,
         PRACTICE

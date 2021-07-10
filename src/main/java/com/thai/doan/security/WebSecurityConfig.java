@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         "/api/auth/checkToken",
         "/swagger-ui.html",
         "/swagger-ui/**",
-        "/v3/api-docs/**"
+        "/api-docs/**"
     };
 
     @Bean

@@ -11,4 +11,6 @@ public class ErrorCode {
     public static final String SEMESTER_NOT_FOUND = "Không tồn tại học kỳ";
     public static final String SESSION_NOT_FOUND = "Không tồn tại niên khoá";
     public static final String CLASS_NOT_FOUND = "Không tồn tại lớp học";
+    public static final String SUBJECT_NOT_FOUND = "Không tồn tại môn";
+    public static final String STUDENT_NOT_FOUND = "Không tồn tại sinh viên";
 }

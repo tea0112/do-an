@@ -64,4 +64,8 @@ public class Student implements Serializable {
     @JoinColumn(name = "session_id")
     @NotNull
     private Session session;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Study> studies;
 }

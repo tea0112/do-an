@@ -47,4 +47,8 @@ public class Semester implements Serializable {
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Study> studies;
 }
