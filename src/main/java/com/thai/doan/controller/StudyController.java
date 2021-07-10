@@ -30,4 +30,9 @@ public class StudyController {
         return new ResponseEntity<>(studyService.update(studyId, studyUpdateReq), HttpStatus.OK);
     }
 
+    @DeleteMapping("/admin/studies/{studyId}")
+    public ResponseEntity<?> delete(@PathVariable Integer studyId) {
+        studyService.delete(studyId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -67,4 +67,14 @@ public class StudyService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SAVE_ERROR);
         }
     }
+
+    public void delete(Integer studyId) {
+        Study study = studyRepo.findById(studyId).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.STUDY_NOT_FOUND));
+        try {
+            studyRepo.delete(study);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SAVE_ERROR);
+        }
+    }
 }
