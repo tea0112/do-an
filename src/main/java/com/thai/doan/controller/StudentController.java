@@ -6,6 +6,7 @@ import com.thai.doan.dto.request.StudentUpdatingRequest;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentClassRelationService;
 import com.thai.doan.service.StudentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequiredArgsConstructor
 public class StudentController {

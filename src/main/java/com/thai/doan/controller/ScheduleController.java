@@ -7,6 +7,7 @@ import com.thai.doan.dto.request.ScheduleUpdatingRequest;
 import com.thai.doan.service.DepartmentService;
 import com.thai.doan.service.LecturerService;
 import com.thai.doan.service.ScheduleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @Data
 public class ScheduleController {

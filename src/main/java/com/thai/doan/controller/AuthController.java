@@ -1,5 +1,6 @@
 package com.thai.doan.controller;
 
+import com.thai.doan.dto.request.AuthRequest;
 import com.thai.doan.dto.request.LoginRequest;
 import com.thai.doan.dto.response.LoginResponse;
 import com.thai.doan.security.CustomUserDetails;
@@ -48,9 +49,9 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/auth")
-    public ResponseEntity<?> authenticate(@RequestParam String bearerToken) {
-        String token = bearerToken.substring(6);
+    @PostMapping("/auth/checkToken")
+    public ResponseEntity<?> authenticate(@RequestBody AuthRequest authRequest) {
+        String token = authRequest.getBearerToken().substring(6);
         if (jwtTokenUtils.verify(token))
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

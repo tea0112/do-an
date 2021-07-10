@@ -1,10 +1,10 @@
 package com.thai.doan.controller;
 
-import com.thai.doan.dao.model.Classes;
 import com.thai.doan.dao.model.Student;
 import com.thai.doan.dao.model.StudentClassRelation;
 import com.thai.doan.dto.request.StudentClassAddingRequest;
 import com.thai.doan.service.StudentClassRelationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @Data
 public class StudentClassController {

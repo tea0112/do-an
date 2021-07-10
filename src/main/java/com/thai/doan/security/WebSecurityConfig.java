@@ -22,6 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private static final String[] AUTH_LIST = {
         "/api/auth",
+        "/api/auth/checkToken",
         "/swagger-ui.html",
         "/swagger-ui/**",
         "/v3/api-docs/**"

@@ -5,6 +5,7 @@ import com.thai.doan.dao.model.Semester;
 import com.thai.doan.dto.request.SemesterAddingRequest;
 import com.thai.doan.dto.request.SemesterUpdatingRequest;
 import com.thai.doan.service.SemesterService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @Data
 @RestController
 public class SemesterController {

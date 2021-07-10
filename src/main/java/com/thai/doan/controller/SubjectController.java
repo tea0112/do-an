@@ -4,6 +4,7 @@ import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dto.request.SubjectAddingRequest;
 import com.thai.doan.dto.request.SubjectUpdatingRequest;
 import com.thai.doan.service.SubjectService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @Data
 public class SubjectController {
