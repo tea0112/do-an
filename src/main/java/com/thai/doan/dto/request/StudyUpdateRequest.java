@@ -8,7 +8,4 @@ import javax.validation.constraints.Min;
 public class StudyUpdateRequest {
     @Min(0)
     private Float grade;
-
-    @Min(0)
-    private Integer subjectId;
 }

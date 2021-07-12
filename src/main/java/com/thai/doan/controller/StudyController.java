@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
 @Data
@@ -34,5 +35,23 @@ public class StudyController {
     public ResponseEntity<?> delete(@PathVariable Integer studyId) {
         studyService.delete(studyId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/studies/filter")
+    public ResponseEntity<List<Study>> filter(
+        @RequestParam(required = false) Float minGrade,
+        @RequestParam(required = false) Float maxGrade,
+        @RequestParam(required = false) Boolean gradeType,
+        @RequestParam(required = false) Integer subjectId,
+        @RequestParam(required = false) Integer semesterId,
+        @RequestParam(required = false) Integer studentId
+        ) {
+        return new ResponseEntity<>(studyService.filter(
+            minGrade,
+            maxGrade,
+            gradeType,
+            subjectId,
+            semesterId,
+            studentId), HttpStatus.OK);
     }
 }
