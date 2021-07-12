@@ -28,35 +28,6 @@ public class ScheduleController {
     private final DepartmentService departmentSv;
     private final LecturerService lecturerSv;
 
-    // View
-
-    @GetMapping("/thoi-khoa-bieu/ly-thuyet")
-    public ModelAndView getTheorySchedule() {
-        ModelAndView mav = new ModelAndView("client/schedule/theory");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        mav.addObject("currentTime", dtf.format(now));
-        return mav;
-    }
-
-    @GetMapping("/thoi-khoa-bieu/thuc-hanh")
-    public ModelAndView getPracticeSchedule() {
-        ModelAndView mav = new ModelAndView("client/schedule/practice");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        mav.addObject("currentTime", dtf.format(now));
-        return mav;
-    }
-
-    // admin view
-    @GetMapping("/admin/thoi-khoa-bieu/them")
-    public ModelAndView getAdminAddSchedule() {
-        ModelAndView mav = new ModelAndView("admin/schedule/add-schedule");
-        mav.addObject("newScheduleRequest", new NewScheduleRequest());
-        mav.addObject("allDepartment", departmentSv.getAllDepartments());
-        return mav;
-    }
-
     @GetMapping("/admin/thoi-khoa-bieu/sua")
     public ModelAndView getAdminEditSchedule() {
         return new ModelAndView("admin/schedule/edit-schedule");

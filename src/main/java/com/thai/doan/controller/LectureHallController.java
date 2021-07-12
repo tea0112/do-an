@@ -25,22 +25,6 @@ public class LectureHallController {
     // repo
     private final LectureHallRepository lectureHallRepo;
 
-    // admin view
-    @GetMapping("/admin/giang-duong/them")
-    public ModelAndView getAddView() {
-        return new ModelAndView("admin/lecture-hall/add-lecture-hall");
-    }
-
-    @GetMapping("/admin/giang-duong/sua")
-    public ModelAndView getEditView() {
-        return new ModelAndView("admin/lecture-hall/edit-lecture-hall");
-    }
-
-    @GetMapping("/admin/giang-duong/xoa")
-    public ModelAndView getDeleteView() {
-        return new ModelAndView("admin/lecture-hall/delete-lecture-hall");
-    }
-
     // restful api
     @GetMapping("/api/lecturerHalls")
     public List<LectureHall> getAll() {

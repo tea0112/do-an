@@ -20,22 +20,6 @@ import java.util.List;
 public class SubjectController {
     private final SubjectService subjectSv;
 
-    // view
-    @GetMapping("/admin/mon/them")
-    public ModelAndView getAddPage() {
-        return new ModelAndView("admin/subject/add-subject");
-    }
-
-    @GetMapping("/admin/mon/sua")
-    public ModelAndView getEditPage() {
-        return new ModelAndView("admin/subject/edit-subject");
-    }
-
-    @GetMapping("/admin/mon/xoa")
-    public ModelAndView getDeletePage() {
-        return new ModelAndView("admin/subject/delete-subject");
-    }
-
     // RestFul api
     @GetMapping("/admin/subject")
     public @ResponseBody

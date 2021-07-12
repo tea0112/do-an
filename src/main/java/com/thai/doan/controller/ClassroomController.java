@@ -21,22 +21,6 @@ import java.util.List;
 public class ClassroomController {
     private final ClassroomService classroomSrv;
 
-    // admin view
-    @GetMapping("/admin/phong-hoc/them")
-    public ModelAndView getAddView () {
-        return new ModelAndView("admin/classroom/add-classroom");
-    }
-
-    @GetMapping("/admin/phong-hoc/sua")
-    public ModelAndView getEditView () {
-        return new ModelAndView("admin/classroom/edit-classroom");
-    }
-
-    @GetMapping("/admin/phong-hoc/xoa")
-    public ModelAndView getDeleteView () {
-        return new ModelAndView("admin/classroom/delete-classroom");
-    }
-
     // restful api
     @PostMapping("/api/admin/classrooms")
     public ResponseEntity<Classroom> add(@Valid @RequestBody ClassroomAddingRequest classroomAddingReq) {

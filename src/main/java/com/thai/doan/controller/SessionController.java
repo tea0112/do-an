@@ -24,28 +24,6 @@ import java.util.List;
 public class SessionController {
     private final SessionService sessionSv;
 
-    //view
-    @GetMapping("/admin/nien-khoa/them")
-    public ModelAndView addSession() {
-        ModelAndView mv = new ModelAndView("admin/session/add-session");
-        mv.addObject("sessionCreation", new SessionCreation());
-        mv.addObject("message", "");
-        return mv;
-    }
-
-    @GetMapping("/admin/nien-khoa/sua")
-    public ModelAndView editSession() {
-        ModelAndView mv = new ModelAndView("admin/session/edit-session");
-        mv.addObject("sessionCreation", new SessionCreation());
-        mv.addObject("message", "");
-        return mv;
-    }
-
-    @GetMapping("/admin/nien-khoa/xoa")
-    public ModelAndView deleteSession() {
-        return new ModelAndView("admin/session/delete-session");
-    }
-
     //curd
     @PostMapping("/api/admin/sessions")
     public @ResponseBody

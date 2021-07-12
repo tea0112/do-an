@@ -21,22 +21,6 @@ import java.util.List;
 public class LecturerController {
     private final LecturerService lecturerSv;
 
-    // view
-    @GetMapping("/admin/giang-vien/them")
-    public ModelAndView getAdd() {
-        return new ModelAndView("admin/lecturer/add-lecturer");
-    }
-
-    @GetMapping("/admin/giang-vien/sua")
-    public ModelAndView getEdit() {
-        return new ModelAndView("admin/lecturer/edit-lecturer");
-    }
-
-    @GetMapping("/admin/giang-vien/xoa")
-    public ModelAndView getDelete() {
-        return new ModelAndView("admin/lecturer/delete-lecturer");
-    }
-
     //Restful api
     @GetMapping("/admin/lecturers")
     public @ResponseBody List<Lecturer> getAllLecturerWithDepartment(@RequestParam String department) {

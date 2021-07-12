@@ -20,22 +20,6 @@ import java.util.List;
 public class DepartmentController {
     private final DepartmentService departmentService;
 
-    //view
-    @GetMapping("/admin/khoa/them")
-    public ModelAndView getAddPage() {
-        return new ModelAndView("admin/department/add-department");
-    }
-
-    @GetMapping("/admin/khoa/sua")
-    public ModelAndView getEditPage() {
-        return new ModelAndView("admin/department/edit-department");
-    }
-
-    @GetMapping("/admin/khoa/xoa")
-    public ModelAndView getDeletePage() {
-        return new ModelAndView("admin/department/delete-department");
-    }
-
     // RESTFul api
     @GetMapping("/api/departments")
     public List<Department> getAllDepartments() {

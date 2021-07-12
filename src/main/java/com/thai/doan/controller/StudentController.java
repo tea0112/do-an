@@ -24,39 +24,6 @@ public class StudentController {
     private final StudentService studentService;
     private final StudentClassRelationService studentClassRelationSv;
 
-    // client view
-    @GetMapping("/sinh-vien/ho-so")
-    public ModelAndView studentProfile() {
-        ModelAndView mvc = new ModelAndView("client/student/profile");
-        mvc.addObject("sessionNames", sessionSv.getAllSession());
-        mvc.addObject("newStudentRequest", new NewStudentRequest());
-        return mvc;
-    }
-
-    // admin view
-    @GetMapping("/admin/sinh-vien/them")
-    public ModelAndView addStudent() {
-        ModelAndView mvc = new ModelAndView("admin/student/add-student");
-        mvc.addObject("sessionNames", sessionSv.getAllSession());
-        mvc.addObject("newStudentRequest", new NewStudentRequest());
-        return mvc;
-    }
-
-    @GetMapping("/admin/sinh-vien/sua")
-    public ModelAndView editStudent() {
-        return new ModelAndView("admin/student/edit-student");
-    }
-
-    @GetMapping("/admin/sinh-vien/xoa")
-    public ModelAndView deleteStudent() {
-        return new ModelAndView("admin/student/delete-student");
-    }
-
-    @RequestMapping(value = "/admin/sinh-vien/sua", params = "studentId", method = RequestMethod.GET)
-    public ModelAndView editStudentWithId(@RequestParam int studentId) {
-        return new ModelAndView("admin/student/edit-id-student.html");
-    }
-
     // restful api
     @PostMapping("/api/admin/student/add")
     public Student addNewStudent(@RequestBody @Valid NewStudentRequest stdReq) {

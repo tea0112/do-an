@@ -21,31 +21,6 @@ import java.util.List;
 public class ClassController {
     private final ClassesService classSv;
 
-    @GetMapping("/admin/lop/them")
-    public ModelAndView getAddClassPage() {
-        return new ModelAndView("admin/class/add-class");
-    }
-
-    @GetMapping("/admin/lop/sua")
-    public ModelAndView getEditClassPage() {
-        return new ModelAndView("admin/class/edit-class");
-    }
-
-    @GetMapping("/admin/lop/xoa")
-    public ModelAndView getDeleteClassPage() {
-        return new ModelAndView("admin/class/delete-class");
-    }
-
-    @GetMapping("/admin/lop/them-sinh-vien")
-    public ModelAndView getAddStudentClassPage() {
-        return new ModelAndView("admin/class/add-student-class");
-    }
-
-    @GetMapping("/admin/lop/xoa-sinh-vien")
-    public ModelAndView getDeleteStudentClassPage() {
-        return new ModelAndView("admin/class/delete-student-class");
-    }
-
     @RequestMapping(
         value = "/api/classes",
         method = RequestMethod.GET,

@@ -21,22 +21,6 @@ import java.util.List;
 public class SemesterController {
     private final SemesterService semesterSv;
 
-    //view
-    @GetMapping("/admin/hoc-ky/them")
-    public ModelAndView getAddPage() {
-        return new ModelAndView("admin/semester/add-semester");
-    }
-
-    @GetMapping("/admin/hoc-ky/sua")
-    public ModelAndView getEditPage() {
-        return new ModelAndView("admin/semester/edit-semester");
-    }
-
-    @GetMapping("/admin/hoc-ky/xoa")
-    public ModelAndView getDeletePage() {
-        return new ModelAndView("admin/semester/delete-semester");
-    }
-
     // restful api
     @GetMapping("/api/semesters")
     public List<Semester> getWithSession(@RequestParam int sessionId) {
