@@ -1,7 +1,9 @@
 package com.thai.doan.controller;
 
 import com.thai.doan.dao.model.Student;
+import com.thai.doan.dao.model.User;
 import com.thai.doan.dto.request.NewStudentRequest;
+import com.thai.doan.dto.request.PasswordChangeRequest;
 import com.thai.doan.dto.request.StudentUpdatingRequest;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentClassRelationService;
@@ -20,7 +22,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class StudentController {
-    private final SessionService sessionSv;
     private final StudentService studentService;
     private final StudentClassRelationService studentClassRelationSv;
 
@@ -60,6 +61,11 @@ public class StudentController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         studentService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/api/students/passwordChange")
+    public ResponseEntity<User> updatePassword(@RequestBody @Valid PasswordChangeRequest passwordChangeReq) {
+        return new ResponseEntity<>(studentService.updatePassword(passwordChangeReq), HttpStatus.OK);
     }
 
 }

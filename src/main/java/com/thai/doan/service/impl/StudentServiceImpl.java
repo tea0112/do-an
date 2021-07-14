@@ -3,24 +3,19 @@ package com.thai.doan.service.impl;
 import com.thai.doan.dao.model.*;
 import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewStudentRequest;
+import com.thai.doan.dto.request.PasswordChangeRequest;
 import com.thai.doan.dto.request.StudentUpdatingRequest;
 import com.thai.doan.exception.ErrorCode;
 import com.thai.doan.security.CustomUserDetails;
 import com.thai.doan.service.SessionService;
 import com.thai.doan.service.StudentService;
-import com.thai.doan.util.VNCharacterUtils;
 import lombok.Data;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -131,6 +126,21 @@ public class StudentServiceImpl implements StudentService {
             return studentRepo.findBySession(session);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
+        }
+    }
+
+    @Override
+    public User updatePassword(PasswordChangeRequest passwordChangeReq) {
+        Student student = studentRepo.findById(Optional.ofNullable(passwordChangeReq.getStudentId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.ARGUMENT_NOT_FOUND)))
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.STUDENT_NOT_FOUND));
+        User user = Optional.ofNullable(student.getUser()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.USER_NOT_FOUND));
+        user.setPassword(pwdEcd.encode(passwordChangeReq.getPassword()));
+        try {
+            return userRepo.save(user);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.SAVE_ERROR);
         }
     }
 }
