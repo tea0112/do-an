@@ -6,13 +6,22 @@ import com.thai.doan.dao.model.User;
 import com.thai.doan.dao.repository.StudentRepository;
 import com.thai.doan.dao.repository.UserRepository;
 import com.thai.doan.dto.request.PasswordChangeRequest;
+import com.thai.doan.service.StudentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -56,6 +65,7 @@ class StudentServiceImplTest {
             .session(new Session())
             .build();
         user.setStudent(student);
+        String test = new BCryptPasswordEncoder().encode("123");
         PasswordChangeRequest passwordChangeReq = new PasswordChangeRequest(1, "abc");
         Mockito.when(studentRepo.findById(passwordChangeReq.getStudentId())).thenReturn(Optional.ofNullable(student));
         studentService.updatePassword(passwordChangeReq);
