@@ -51,13 +51,13 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleSv.createNewSchedule(newSchlReq), HttpStatus.CREATED);
     }
 
-    @GetMapping("/thoi-khoa-bieu/ly-thuyet/theory-schedule")
+    @GetMapping("/api/schedules/theory")
     public @ResponseBody
     ResponseEntity<List<Schedule>> getRESTTheorySchedule() {
         return new ResponseEntity<>(scheduleSv.getSchedule(Subject.SUBJECT_TYPE.THEORY.ordinal()), HttpStatus.OK);
     }
 
-    @GetMapping("/thoi-khoa-bieu/thuc-hanh/practice-schedule")
+    @GetMapping("/api/schedules/practice")
     public @ResponseBody
     ResponseEntity<List<Schedule>> getRESTPracticeSchedule() {
         return new ResponseEntity<>(scheduleSv.getSchedule(Subject.SUBJECT_TYPE.PRACTICE.ordinal()), HttpStatus.OK);

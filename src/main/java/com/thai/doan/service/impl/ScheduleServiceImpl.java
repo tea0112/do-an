@@ -69,6 +69,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         Predicate isSameSubject = builder.equal(root.get("subject").get("id"), newSchlReq.getSubject());
         Predicate isSameWeekDay = builder.equal(root.get("weekDay"), newSchlReq.getWeek());
         Predicate isSamePeriodType = builder.equal(root.get("periodType"), newSchlReq.getPeriodType());
+        Predicate isSameClass = builder.equal(root.get("classes").<Integer>get("id"), newSchlReq.getClassId());
+        Predicate isSameClassroom = builder.equal(root.get("classroom").<Integer>get("id"), newSchlReq.getClassroomId());
+        Predicate isSameLecturer = builder.equal(root.get("lecturer").<Integer>get("id"), newSchlReq.getLecturer());
+        Predicate isSameStartPeriod = builder.equal(root.get("startPeriod"), newSchlReq.getStartPeriod());
+        Predicate isSameEndPeriod = builder.equal(root.get("endPeriod"), newSchlReq.getEndPeriod());
 
         Predicate isStartEqualStartPeriod = builder.equal(root.get("startPeriod"), newSchlReq.getStartPeriod());
         Predicate isEndEqualStartPeriod = builder.equal(root.get("startPeriod"), newSchlReq.getEndPeriod());
@@ -79,19 +84,31 @@ public class ScheduleServiceImpl implements ScheduleService {
         Predicate hasStartPeriod = builder.greaterThanOrEqualTo(root.get("startPeriod"), newSchlReq.getStartPeriod());
         Predicate hasEndPeriod = builder.lessThanOrEqualTo(root.get("endPeriod"), newSchlReq.getEndPeriod());
 
-        query.where(builder.and(isSameSemester, isSameSubject, isSameWeekDay, isSamePeriodType));
-
+        // trùng môn
+        query.where(builder.and(isSameSemester, isSameSubject, isSameWeekDay, isSamePeriodType, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
-                throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng môn học trong ngày");
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.OK, "Trùng buổi học trong ngày");
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng môn học trong ngày");
+        }
+
+        // trùng phòng học
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType,
+            isSameStartPeriod, isSameEndPeriod, isSameClassroom));
+        try {
+            List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
+            if (existedSchedule.size() > 0) {
+                throw new ResponseStatusException(HttpStatus.OK, "Trùng phòng học trong ngày");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.OK, "Trùng phòng học trong ngày");
         }
 
         // bằng bắt đầu
-        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualStartPeriod));
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualStartPeriod, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
@@ -100,7 +117,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
-        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod));
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualStartPeriod, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
@@ -111,7 +128,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // bằng kết thúc
-        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualEndPeriod));
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isStartEqualEndPeriod, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
@@ -120,7 +137,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.OK, "Trùng tiết trong một buổi");
         }
-        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod));
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, isEndEqualEndPeriod, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
@@ -131,7 +148,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // cùng lúc lớn hơn bằng bắt đầu và nhỏ hơn bằng kết thúc
-        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, hasStartPeriod, hasEndPeriod));
+        query.where(builder.and(isSameSemester, isSameWeekDay, isSamePeriodType, hasStartPeriod, hasEndPeriod, isSameClass));
         try {
             List<Schedule> existedSchedule = em.createQuery(query.select(root)).getResultList();
             if (existedSchedule.size() > 0) {
