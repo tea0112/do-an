@@ -9,13 +9,9 @@ create table if not exists studies
 );
 
 alter table studies
-    add constraint foreign key if not exists
-        fk_study_subject (subject_id) references subjects (id);
+    add constraint foreign key fk_study_subject (subject_id) references subjects (id);
 alter table studies
-    add constraint foreign key if not exists
-        fk_study_semester (semester_id) references semesters (id);
+    add constraint foreign key fk_study_semester (semester_id) references semesters (id);
 alter table studies
-    add constraint foreign key if not exists
-        fk_study_student (student_id) references students (id);
-alter table studies
-    add constraint unique unique_key (subject_id, semester_id, student_id, grade_type)
+    add constraint foreign key fk_study_student (student_id) references students (id);
+alter table studies add constraint unique unique_key (subject_id, semester_id, student_id, grade_type)
