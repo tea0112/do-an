@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class SchedulesResponse {
-    private List<Schedule> schedules;
+  private List<Schedule> schedules;
 }

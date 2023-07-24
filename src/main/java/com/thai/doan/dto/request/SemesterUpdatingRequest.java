@@ -8,12 +8,12 @@ import java.time.LocalDate;
 
 @Data
 public class SemesterUpdatingRequest {
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDay;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate endDay;
-    @Min(1)
-    private Integer termNumber;
-    @Min(1)
-    private Integer sessionId;
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate startDay;
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate endDay;
+  @Min(1)
+  private Integer termNumber;
+  @Min(1)
+  private Integer sessionId;
 }

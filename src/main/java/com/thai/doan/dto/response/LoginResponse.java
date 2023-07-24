@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class LoginResponse {
-    private String refreshToken;
-    private String accessToken;
-    private Student student;
-    private User user;
+  private String refreshToken;
+  private String accessToken;
+  private Student student;
+  private User user;
 }

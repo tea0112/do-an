@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class SubjectUpdatingRequest {
-    @NotBlank
-    private String name;
+  @NotBlank
+  private String name;
 
-    @Min(0)
-    private int subjectType;
+  @Min(0)
+  private int subjectType;
 
-    @Min(0)
-    private Integer departmentId;
+  @Min(0)
+  private Integer departmentId;
 }

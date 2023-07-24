@@ -18,29 +18,29 @@ import java.util.List;
 @Table(name = "departments")
 public class Department implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+  @Column(name = "name", nullable = false)
+  private String name;
 
-    @Column(name = "is_general", nullable = false)
-    private Boolean isGeneral;
+  @Column(name = "is_general", nullable = false)
+  private Boolean isGeneral;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Lecturer> lecturers;
+  @JsonIgnore
+  @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Lecturer> lecturers;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Subject> subjects;
+  @JsonIgnore
+  @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Subject> subjects;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Classes> classes;
+  @JsonIgnore
+  @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Classes> classes;
 
 }

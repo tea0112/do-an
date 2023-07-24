@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,30 +18,30 @@ import java.util.List;
 @Data
 @RestController
 public class LectureHallController {
-    // service
-    private final LectureHallService lectureHallSrv;
-    // repo
-    private final LectureHallRepository lectureHallRepo;
+  // service
+  private final LectureHallService lectureHallSrv;
+  // repo
+  private final LectureHallRepository lectureHallRepo;
 
-    // restful api
-    @GetMapping("/api/lecturerHalls")
-    public List<LectureHall> getAll() {
-        return lectureHallRepo.findAll();
-    }
+  // restful api
+  @GetMapping("/api/lecturerHalls")
+  public List<LectureHall> getAll() {
+    return lectureHallRepo.findAll();
+  }
 
-    @PostMapping("/api/admin/lectureHalls")
-    public ResponseEntity<LectureHall> add(@RequestBody LectureHallAddingRequest lectureHallAddingReq) {
-        return new ResponseEntity<>(lectureHallSrv.add(lectureHallAddingReq), HttpStatus.OK);
-    }
+  @PostMapping("/api/admin/lectureHalls")
+  public ResponseEntity<LectureHall> add(@RequestBody LectureHallAddingRequest lectureHallAddingReq) {
+    return new ResponseEntity<>(lectureHallSrv.add(lectureHallAddingReq), HttpStatus.OK);
+  }
 
-    @PatchMapping("/api/admin/lectureHalls/{id}")
-    public ResponseEntity<LectureHall> update(@Valid @RequestBody LectureHallUpdatingRequest lectureHallUpdatingReq,
-                                              @PathVariable Integer id) {
-        return new ResponseEntity<>(lectureHallSrv.update(lectureHallUpdatingReq, id), HttpStatus.OK);
-    }
+  @PatchMapping("/api/admin/lectureHalls/{id}")
+  public ResponseEntity<LectureHall> update(@Valid @RequestBody LectureHallUpdatingRequest lectureHallUpdatingReq,
+                                            @PathVariable Integer id) {
+    return new ResponseEntity<>(lectureHallSrv.update(lectureHallUpdatingReq, id), HttpStatus.OK);
+  }
 
-    @DeleteMapping("/api/admin/lectureHalls/{id}")
-    public ResponseEntity<LectureHall> delete(@PathVariable Integer id) {
-        return new ResponseEntity<>(lectureHallSrv.delete(id), HttpStatus.OK);
-    }
+  @DeleteMapping("/api/admin/lectureHalls/{id}")
+  public ResponseEntity<LectureHall> delete(@PathVariable Integer id) {
+    return new ResponseEntity<>(lectureHallSrv.delete(id), HttpStatus.OK);
+  }
 }

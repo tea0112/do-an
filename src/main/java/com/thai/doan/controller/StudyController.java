@@ -18,40 +18,40 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class StudyController {
-    private final StudyService studyService;
+  private final StudyService studyService;
 
-    @PostMapping("/admin/studies")
-    public ResponseEntity<Study> add(@Valid @RequestBody StudyAddingRequest studyAddingReq) {
-        return new ResponseEntity<>(studyService.add(studyAddingReq), HttpStatus.OK);
-    }
+  @PostMapping("/admin/studies")
+  public ResponseEntity<Study> add(@Valid @RequestBody StudyAddingRequest studyAddingReq) {
+    return new ResponseEntity<>(studyService.add(studyAddingReq), HttpStatus.OK);
+  }
 
-    @PatchMapping("/admin/studies/{studyId}")
-    public ResponseEntity<Study> update(@Valid @RequestBody StudyUpdateRequest studyUpdateReq,
-                                        @PathVariable Integer studyId) {
-        return new ResponseEntity<>(studyService.update(studyId, studyUpdateReq), HttpStatus.OK);
-    }
+  @PatchMapping("/admin/studies/{studyId}")
+  public ResponseEntity<Study> update(@Valid @RequestBody StudyUpdateRequest studyUpdateReq,
+                                      @PathVariable Integer studyId) {
+    return new ResponseEntity<>(studyService.update(studyId, studyUpdateReq), HttpStatus.OK);
+  }
 
-    @DeleteMapping("/admin/studies/{studyId}")
-    public ResponseEntity<?> delete(@PathVariable Integer studyId) {
-        studyService.delete(studyId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @DeleteMapping("/admin/studies/{studyId}")
+  public ResponseEntity<?> delete(@PathVariable Integer studyId) {
+    studyService.delete(studyId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @GetMapping("/studies/filter")
-    public ResponseEntity<List<Study>> filter(
-        @RequestParam(required = false) Float minGrade,
-        @RequestParam(required = false) Float maxGrade,
-        @RequestParam(required = false) Boolean gradeType,
-        @RequestParam(required = false) Integer subjectId,
-        @RequestParam(required = false) Integer semesterId,
-        @RequestParam(required = false) Integer studentId
-        ) {
-        return new ResponseEntity<>(studyService.filter(
-            minGrade,
-            maxGrade,
-            gradeType,
-            subjectId,
-            semesterId,
-            studentId), HttpStatus.OK);
-    }
+  @GetMapping("/studies/filter")
+  public ResponseEntity<List<Study>> filter(
+      @RequestParam(required = false) Float minGrade,
+      @RequestParam(required = false) Float maxGrade,
+      @RequestParam(required = false) Boolean gradeType,
+      @RequestParam(required = false) Integer subjectId,
+      @RequestParam(required = false) Integer semesterId,
+      @RequestParam(required = false) Integer studentId
+  ) {
+    return new ResponseEntity<>(studyService.filter(
+        minGrade,
+        maxGrade,
+        gradeType,
+        subjectId,
+        semesterId,
+        studentId), HttpStatus.OK);
+  }
 }

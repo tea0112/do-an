@@ -17,16 +17,16 @@ import java.io.Serializable;
 @Table(name = "student_class_relations")
 public class StudentClassRelation implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student studentId;
+  @Id
+  @ManyToOne
+  @JoinColumn(name = "student_id", nullable = false)
+  private Student studentId;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "class_id", nullable = false)
-    private Classes classId;
+  @Id
+  @ManyToOne
+  @JoinColumn(name = "class_id", nullable = false)
+  private Classes classId;
 
 }

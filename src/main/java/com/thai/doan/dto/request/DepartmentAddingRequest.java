@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class DepartmentAddingRequest {
-    @NotBlank
-    private String name;
-    @NotNull
-    private Boolean isGeneral;
+  @NotBlank
+  private String name;
+  @NotNull
+  private Boolean isGeneral;
 
 }

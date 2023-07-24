@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PasswordChangeRequest {
-    @Min(0)
-    Integer studentId;
-    @NotNull
-    String password;
+  @Min(0)
+  Integer studentId;
+  @NotNull
+  String password;
 }

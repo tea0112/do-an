@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ClassUpdatingRequest {
-    private String name;
-    private Integer sessionId;
-    private Integer departmentId;
+  private String name;
+  private Integer sessionId;
+  private Integer departmentId;
 }

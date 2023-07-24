@@ -18,33 +18,33 @@ import java.util.List;
 @Table(name = "subjects")
 public class Subject implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+  @Column(name = "name", nullable = false)
+  private String name;
 
-    @Column(name = "subject_type", nullable = false)
-    private int subjectType;
+  @Column(name = "subject_type", nullable = false)
+  private int subjectType;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Schedule> schedules;
+  @JsonIgnore
+  @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Schedule> schedules;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+  @ManyToOne
+  @JoinColumn(name = "department_id")
+  private Department department;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Study> studies;
+  @JsonIgnore
+  @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Study> studies;
 
-    public enum SUBJECT_TYPE {
-        THEORY,
-        PRACTICE
-    }
+  public enum SUBJECT_TYPE {
+    THEORY,
+    PRACTICE
+  }
 }

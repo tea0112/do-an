@@ -13,43 +13,43 @@ import java.util.Collections;
 @Data
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private User user;
+  private User user;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (user.getAdmin()) {
-            return Collections.singleton(new SimpleGrantedAuthority("ADMIN"));
-        }
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (user.getAdmin()) {
+      return Collections.singleton(new SimpleGrantedAuthority("ADMIN"));
     }
+    return Collections.singleton(new SimpleGrantedAuthority("USER"));
+  }
 
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
+  @Override
+  public String getPassword() {
+    return user.getPassword();
+  }
 
-    @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
+  @Override
+  public String getUsername() {
+    return user.getUsername();
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

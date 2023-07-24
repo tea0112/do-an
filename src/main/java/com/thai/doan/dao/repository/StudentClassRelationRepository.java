@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface StudentClassRelationRepository extends JpaRepository<StudentClassRelation, Integer>, JpaSpecificationExecutor<StudentClassRelation> {
-    List<StudentClassRelation> findByClassId(Classes clazz);
-    List<StudentClassRelation> findByStudentId(Student student);
+  List<StudentClassRelation> findByClassId(Classes clazz);
+
+  List<StudentClassRelation> findByStudentId(Student student);
 }

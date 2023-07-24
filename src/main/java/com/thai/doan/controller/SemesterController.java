@@ -10,7 +10,6 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,31 +18,31 @@ import java.util.List;
 @Data
 @RestController
 public class SemesterController {
-    private final SemesterService semesterSv;
+  private final SemesterService semesterSv;
 
-    // restful api
-    @GetMapping("/api/semesters")
-    public List<Semester> getWithSession(@RequestParam int sessionId) {
-        return semesterSv.getWithSession(sessionId);
-    }
+  // restful api
+  @GetMapping("/api/semesters")
+  public List<Semester> getWithSession(@RequestParam int sessionId) {
+    return semesterSv.getWithSession(sessionId);
+  }
 
-    @PostMapping("/api/admin/semesters")
-    public ResponseEntity<?> add(@Valid @RequestBody SemesterAddingRequest semesterAddingReq) {
-        semesterSv.add(semesterAddingReq);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping("/api/admin/semesters")
+  public ResponseEntity<?> add(@Valid @RequestBody SemesterAddingRequest semesterAddingReq) {
+    semesterSv.add(semesterAddingReq);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @PatchMapping("/api/admin/semesters/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody SemesterUpdatingRequest semesterUpdatingReq,
-                                    @PathVariable Integer id) {
-        semesterSv.updateWithId(semesterUpdatingReq, id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PatchMapping("/api/admin/semesters/{id}")
+  public ResponseEntity<?> update(@Valid @RequestBody SemesterUpdatingRequest semesterUpdatingReq,
+                                  @PathVariable Integer id) {
+    semesterSv.updateWithId(semesterUpdatingReq, id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @DeleteMapping("/api/admin/semesters/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
-        semesterSv.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @DeleteMapping("/api/admin/semesters/{id}")
+  public ResponseEntity<?> delete(@PathVariable Integer id) {
+    semesterSv.delete(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
 }

@@ -26,89 +26,89 @@ import java.util.stream.Collectors;
 @Data
 @Service
 public class StudentClassRelationServiceImpl implements StudentClassRelationService {
-    private final StudentClassRelationRepository studentClassRelationRepo;
-    private final StudentRepository studentRepo;
-    private final ClassesRepository classesRepo;
-    private final UserRepository userRepo;
-    @PersistenceContext
-    private EntityManager em;
+  private final StudentClassRelationRepository studentClassRelationRepo;
+  private final StudentRepository studentRepo;
+  private final ClassesRepository classesRepo;
+  private final UserRepository userRepo;
+  @PersistenceContext
+  private EntityManager em;
 
-    @Override
-    public List<Student> getWithClassId(String classId) {
-        Classes clazz = classesRepo.findById(Integer.parseInt(classId)).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.CLASS_NOT_FOUND)
-        );
+  @Override
+  public List<Student> getWithClassId(String classId) {
+    Classes clazz = classesRepo.findById(Integer.parseInt(classId)).orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.CLASS_NOT_FOUND)
+    );
 
-        List<StudentClassRelation> studentClassRelations = studentClassRelationRepo.findByClassId(clazz);
-        if (studentClassRelations == null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.STUDENT_CLASS_RELATION_NOT_FOUND);
-        }
-
-        return studentClassRelations
-            .stream()
-            .map(StudentClassRelation::getStudentId)
-            .collect(Collectors.toList());
-
+    List<StudentClassRelation> studentClassRelations = studentClassRelationRepo.findByClassId(clazz);
+    if (studentClassRelations == null) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorCode.STUDENT_CLASS_RELATION_NOT_FOUND);
     }
 
-    @Override
-    public Student addStudentToClass(int studentId, int classId) {
-        try {
-            Classes clazz = classesRepo.findById(classId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Student student = studentRepo.findById(studentId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
+    return studentClassRelations
+        .stream()
+        .map(StudentClassRelation::getStudentId)
+        .collect(Collectors.toList());
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<StudentClassRelation> q = cb.createQuery(StudentClassRelation.class);
-            Root<StudentClassRelation> root = q.from(StudentClassRelation.class);
-            Predicate hasMoreThanTwoRow = cb.equal(root.get("studentId"), student);
-            q.where(cb.and(hasMoreThanTwoRow));
-            List<StudentClassRelation> results = em.createQuery(q.select(root)).getResultList();
-            if (results.size() >= 2) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sinh viên thuộc tối đa 2 lớp");
-            }
+  }
 
-            StudentClassRelation studentClassRlt = StudentClassRelation.builder()
-                .studentId(student)
-                .classId(clazz)
-                .build();
-            studentClassRelationRepo.save(studentClassRlt);
-            return student;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public Student addStudentToClass(int studentId, int classId) {
+    try {
+      Classes clazz = classesRepo.findById(classId).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+      Student student = studentRepo.findById(studentId).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<StudentClassRelation> q = cb.createQuery(StudentClassRelation.class);
+      Root<StudentClassRelation> root = q.from(StudentClassRelation.class);
+      Predicate hasMoreThanTwoRow = cb.equal(root.get("studentId"), student);
+      q.where(cb.and(hasMoreThanTwoRow));
+      List<StudentClassRelation> results = em.createQuery(q.select(root)).getResultList();
+      if (results.size() >= 2) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sinh viên thuộc tối đa 2 lớp");
+      }
+
+      StudentClassRelation studentClassRlt = StudentClassRelation.builder()
+          .studentId(student)
+          .classId(clazz)
+          .build();
+      studentClassRelationRepo.save(studentClassRlt);
+      return student;
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public void removeStudentFromClass(int studentId, int classId) {
-        try {
-            Classes clazz = classesRepo.findById(classId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Student student = studentRepo.findById(studentId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            StudentClassRelation studentClassRlt = StudentClassRelation.builder()
-                .studentId(student)
-                .classId(clazz)
-                .build();
-            studentClassRelationRepo.delete(studentClassRlt);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void removeStudentFromClass(int studentId, int classId) {
+    try {
+      Classes clazz = classesRepo.findById(classId).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+      Student student = studentRepo.findById(studentId).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+      StudentClassRelation studentClassRlt = StudentClassRelation.builder()
+          .studentId(student)
+          .classId(clazz)
+          .build();
+      studentClassRelationRepo.delete(studentClassRlt);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public List<StudentClassRelation> getWithStudentId(Integer studentId) {
-        try {
-            Student student =
-                studentRepo.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            return studentClassRelationRepo.findByStudentId(student);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        }
+  @Override
+  public List<StudentClassRelation> getWithStudentId(Integer studentId) {
+    try {
+      Student student =
+          studentRepo.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      return studentClassRelationRepo.findByStudentId(student);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
     }
+  }
 }

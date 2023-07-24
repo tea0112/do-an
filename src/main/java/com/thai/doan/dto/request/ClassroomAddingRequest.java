@@ -7,8 +7,8 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class ClassroomAddingRequest {
-    @NotBlank
-    private String name;
-    @Min(0)
-    private Integer lectureHallId;
+  @NotBlank
+  private String name;
+  @Min(0)
+  private Integer lectureHallId;
 }

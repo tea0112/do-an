@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LecturerRepository extends JpaRepository<Lecturer, Integer>, JpaSpecificationExecutor<Lecturer> {
-    Optional<Lecturer> findByIdAndDepartment(int lecturer, Department department);
-    List<Lecturer> findAllByDepartment(Department department);
+  Optional<Lecturer> findByIdAndDepartment(int lecturer, Department department);
+
+  List<Lecturer> findAllByDepartment(Department department);
 }

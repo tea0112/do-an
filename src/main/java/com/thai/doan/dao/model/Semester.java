@@ -1,9 +1,7 @@
 package com.thai.doan.dao.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,33 +20,33 @@ import java.util.List;
 @Table(name = "semesters")
 public class Semester implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "term_number", nullable = false)
-    private Integer termNumber;
+  @Column(name = "term_number", nullable = false)
+  private Integer termNumber;
 
-    @Column(name = "start_day", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDay;
+  @Column(name = "start_day", nullable = false)
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate startDay;
 
-    @Column(name = "end_day", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate endDay;
+  @Column(name = "end_day", nullable = false)
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate endDay;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Schedule> schedules;
+  @JsonIgnore
+  @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Schedule> schedules;
 
-    @ManyToOne
-    @JoinColumn(name = "session_id")
-    private Session session;
+  @ManyToOne
+  @JoinColumn(name = "session_id")
+  private Session session;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Study> studies;
+  @JsonIgnore
+  @OneToMany(mappedBy = "semester", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Study> studies;
 }

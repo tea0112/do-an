@@ -6,6 +6,6 @@ import javax.validation.constraints.Min;
 
 @Data
 public class StudyUpdateRequest {
-    @Min(0)
-    private Float grade;
+  @Min(0)
+  private Float grade;
 }

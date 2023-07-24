@@ -9,7 +9,6 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,32 +17,32 @@ import java.util.List;
 @Data
 @RestController
 public class DepartmentController {
-    private final DepartmentService departmentService;
+  private final DepartmentService departmentService;
 
-    // RESTFul api
-    @GetMapping("/api/departments")
-    public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
-    }
+  // RESTFul api
+  @GetMapping("/api/departments")
+  public List<Department> getAllDepartments() {
+    return departmentService.getAllDepartments();
+  }
 
-    @PostMapping("/api/admin/departments")
-    public ResponseEntity<?> add(@Valid @RequestBody DepartmentAddingRequest departmentAddingReq) {
-        departmentService.add(departmentAddingReq);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping("/api/admin/departments")
+  public ResponseEntity<?> add(@Valid @RequestBody DepartmentAddingRequest departmentAddingReq) {
+    departmentService.add(departmentAddingReq);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @RequestMapping(value = "/api/admin/departments/{id}",
-        method = RequestMethod.PATCH)
-    public ResponseEntity<?> update(@PathVariable Integer id,
-                                    @Valid @RequestBody DepartmentUpdatingRequest departmentUpdatingReq) {
-        departmentService.update(id, departmentUpdatingReq);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @RequestMapping(value = "/api/admin/departments/{id}",
+      method = RequestMethod.PATCH)
+  public ResponseEntity<?> update(@PathVariable Integer id,
+                                  @Valid @RequestBody DepartmentUpdatingRequest departmentUpdatingReq) {
+    departmentService.update(id, departmentUpdatingReq);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @RequestMapping(value = "/api/admin/departments/{id}",
-        method = RequestMethod.DELETE)
-    public ResponseEntity<?> update(@PathVariable Integer id) {
-        departmentService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @RequestMapping(value = "/api/admin/departments/{id}",
+      method = RequestMethod.DELETE)
+  public ResponseEntity<?> update(@PathVariable Integer id) {
+    departmentService.delete(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

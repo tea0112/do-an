@@ -16,33 +16,33 @@ import java.io.Serializable;
 @Table(name = "studies")
 public class Study implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "grade", nullable = false)
-    private Float grade;
+  @Column(name = "grade", nullable = false)
+  private Float grade;
 
-    @Column(name = "grade_type", nullable = false)
-    private Boolean gradeType;
+  @Column(name = "grade_type", nullable = false)
+  private Boolean gradeType;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+  @ManyToOne
+  @JoinColumn(name = "subject_id")
+  private Subject subject;
 
-    @ManyToOne
-    @JoinColumn(name = "semester_id")
-    private Semester semester;
+  @ManyToOne
+  @JoinColumn(name = "semester_id")
+  private Semester semester;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+  @ManyToOne
+  @JoinColumn(name = "student_id")
+  private Student student;
 
-    public enum GRADE_TYPE {
-        THEORY,
-        PRACTICE
-    }
+  public enum GRADE_TYPE {
+    THEORY,
+    PRACTICE
+  }
 }

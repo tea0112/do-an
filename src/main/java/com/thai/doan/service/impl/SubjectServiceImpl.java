@@ -18,87 +18,87 @@ import java.util.Optional;
 @Data
 @Service
 public class SubjectServiceImpl implements SubjectService {
-    private final SubjectRepository subjectRepo;
-    private final DepartmentRepository departmentRepo;
+  private final SubjectRepository subjectRepo;
+  private final DepartmentRepository departmentRepo;
 
-    @Override
-    public List<Subject> getSubjectBySubjectTypeAndDepartment(int subjectType, String departmentName) {
-        Optional<Department> department = departmentRepo.findByName(departmentName);
-        if (!department.isPresent())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Môn Không Tồn Tại");
-        switch (subjectType) {
-            case 0:
-                return subjectRepo.findBySubjectTypeAndDepartment(
-                    Subject.SUBJECT_TYPE.THEORY.ordinal(), department.get());
-            case 1:
-                return subjectRepo.findBySubjectTypeAndDepartment(
-                    Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
-            default:
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Môn Không Tồn Tại");
-        }
+  @Override
+  public List<Subject> getSubjectBySubjectTypeAndDepartment(int subjectType, String departmentName) {
+    Optional<Department> department = departmentRepo.findByName(departmentName);
+    if (!department.isPresent())
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Môn Không Tồn Tại");
+    switch (subjectType) {
+      case 0:
+        return subjectRepo.findBySubjectTypeAndDepartment(
+            Subject.SUBJECT_TYPE.THEORY.ordinal(), department.get());
+      case 1:
+        return subjectRepo.findBySubjectTypeAndDepartment(
+            Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
+      default:
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Môn Không Tồn Tại");
     }
+  }
 
-    @Override
-    public List<Subject> getBySubjectTypeAndDepartment(int subjectType, int departmentId) {
-        Optional<Department> department = departmentRepo.findById(departmentId);
-        if (!department.isPresent())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        switch (subjectType) {
-            case 0:
-                return subjectRepo.findBySubjectTypeAndDepartment(
-                    Subject.SUBJECT_TYPE.THEORY.ordinal(), department.get());
-            case 1:
-                return subjectRepo.findBySubjectTypeAndDepartment(
-                    Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
-            default:
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+  @Override
+  public List<Subject> getBySubjectTypeAndDepartment(int subjectType, int departmentId) {
+    Optional<Department> department = departmentRepo.findById(departmentId);
+    if (!department.isPresent())
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    switch (subjectType) {
+      case 0:
+        return subjectRepo.findBySubjectTypeAndDepartment(
+            Subject.SUBJECT_TYPE.THEORY.ordinal(), department.get());
+      case 1:
+        return subjectRepo.findBySubjectTypeAndDepartment(
+            Subject.SUBJECT_TYPE.PRACTICE.ordinal(), department.get());
+      default:
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
+  }
 
-    @Override
-    public void addOne(SubjectAddingRequest subjectAddingRequest) {
-        try {
-            Department department = departmentRepo.findById(Integer.parseInt(subjectAddingRequest.getDepartmentId()))
-                .orElseThrow(
-                    () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-                );
-            Subject subject = Subject.builder()
-                .name(subjectAddingRequest.getName())
-                .subjectType(subjectAddingRequest.getSubjectType())
-                .department(department)
-                .build();
-            subjectRepo.save(subject);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void addOne(SubjectAddingRequest subjectAddingRequest) {
+    try {
+      Department department = departmentRepo.findById(Integer.parseInt(subjectAddingRequest.getDepartmentId()))
+          .orElseThrow(
+              () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+          );
+      Subject subject = Subject.builder()
+          .name(subjectAddingRequest.getName())
+          .subjectType(subjectAddingRequest.getSubjectType())
+          .department(department)
+          .build();
+      subjectRepo.save(subject);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public void updateWithId(Integer id, SubjectUpdatingRequest subjectUpdatingReq) {
-        try {
-            Department department = departmentRepo.findById(subjectUpdatingReq.getDepartmentId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            Subject subject =
-                subjectRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            subject.setName(subjectUpdatingReq.getName());
-            subject.setSubjectType(subjectUpdatingReq.getSubjectType());
-            subject.setDepartment(department);
-            subjectRepo.save(subject);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void updateWithId(Integer id, SubjectUpdatingRequest subjectUpdatingReq) {
+    try {
+      Department department = departmentRepo.findById(subjectUpdatingReq.getDepartmentId()).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+      Subject subject =
+          subjectRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      subject.setName(subjectUpdatingReq.getName());
+      subject.setSubjectType(subjectUpdatingReq.getSubjectType());
+      subject.setDepartment(department);
+      subjectRepo.save(subject);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public void delete(Integer id) {
-        try {
-            Subject subject = subjectRepo.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
-            );
-            subjectRepo.delete(subject);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void delete(Integer id) {
+    try {
+      Subject subject = subjectRepo.findById(id).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
+      );
+      subjectRepo.delete(subject);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 }

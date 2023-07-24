@@ -8,13 +8,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClassesRepository extends JpaRepository<Classes, Integer>, JpaSpecificationExecutor<Classes> {
-    List<Classes> findBySession(Session session);
-    List<Classes> findBySessionAndDepartment(Session session, Department department);
-    @Query("select cls from Classes cls " +
-        "where cls.session.id = :sessionId and cls.department.id = :departmentId")
-    List<Classes> findByDepartmentAndSession(Department department, Session session);
-    List<Classes> findBySessionAndDepartment_IsGeneralTrue(Session session);
+  List<Classes> findBySession(Session session);
+
+  List<Classes> findBySessionAndDepartment(Session session, Department department);
+
+  @Query("select cls from Classes cls " +
+      "where cls.session.id = :sessionId and cls.department.id = :departmentId")
+  List<Classes> findByDepartmentAndSession(Department department, Session session);
+
+  List<Classes> findBySessionAndDepartment_IsGeneralTrue(Session session);
 }

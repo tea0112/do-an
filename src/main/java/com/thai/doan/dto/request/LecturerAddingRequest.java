@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class LecturerAddingRequest {
-    @NotBlank
-    private String name;
+  @NotBlank
+  private String name;
 
-    @NotBlank
-    private String departmentId;
+  @NotBlank
+  private String departmentId;
 }

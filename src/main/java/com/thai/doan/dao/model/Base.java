@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
 @Data
 @MappedSuperclass
 public class Base {
-    @Column(name = "created_at")
-    @CreatedDate
-    private LocalDateTime createdAt;
+  @Column(name = "created_at")
+  @CreatedDate
+  private LocalDateTime createdAt;
 
-    @Column(name = "created_by")
-    @CreatedBy
-    private Integer createdBy;
+  @Column(name = "created_by")
+  @CreatedBy
+  private Integer createdBy;
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updatdAt;
+  @Column(name = "updated_at")
+  @LastModifiedDate
+  private LocalDateTime updatdAt;
 
-    @Column(name = "updated_by")
-    @LastModifiedBy
-    private Integer updatedBy;
+  @Column(name = "updated_by")
+  @LastModifiedBy
+  private Integer updatedBy;
 }

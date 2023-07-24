@@ -18,68 +18,68 @@ import java.util.Optional;
 @Service
 @Data
 public class LecturerServiceImpl implements LecturerService {
-    private final LecturerRepository lecturerRepo;
-    private final DepartmentRepository departmentRepo;
+  private final LecturerRepository lecturerRepo;
+  private final DepartmentRepository departmentRepo;
 
-    @Override
-    public List<Lecturer> getAllLecturer(String department) {
-        Optional<Department> departmentOpt = departmentRepo.findByName(department);
-        return lecturerRepo.findAllByDepartment(departmentOpt.get());
-    }
+  @Override
+  public List<Lecturer> getAllLecturer(String department) {
+    Optional<Department> departmentOpt = departmentRepo.findByName(department);
+    return lecturerRepo.findAllByDepartment(departmentOpt.get());
+  }
 
-    @Override
-    public List<Lecturer> getWithDepartmentId(String departmentId) {
-        Optional<Department> department = departmentRepo.findById(Integer.parseInt(departmentId));
-        if (!department.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-        return lecturerRepo.findAllByDepartment(department.get());
+  @Override
+  public List<Lecturer> getWithDepartmentId(String departmentId) {
+    Optional<Department> department = departmentRepo.findById(Integer.parseInt(departmentId));
+    if (!department.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
+    return lecturerRepo.findAllByDepartment(department.get());
+  }
 
-    @Override
-    public void add(LecturerAddingRequest lecturerAddingReq) {
-        try {
-            Department department = departmentRepo.findById(Integer.parseInt(lecturerAddingReq.getDepartmentId()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            Lecturer lecturer = Lecturer.builder()
-                .name(lecturerAddingReq.getName())
-                .department(department)
-                .build();
-            lecturerRepo.save(lecturer);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void add(LecturerAddingRequest lecturerAddingReq) {
+    try {
+      Department department = departmentRepo.findById(Integer.parseInt(lecturerAddingReq.getDepartmentId()))
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      Lecturer lecturer = Lecturer.builder()
+          .name(lecturerAddingReq.getName())
+          .department(department)
+          .build();
+      lecturerRepo.save(lecturer);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public Lecturer getOne(String id) {
-        try {
-            return lecturerRepo.findById(Integer.parseInt(id))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+  @Override
+  public Lecturer getOne(String id) {
+    try {
+      return lecturerRepo.findById(Integer.parseInt(id))
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
+  }
 
-    @Override
-    public void updateWithId(LecturerUpdatingRequest lecturerUpdatingReq, Integer id) {
-        try {
-            Lecturer lecturer = lecturerRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            Department department = departmentRepo.findById(lecturerUpdatingReq.getDepartmentId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            lecturer.setName(lecturerUpdatingReq.getName());
-            lecturer.setDepartment(department);
-            lecturerRepo.save(lecturer);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
-        }
+  @Override
+  public void updateWithId(LecturerUpdatingRequest lecturerUpdatingReq, Integer id) {
+    try {
+      Lecturer lecturer = lecturerRepo.findById(id)
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      Department department = departmentRepo.findById(lecturerUpdatingReq.getDepartmentId())
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      lecturer.setName(lecturerUpdatingReq.getName());
+      lecturer.setDepartment(department);
+      lecturerRepo.save(lecturer);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getCause().toString());
     }
+  }
 
-    @Override
-    public void delete(Integer id) {
-            Lecturer lecturer = lecturerRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-            lecturerRepo.delete(lecturer);
-    }
+  @Override
+  public void delete(Integer id) {
+    Lecturer lecturer = lecturerRepo.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+    lecturerRepo.delete(lecturer);
+  }
 }

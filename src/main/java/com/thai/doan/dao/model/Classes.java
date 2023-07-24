@@ -18,25 +18,25 @@ import java.util.List;
 @Table(name = "classes")
 public class Classes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+  @Column(name = "name", nullable = false)
+  private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Schedule> schedules;
+  @JsonIgnore
+  @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Schedule> schedules;
 
-    @ManyToOne
-    @JoinColumn(name = "session_id")
-    private Session session;
+  @ManyToOne
+  @JoinColumn(name = "session_id")
+  private Session session;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+  @ManyToOne
+  @JoinColumn(name = "department_id")
+  private Department department;
 }

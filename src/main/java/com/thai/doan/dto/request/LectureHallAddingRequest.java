@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class LectureHallAddingRequest {
-    @NotBlank
-    private String name;
+  @NotBlank
+  private String name;
 
-    @NotNull
-    private String address;
+  @NotNull
+  private String address;
 }

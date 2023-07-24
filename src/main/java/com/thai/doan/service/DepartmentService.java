@@ -7,8 +7,11 @@ import com.thai.doan.dto.request.DepartmentUpdatingRequest;
 import java.util.List;
 
 public interface DepartmentService {
-    List<Department> getAllDepartments();
-    void add(DepartmentAddingRequest departmentAddingReq);
-    void update(Integer id, DepartmentUpdatingRequest departmentUpdatingReq);
-    void delete(Integer id);
+  List<Department> getAllDepartments();
+
+  void add(DepartmentAddingRequest departmentAddingReq);
+
+  void update(Integer id, DepartmentUpdatingRequest departmentUpdatingReq);
+
+  void delete(Integer id);
 }

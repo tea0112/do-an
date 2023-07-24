@@ -6,6 +6,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class SessionUpdatingRequest {
-    @NotNull
-    private String name;
+  @NotNull
+  private String name;
 }

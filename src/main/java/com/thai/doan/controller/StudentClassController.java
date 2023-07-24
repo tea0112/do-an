@@ -17,25 +17,25 @@ import java.util.List;
 @RestController
 @Data
 public class StudentClassController {
-    private final StudentClassRelationService studentClassRelationSv;
+  private final StudentClassRelationService studentClassRelationSv;
 
-    // restful api
-    @PostMapping("/api/admin/studentClass")
-    public ResponseEntity<Student> add(@RequestBody @Valid StudentClassAddingRequest studentClassAddingReq) {
-        return new ResponseEntity<>(
-            studentClassRelationSv.addStudentToClass(studentClassAddingReq.getStudentId(),
+  // restful api
+  @PostMapping("/api/admin/studentClass")
+  public ResponseEntity<Student> add(@RequestBody @Valid StudentClassAddingRequest studentClassAddingReq) {
+    return new ResponseEntity<>(
+        studentClassRelationSv.addStudentToClass(studentClassAddingReq.getStudentId(),
             studentClassAddingReq.getClassId()), HttpStatus.OK);
-    }
+  }
 
-    @DeleteMapping("/api/admin/studentClass")
-    public ResponseEntity<?> deleteWithId(@RequestParam int studentId, @RequestParam int classId) {
-        studentClassRelationSv.removeStudentFromClass(studentId, classId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @DeleteMapping("/api/admin/studentClass")
+  public ResponseEntity<?> deleteWithId(@RequestParam int studentId, @RequestParam int classId) {
+    studentClassRelationSv.removeStudentFromClass(studentId, classId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @GetMapping("/api/studentClass")
-    public List<StudentClassRelation> getWithStudentId(@RequestParam int studentId) {
-        return studentClassRelationSv.getWithStudentId(studentId);
-    }
+  @GetMapping("/api/studentClass")
+  public List<StudentClassRelation> getWithStudentId(@RequestParam int studentId) {
+    return studentClassRelationSv.getWithStudentId(studentId);
+  }
 
 }

@@ -8,10 +8,10 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class DepartmentUpdatingRequest {
-    @Min(0)
-    private Integer id;
-    @NotBlank
-    private String name;
-    @NotNull
-    private Boolean isGeneral;
+  @Min(0)
+  private Integer id;
+  @NotBlank
+  private String name;
+  @NotNull
+  private Boolean isGeneral;
 }

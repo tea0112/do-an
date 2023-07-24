@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface ClassroomRepository extends JpaRepository<Classroom, Integer>, JpaSpecificationExecutor<Classroom> {
-    List<Classroom> findByLectureHall(LectureHall id);
+  List<Classroom> findByLectureHall(LectureHall id);
 }
