@@ -31,6 +31,10 @@ public class Department implements Serializable {
   @Column(name = "is_general", nullable = false)
   private Boolean isGeneral;
 
+  public Boolean isGeneral() {
+      return this.isGeneral;
+  }
+
   @JsonIgnore
   @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Lecturer> lecturers;

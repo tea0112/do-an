@@ -26,15 +26,15 @@ public class DepartmentServiceImpl implements DepartmentService {
   public void update(Integer id, DepartmentUpdatingRequest departmentUpdatingReq) {
     try {
       boolean isGeneral = departmentUpdatingReq.getIsGeneral();
-      if (isGeneral) {
-        if (departmentRepo.countByIsGeneralTrue() >= 1) {
-          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Exist more than one isGeneral row");
-        }
-      }
       Department department = departmentRepo.findById(id).orElseThrow(
           () -> new ResponseStatusException(HttpStatus.FORBIDDEN)
       );
       department.setName(departmentUpdatingReq.getName());
+      if (department.isGeneral() != isGeneral && isGeneral == true) {
+        if (departmentRepo.countByIsGeneralTrue() >= 1) {
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Exist more than one isGeneral row");
+        }
+      }
       department.setIsGeneral(isGeneral);
       departmentRepo.save(department);
     } catch (Exception e) {
