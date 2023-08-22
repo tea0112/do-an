@@ -1,5 +1,7 @@
 package com.thai.doan.service.impl;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import com.thai.doan.dao.model.*;
 import com.thai.doan.dao.repository.*;
 import com.thai.doan.dto.request.NewScheduleRequest;
@@ -39,14 +41,18 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ClassroomRepository classroomRepo;
   @PersistenceContext
   private EntityManager em;
+  private Logger logger = LogManager.getLogger(ScheduleServiceImpl.class);
 
   @Override
   public List<Schedule> getSchedule(int subjectType) {
+    logger.debug("start getSchedule");
     CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder
         .getContext().getAuthentication().getPrincipal();
     User user = customUserDetails.getUser();
     Student std = user.getStudent();
+    logger.debug("getMaxTermOfStudent: " + semesterRepo.getMaxTermOfStudent(std));
     if (semesterRepo.getMaxTermOfStudent(std) > 1) {
+      // after semester 1, the general subject will not appear
       return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), false);
     } else
       return scheduleRepo.getCurrentSchedules(std, subjectType, std.getSession().getId(), true);

@@ -1,5 +1,7 @@
 package com.thai.doan.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.thai.doan.dao.model.Schedule;
 import com.thai.doan.dao.model.Subject;
 import com.thai.doan.dto.request.NewScheduleRequest;
@@ -24,6 +26,7 @@ public class ScheduleController {
   private final ScheduleService scheduleSv;
   private final DepartmentService departmentSv;
   private final LecturerService lecturerSv;
+  private Logger logger = LogManager.getLogger(ScheduleController.class);
 
   @GetMapping("/admin/thoi-khoa-bieu/sua")
   public ModelAndView getAdminEditSchedule() {
