@@ -1,13 +1,14 @@
 package com.thai.doan;
 
-import org.springframework.core.SpringVersion;
-import com.thai.doan.dao.model.User;
-import com.thai.doan.dao.repository.UserRepository;
-import lombok.Data;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.thai.doan.dao.model.User;
+import com.thai.doan.dao.repository.UserRepository;
+
+import lombok.Data;
 
 @Data
 @SpringBootApplication
