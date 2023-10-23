@@ -49,7 +49,8 @@ public class ClassController {
 
   @RequestMapping(value = "/api/classes", method = RequestMethod.GET, params = "sessionId")
   public List<Classes> getGeneralWithSession(@RequestParam Integer sessionId) {
-    return classSv.getGeneralWithSession(sessionId);
+    List<Classes> cls =  classSv.getGeneralWithSession(sessionId);
+    return cls;
   }
 
   @RequestMapping(value = "/api/specializedClass", method = RequestMethod.GET, params = "sessionId")
